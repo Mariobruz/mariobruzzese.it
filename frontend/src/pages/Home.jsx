@@ -18,16 +18,20 @@ const AnimatedCounter = ({ end, duration = 2 }) => {
     let startTime;
     let animationFrame;
 
+    const numericValue =
+      typeof end === 'string'
+        ? parseInt(end.replace(/\./g, '').replace(/[^\d]/g, ''), 10)
+        : end;
+
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = (timestamp - startTime) / (duration * 1000);
 
       if (progress < 1) {
-        const value = typeof end === 'string' ? parseInt(end) : end;
-        setCount(Math.floor(progress * value));
+        setCount(Math.floor(progress * numericValue));
         animationFrame = requestAnimationFrame(animate);
       } else {
-        setCount(end);
+        setCount(numericValue);
       }
     };
 
@@ -35,7 +39,18 @@ const AnimatedCounter = ({ end, duration = 2 }) => {
     return () => cancelAnimationFrame(animationFrame);
   }, [isInView, end, duration]);
 
-  return <span ref={ref}>{count}{typeof end === 'string' && end.includes('+') ? '+' : ''}{typeof end === 'string' && end.includes('%') ? '%' : ''}</span>;
+  const formatted =
+    typeof end === 'string' && end.includes('.')
+      ? count.toLocaleString('it-IT')
+      : count;
+
+  return (
+    <span ref={ref}>
+      {formatted}
+      {typeof end === 'string' && end.includes('+') ? '+' : ''}
+      {typeof end === 'string' && end.includes('%') ? '%' : ''}
+    </span>
+  );
 };
 
 const Home = () => {
@@ -53,7 +68,6 @@ const Home = () => {
     }
   };
 
-  // Particles for background
   const particles = Array.from({ length: 15 }, (_, i) => ({
     id: i,
     size: Math.random() * 100 + 50,
@@ -63,9 +77,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Parallax */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        {/* Animated Background */}
         <div className="absolute inset-0 gradient-mesh">
           <div className="particles">
             {particles.map((particle) => (
@@ -147,7 +159,6 @@ const Home = () => {
             </motion.div>
           </motion.div>
 
-          {/* Animated Stats */}
           <motion.div
             style={{ y: y2 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 max-w-5xl mx-auto"
@@ -178,7 +189,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Value Proposition with Stagger Animation */}
       <section className="py-20 px-6 bg-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-50">
           <div className="absolute top-0 left-0 w-96 h-96 bg-gray-100 rounded-full blur-3xl" />
@@ -241,7 +251,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section with Gradient */}
       <section className="py-20 px-6 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white relative overflow-hidden">
         <motion.div
           initial={{ scale: 0 }}
@@ -298,10 +307,9 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Contact Modal */}
-      <ContactModal 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
         source="hero_cta"
       />
     </div>
