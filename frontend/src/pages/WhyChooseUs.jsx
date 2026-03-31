@@ -12,7 +12,7 @@ const WhyChooseUs = () => {
   const icons = [Award, Target, TrendingUp, Users, Shield, Lightbulb];
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
+    <div className="min-h-screen pt-36 pb-20 relative overflow-hidden">
       <div className="absolute inset-0 gradient-mesh opacity-40" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

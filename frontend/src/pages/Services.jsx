@@ -47,7 +47,7 @@ const Services = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
+    <div className="min-h-screen pt-36 pb-20 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 gradient-mesh opacity-50" />
 

@@ -15,7 +15,7 @@ const FAQ = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
+    <div className="min-h-screen pt-36 pb-20 relative overflow-hidden">
       <div className="absolute inset-0 gradient-mesh opacity-40" />
 
       <div className="max-w-4xl mx-auto px-6 relative z-10">
