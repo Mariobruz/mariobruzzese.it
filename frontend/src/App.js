@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
 import HowItWorks from "@/pages/HowItWorks";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
         </Routes>
         <Footer />
+        <WhatsAppButton />
         <Toaster />
       </BrowserRouter>
     </div>
