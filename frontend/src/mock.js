@@ -7,9 +7,9 @@ export const mockData = {
   
   stats: [
     { number: "500+", label: "Aziende Servite" },
-    { number: "10.000+", label: "Ore di Formazione Erogate" },
+    { number: "15.000+", label: "Ore di Formazione Erogate" },
     { number: "100%", label: "Finanziamento Coperto" },
-    { number: "15+", label: "Anni di Esperienza" }
+    { number: "25+", label: "Anni di Esperienza" }
   ],
   
   howItWorks: [
