@@ -6,6 +6,7 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { useNavigate } from 'react-router-dom';
 import ContactModal from '../components/ContactModal';
+import useSEO from '../hooks/useSEO';
 
 const AnimatedCounter = ({ end, duration = 2 }) => {
   const [count, setCount] = useState(0);
@@ -54,6 +55,12 @@ const AnimatedCounter = ({ end, duration = 2 }) => {
 };
 
 const Home = () => {
+  useSEO({
+    title: 'MB Consulting - Formazione Finanziata al 100% | Mario Bruzzese',
+    description: 'Ottieni formazione finanziata al 100% tramite fondi interprofessionali. MB Consulting gestisce tutto il processo: analisi, progettazione, erogazione e rendicontazione. Zero costi per la tua azienda.',
+    canonical: 'https://www.mariobruzzese.it/'
+  });
+
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);

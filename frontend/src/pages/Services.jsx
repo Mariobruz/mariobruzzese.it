@@ -5,8 +5,15 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
+import useSEO from '../hooks/useSEO';
 
 const Services = () => {
+  useSEO({
+    title: 'Servizi di Formazione Finanziata | MB Consulting',
+    description: 'Consulenza fondi interprofessionali, analisi fabbisogni formativi, progettazione piani formativi e gestione completa del processo. Scopri tutti i servizi di MB Consulting.',
+    canonical: 'https://www.mariobruzzese.it/servizi'
+  });
+
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const getIcon = (iconName) => {

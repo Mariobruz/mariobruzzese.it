@@ -6,8 +6,15 @@ import { Badge } from '../components/ui/badge';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
+import useSEO from '../hooks/useSEO';
 
 const CaseStudies = () => {
+  useSEO({
+    title: 'Casi Studio - Risultati Reali | MB Consulting',
+    description: 'Guarda i risultati concreti ottenuti da aziende italiane con la formazione finanziata: fino a €62.000 di formazione ottenuta a costo zero. Casi reali in manifattura, turismo, servizi e retail.',
+    canonical: 'https://www.mariobruzzese.it/casi-studio'
+  });
+
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   return (

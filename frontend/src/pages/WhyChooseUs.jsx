@@ -5,8 +5,15 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
+import useSEO from '../hooks/useSEO';
 
 const WhyChooseUs = () => {
+  useSEO({
+    title: 'Perché Scegliere MB Consulting | Formazione Finanziata',
+    description: 'Zero costi, gestione chiavi in mano, 25 anni di esperienza e 15.000 ore di formazione erogate. Scopri perché centinaia di aziende italiane scelgono MB Consulting per la formazione finanziata.',
+    canonical: 'https://www.mariobruzzese.it/perche-noi'
+  });
+
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const icons = [Award, Target, TrendingUp, Users, Shield, Lightbulb];

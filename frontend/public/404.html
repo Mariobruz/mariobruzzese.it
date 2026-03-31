@@ -1,12 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
   <head>
     <meta charset="utf-8">
-    <title>MB Consulting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pagina non trovata | MB Consulting</title>
+    <meta name="description" content="La pagina che cerchi non esiste. Torna alla home di MB Consulting per scoprire i nostri servizi di formazione finanziata.">
+    <meta name="robots" content="noindex, follow">
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: #f9fafb;
+        color: #111827;
+        text-align: center;
+        padding: 2rem;
+      }
+      h1 { font-size: 5rem; font-weight: 800; margin: 0; }
+      h2 { font-size: 1.5rem; font-weight: 600; margin: 0.5rem 0 1rem; }
+      p  { color: #6b7280; margin-bottom: 2rem; }
+      a  {
+        display: inline-block;
+        background: #000;
+        color: #fff;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      a:hover { background: #374151; }
+    </style>
     <script>
       // Redirect per SPA su GitHub Pages
-      // Quando GitHub Pages non trova la pagina, reindirizza qui
-      // e noi rimandiamo all'index con il percorso corretto
       var l = window.location;
       l.replace(
         l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/?/' +
@@ -16,5 +44,12 @@
       );
     </script>
   </head>
-  <body></body>
+  <body>
+    <div>
+      <h1>404</h1>
+      <h2>Pagina non trovata</h2>
+      <p>La pagina che cerchi non esiste o è stata spostata.</p>
+      <a href="/">Torna alla Home</a>
+    </div>
+  </body>
 </html>

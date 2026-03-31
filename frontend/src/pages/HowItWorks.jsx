@@ -5,8 +5,15 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
+import useSEO from '../hooks/useSEO';
 
 const HowItWorks = () => {
+  useSEO({
+    title: 'Come Funziona la Formazione Finanziata | MB Consulting',
+    description: 'Scopri il processo in 6 step per ottenere formazione finanziata al 100% tramite fondi interprofessionali. Dall\'analisi iniziale alla rendicontazione finale, ci occupiamo di tutto noi.',
+    canonical: 'https://www.mariobruzzese.it/come-funziona'
+  });
+
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const scrollToContact = () => {
     const footer = document.getElementById('contatti');

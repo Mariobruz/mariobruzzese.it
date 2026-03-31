@@ -10,8 +10,15 @@ import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import { MessageCircle, HelpCircle } from 'lucide-react';
 import ContactModal from '../components/ContactModal';
+import useSEO from '../hooks/useSEO';
 
 const FAQ = () => {
+  useSEO({
+    title: 'Domande Frequenti sulla Formazione Finanziata | MB Consulting',
+    description: 'Tutto quello che devi sapere sui fondi interprofessionali e la formazione finanziata: cos\'è, chi può accedervi, quanto costa, come funziona il processo. Risposte chiare alle domande più comuni.',
+    canonical: 'https://www.mariobruzzese.it/faq'
+  });
+
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   return (
