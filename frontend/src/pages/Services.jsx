@@ -1,3 +1,4 @@
+import SEOHead from '../components/SEOHead';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
@@ -5,15 +6,8 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
-import useSEO from '../hooks/useSEO';
 
 const Services = () => {
-  useSEO({
-    title: 'Servizi di Formazione Finanziata | MB Consulting',
-    description: 'Consulenza fondi interprofessionali, analisi fabbisogni formativi, progettazione piani formativi e gestione completa del processo. Scopri tutti i servizi di MB Consulting.',
-    canonical: 'https://www.mariobruzzese.it/servizi'
-  });
-
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const getIcon = (iconName) => {
@@ -54,8 +48,13 @@ const Services = () => {
   };
 
   return (
-    <div className="min-h-screen pt-36 pb-20 relative overflow-hidden">
-      {/* Background Elements */}
+      <>
+      <SEOHead
+        title="Consulenza Fondi Interprofessionali per Aziende"
+        description="Scopri i servizi di MB Consulting per i fondi interprofessionali: scelta del fondo, progettazione del piano formativo, rendicontazione e gestione completa."
+        canonical="https://www.mariobruzzese.it/servizi"
+      />
+      <div className="min-h-screen pt-40 pb-20 relative overflow-hidden">
       <div className="absolute inset-0 gradient-mesh opacity-50" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -98,16 +97,18 @@ const Services = () => {
                     {getIcon(service.icon)}
                   </div>
                 </motion.div>
+
                 <h3 className="text-2xl font-bold mb-4 text-gray-900 relative z-10 group-hover:translate-x-1 transition-transform duration-300">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed relative z-10">{service.description}</p>
+                <p className="text-gray-600 leading-relaxed relative z-10">
+                  {service.description}
+                </p>
               </Card>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Process Overview */}
         <motion.div
           initial={{ y: 50, opacity: 0, scale: 0.95 }}
           whileInView={{ y: 0, opacity: 1, scale: 1 }}
@@ -146,13 +147,13 @@ const Services = () => {
         </motion.div>
       </div>
 
-      {/* Contact Modal */}
-      <ContactModal 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
         source="services"
       />
     </div>
+    </>
   );
 };
 

@@ -1,3 +1,4 @@
+import SEOHead from '../components/SEOHead';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, TrendingUp, ArrowRight } from 'lucide-react';
@@ -6,19 +7,18 @@ import { Badge } from '../components/ui/badge';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
-import useSEO from '../hooks/useSEO';
 
 const CaseStudies = () => {
-  useSEO({
-    title: 'Casi Studio - Risultati Reali | MB Consulting',
-    description: 'Guarda i risultati concreti ottenuti da aziende italiane con la formazione finanziata: fino a €62.000 di formazione ottenuta a costo zero. Casi reali in manifattura, turismo, servizi e retail.',
-    canonical: 'https://www.mariobruzzese.it/casi-studio'
-  });
-
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen pt-36 pb-20 relative overflow-hidden">
+      <>
+      <SEOHead
+        title="Casi Studio: Aziende che hanno Ottenuto Formazione Finanziata"
+        description="Leggi i casi reali di aziende che hanno ottenuto formazione finanziata grazie ai fondi interprofessionali con MB Consulting. Risultati verificabili."
+        canonical="https://www.mariobruzzese.it/casi-studio"
+      />
+      <div className="min-h-screen pt-40 pb-20 relative overflow-hidden">
       <div className="absolute inset-0 gradient-mesh opacity-40" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -68,6 +68,7 @@ const CaseStudies = () => {
                         {caseStudy.company}
                       </h3>
                     </div>
+
                     <motion.div
                       initial={{ scale: 0 }}
                       whileInView={{ scale: 1 }}
@@ -89,6 +90,7 @@ const CaseStudies = () => {
                         <h4 className="font-bold text-gray-900 mb-2">Sfida</h4>
                         <p className="text-gray-600">{caseStudy.challenge}</p>
                       </motion.div>
+
                       <motion.div
                         initial={{ x: -20, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
@@ -138,7 +140,6 @@ const CaseStudies = () => {
           ))}
         </div>
 
-        {/* CTA Section */}
         <motion.div
           initial={{ y: 50, opacity: 0, scale: 0.9 }}
           whileInView={{ y: 0, opacity: 1, scale: 1 }}
@@ -162,6 +163,7 @@ const CaseStudies = () => {
             <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
               Contattaci per scoprire come possiamo aiutare la tua azienda a crescere con la formazione finanziata
             </p>
+
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={() => setIsContactModalOpen(true)}
@@ -176,13 +178,13 @@ const CaseStudies = () => {
         </motion.div>
       </div>
 
-      {/* Contact Modal */}
-      <ContactModal 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
         source="case_studies"
       />
     </div>
+    </>
   );
 };
 

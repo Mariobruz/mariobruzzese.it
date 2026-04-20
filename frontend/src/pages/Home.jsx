@@ -1,3 +1,4 @@
+import SEOHead from '../components/SEOHead';
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
@@ -6,7 +7,6 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { useNavigate } from 'react-router-dom';
 import ContactModal from '../components/ContactModal';
-import useSEO from '../hooks/useSEO';
 
 const AnimatedCounter = ({ end, duration = 2 }) => {
   const [count, setCount] = useState(0);
@@ -54,13 +54,9 @@ const AnimatedCounter = ({ end, duration = 2 }) => {
   );
 };
 
-const Home = () => {
-  useSEO({
-    title: 'MB Consulting - Formazione Finanziata al 100% | Mario Bruzzese',
-    description: 'Ottieni formazione finanziata al 100% tramite fondi interprofessionali. MB Consulting gestisce tutto il processo: analisi, progettazione, erogazione e rendicontazione. Zero costi per la tua azienda.',
-    canonical: 'https://www.mariobruzzese.it/'
-  });
 
+const _seoSchemaHome = "{\"@context\":\"https://schema.org\",\"@type\":\"WebPage\",\"name\":\"Fondi Interprofessionali | MB Consulting\",\"url\":\"https://www.mariobruzzese.it/\",\"description\":\"Consulenza fondi interprofessionali per la formazione aziendale finanziata al 100%.\"}";
+const Home = () => {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
@@ -83,7 +79,14 @@ const Home = () => {
   }));
 
   return (
-    <div className="min-h-screen">
+      <>
+      <SEOHead
+        title="Fondi Interprofessionali | Consulenza Formazione Finanziata"
+        description="Accedi ai fondi interprofessionali e finanzia la formazione aziendale al 100%. MB Consulting gestisce tutto: adesione, piano formativo e rendicontazione. Contattaci."
+        canonical="https://www.mariobruzzese.it/"
+        schema={_seoSchemaHome}
+      />
+      <div className="min-h-screen">
       <section className="relative pt-32 pb-20 px-6 overflow-hidden">
         <div className="absolute inset-0 gradient-mesh">
           <div className="particles">
@@ -320,6 +323,7 @@ const Home = () => {
         source="hero_cta"
       />
     </div>
+    </>
   );
 };
 

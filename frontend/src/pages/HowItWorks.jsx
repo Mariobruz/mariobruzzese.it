@@ -1,3 +1,4 @@
+import SEOHead from '../components/SEOHead';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
@@ -5,16 +6,12 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
-import useSEO from '../hooks/useSEO';
 
+
+const _seoSchemaHowItWorks = "{\"@context\":\"https://schema.org\",\"@type\":\"HowTo\",\"name\":\"Come accedere ai fondi interprofessionali\",\"description\":\"Guida passo-passo per accedere ai fondi interprofessionali e ottenere formazione aziendale finanziata al 100%.\",\"step\":[{\"@type\":\"HowToStep\",\"position\":1,\"name\":\"Scelta del fondo\",\"text\":\"Analizziamo la tua azienda e identifichiamo il fondo più adatto.\"},{\"@type\":\"HowToStep\",\"position\":2,\"name\":\"Piano formativo\",\"text\":\"Progettiamo il piano formativo e prepariamo tutta la documentazione.\"},{\"@type\":\"HowToStep\",\"position\":3,\"name\":\"Formazione e rendicontazione\",\"text\":\"Coordiniamo la formazione e gestiamo la rendicontazione finale.\"}]}";
 const HowItWorks = () => {
-  useSEO({
-    title: 'Come Funziona la Formazione Finanziata | MB Consulting',
-    description: 'Scopri il processo in 6 step per ottenere formazione finanziata al 100% tramite fondi interprofessionali. Dall\'analisi iniziale alla rendicontazione finale, ci occupiamo di tutto noi.',
-    canonical: 'https://www.mariobruzzese.it/come-funziona'
-  });
-
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
   const scrollToContact = () => {
     const footer = document.getElementById('contatti');
     if (footer) {
@@ -23,7 +20,14 @@ const HowItWorks = () => {
   };
 
   return (
-    <div className="min-h-screen pt-36 pb-20">
+      <>
+      <SEOHead
+        title="Come Funzionano i Fondi Interprofessionali"
+        description="Come funzionano i fondi interprofessionali? In 3 passi semplici finanzia la formazione dei dipendenti al 100%. Scopri il metodo MB Consulting."
+        canonical="https://www.mariobruzzese.it/come-funziona"
+        schema={_seoSchemaHowItWorks}
+      />
+      <div className="min-h-screen pt-40 pb-20">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ y: 50, opacity: 0 }}
@@ -40,7 +44,6 @@ const HowItWorks = () => {
         </motion.div>
 
         <div className="relative">
-          {/* Animated Timeline Line */}
           <motion.div
             initial={{ height: 0 }}
             whileInView={{ height: '100%' }}
@@ -71,17 +74,18 @@ const HowItWorks = () => {
                     }`}
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div
-                      className={`inline-block px-4 py-2 bg-black text-white rounded-lg text-sm font-bold mb-4 relative z-10`}
-                    >
+                    <div className="inline-block px-4 py-2 bg-black text-white rounded-lg text-sm font-bold mb-4 relative z-10">
                       Step {step.step}
                     </div>
-                    <h3 className="text-2xl font-bold mb-3 text-gray-900 relative z-10">{step.title}</h3>
-                    <p className="text-gray-600 leading-relaxed relative z-10">{step.description}</p>
+                    <h3 className="text-2xl font-bold mb-3 text-gray-900 relative z-10">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed relative z-10">
+                      {step.description}
+                    </p>
                   </Card>
                 </motion.div>
 
-                {/* Animated Center Circle */}
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
                   whileInView={{ scale: 1, rotate: 0 }}
@@ -99,7 +103,6 @@ const HowItWorks = () => {
           </div>
         </div>
 
-        {/* CTA Section */}
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
@@ -125,13 +128,13 @@ const HowItWorks = () => {
         </motion.div>
       </div>
 
-      {/* Contact Modal */}
-      <ContactModal 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
         source="come_funziona"
       />
     </div>
+    </>
   );
 };
 

@@ -1,3 +1,4 @@
+import SEOHead from '../components/SEOHead';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Award, Target, TrendingUp, Users, Shield, Lightbulb } from 'lucide-react';
@@ -5,21 +6,20 @@ import { Card } from '../components/ui/card';
 import { mockData } from '../mock';
 import { Button } from '../components/ui/button';
 import ContactModal from '../components/ContactModal';
-import useSEO from '../hooks/useSEO';
 
 const WhyChooseUs = () => {
-  useSEO({
-    title: 'Perché Scegliere MB Consulting | Formazione Finanziata',
-    description: 'Zero costi, gestione chiavi in mano, 25 anni di esperienza e 15.000 ore di formazione erogate. Scopri perché centinaia di aziende italiane scelgono MB Consulting per la formazione finanziata.',
-    canonical: 'https://www.mariobruzzese.it/perche-noi'
-  });
-
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const icons = [Award, Target, TrendingUp, Users, Shield, Lightbulb];
 
   return (
-    <div className="min-h-screen pt-36 pb-20 relative overflow-hidden">
+      <>
+      <SEOHead
+        title="Perché Scegliere MB Consulting per i Fondi Interprofessionali"
+        description="Esperienza, risultati concreti e zero burocrazia: MB Consulting accompagna le aziende nell'accesso ai fondi interprofessionali dalla A alla Z. Scopri perché."
+        canonical="https://www.mariobruzzese.it/perche-noi"
+      />
+      <div className="min-h-screen pt-40 pb-20 relative overflow-hidden">
       <div className="absolute inset-0 gradient-mesh opacity-40" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -55,9 +55,7 @@ const WhyChooseUs = () => {
                 whileHover={{ y: -10, scale: 1.03 }}
               >
                 <Card className="p-8 border-2 hover:border-black transition-all duration-300 hover:shadow-2xl group h-full card-modern relative overflow-hidden">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  />
+                  <motion.div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                   <motion.div
                     whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.2 }}
@@ -66,15 +64,20 @@ const WhyChooseUs = () => {
                   >
                     <IconComponent className="w-8 h-8 text-black group-hover:text-white transition-colors duration-300" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold mb-4 text-gray-900 relative z-10">{reason.title}</h3>
-                  <p className="text-gray-600 leading-relaxed relative z-10">{reason.description}</p>
+
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900 relative z-10">
+                    {reason.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed relative z-10">
+                    {reason.description}
+                  </p>
                 </Card>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Animated Stats Section */}
+        {/* Stats */}
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
@@ -96,6 +99,7 @@ const WhyChooseUs = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center relative z-10">
             Numeri che Parlano Chiaro
           </h2>
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
             {mockData.stats.map((stat, index) => (
               <motion.div
@@ -112,14 +116,16 @@ const WhyChooseUs = () => {
                 whileHover={{ scale: 1.1, y: -5 }}
                 className="text-center cursor-pointer"
               >
-                <div className="text-4xl md:text-5xl font-bold mb-2">{stat.number}</div>
+                <div className="text-4xl md:text-5xl font-bold mb-2">
+                  {stat.number}
+                </div>
                 <div className="text-gray-400">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* Trust Section */}
+        {/* CTA */}
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
@@ -133,6 +139,7 @@ const WhyChooseUs = () => {
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
             Unisciti alle centinaia di aziende che hanno scelto MB Consulting per la loro formazione finanziata
           </p>
+
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               onClick={() => setIsContactModalOpen(true)}
@@ -145,13 +152,13 @@ const WhyChooseUs = () => {
         </motion.div>
       </div>
 
-      {/* Contact Modal */}
-      <ContactModal 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
         source="perche_noi"
       />
     </div>
+    </>
   );
 };
 
