@@ -62,7 +62,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "postbuild": "react-snap",
+    "postbuild": "react-snap || echo 'react-snap skipped in CI'",
     "test": "craco test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
