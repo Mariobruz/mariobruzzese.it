@@ -1,17 +1,17 @@
 export const mockData = {
   hero: {
-    title: "Formazione Finanziata Senza Costi per la Tua Azienda",
-    subtitle: "Gestiamo completamente il processo di formazione finanziata tramite fondi interprofessionali",
+    title: "Fondi Interprofessionali: Formazione Aziendale Finanziata al 100%",
+    subtitle: "Gestiamo completamente l'accesso ai fondi interprofessionali per la tua azienda: adesione, piano formativo e rendicontazione",
     cta: "Richiedi Consulenza Gratuita"
   },
-  
+
   stats: [
     { number: "500+", label: "Aziende Servite" },
-    { number: "15.000+", label: "Ore di Formazione Erogate" },
+    { number: "10000+", label: "Ore di Formazione Erogate" }, // 👈 tolto il punto per evitare problemi JS
     { number: "100%", label: "Finanziamento Coperto" },
-    { number: "25+", label: "Anni di Esperienza" }
+    { number: "15+", label: "Anni di Esperienza" }
   ],
-  
+
   howItWorks: [
     {
       step: "01",
@@ -44,7 +44,7 @@ export const mockData = {
       description: "Prepariamo tutta la documentazione necessaria per evitare problemi in fase di controllo e ispezione."
     }
   ],
-  
+
   services: [
     {
       title: "Consulenza Fondi Interprofessionali",
@@ -77,7 +77,7 @@ export const mockData = {
       icon: "shield-check"
     }
   ],
-  
+
   whyChooseUs: [
     {
       title: "Zero Impatto Economico",
@@ -104,7 +104,7 @@ export const mockData = {
       description: "Ogni progetto è costruito sulle reali esigenze della tua azienda, non su modelli standard."
     }
   ],
-  
+
   caseStudies: [
     {
       company: "Azienda Manifatturiera - Lombardia",
@@ -129,68 +129,9 @@ export const mockData = {
         "18 operatori turistici formati",
         "Nessun costo per la struttura"
       ]
-    },
-    {
-      company: "PMI Servizi - Veneto",
-      sector: "Consulenza e Servizi Professionali",
-      challenge: "Necessità di formare il team su normative fiscali e gestione clienti",
-      solution: "Progetto formativo su aggiornamento normativo e customer relationship",
-      results: [
-        "€28.000 di finanziamento ottenuto",
-        "80 ore di formazione specialistica",
-        "15 collaboratori formati",
-        "Nessun costo per l'azienda"
-      ]
-    },
-    {
-      company: "Gruppo Commerciale - Emilia Romagna",
-      sector: "Retail e Distribuzione",
-      challenge: "Miglioramento competenze manageriali e tecniche di vendita",
-      solution: "Piano formativo su leadership, vendita consulenziale e marketing",
-      results: [
-        "€62.000 investiti in formazione",
-        "200+ ore di formazione",
-        "35 manager e venditori coinvolti",
-        "Finanziamento 100% coperto"
-      ]
     }
   ],
-  
-  faqs: [
-    {
-      question: "Cosa sono i fondi interprofessionali?",
-      answer: "I fondi interprofessionali sono enti di natura associativa promossi dalle organizzazioni sindacali e datoriali. Finanziano piani formativi aziendali attraverso un contributo obbligatorio versato dalle aziende all'INPS (0,30% delle retribuzioni). Questo denaro può essere recuperato per finanziare la formazione dei dipendenti."
-    },
-    {
-      question: "La formazione è davvero gratuita per la mia azienda?",
-      answer: "Sì, la formazione è completamente finanziata dai fondi interprofessionali. Le aziende versano già un contributo obbligatorio all'INPS che può essere utilizzato per la formazione. MB Consulting gestisce l'intero processo permettendoti di accedere a questi fondi senza costi aggiuntivi."
-    },
-    {
-      question: "Quanto tempo richiede il processo?",
-      answer: "I tempi variano in base al tipo di fondo e alla complessità del piano formativo. Generalmente, dall'analisi iniziale all'approvazione del piano passano 2-3 mesi. L'erogazione della formazione viene poi calendarizzata in base alle esigenze aziendali."
-    },
-    {
-      question: "Quali aziende possono accedere ai fondi?",
-      answer: "Praticamente tutte le aziende con dipendenti possono accedere ai fondi interprofessionali. È necessario essere iscritti a un fondo (operazione gratuita) e avere dipendenti da formare. MB Consulting verifica l'idoneità e gestisce l'eventuale iscrizione."
-    },
-    {
-      question: "Cosa succede se non utilizzo i fondi?",
-      answer: "Se non utilizzi i fondi interprofessionali, il contributo obbligatorio che versi all'INPS viene semplicemente perso. È denaro che la tua azienda sta già pagando: tanto vale utilizzarlo per formare i tuoi dipendenti e aumentare la competitività aziendale."
-    },
-    {
-      question: "Devo occuparmi della documentazione?",
-      answer: "No, MB Consulting gestisce tutta la parte amministrativa e documentale. Prepariamo noi la documentazione necessaria per la richiesta, il monitoraggio e la rendicontazione, garantendo la conformità ai requisiti dei fondi per evitare problemi in fase ispettiva."
-    },
-    {
-      question: "Posso scegliere i temi della formazione?",
-      answer: "Assolutamente sì. La formazione viene progettata sulle tue reali esigenze aziendali. Dopo un'attenta analisi dei fabbisogni, costruiamo insieme un piano formativo personalizzato che risponda alle necessità specifiche della tua organizzazione."
-    },
-    {
-      question: "Come vengono selezionati i docenti?",
-      answer: "Lavoriamo con una rete consolidata di enti di formazione accreditati e docenti qualificati. Selezioniamo i professionisti più adatti in base al tema della formazione e al settore aziendale, garantendo competenza ed esperienza pratica."
-    }
-  ],
-  
+
   contact: {
     email: "mariobruzzese@hotmail.com",
     phone: "+393291747521",

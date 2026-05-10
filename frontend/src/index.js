@@ -1,16 +1,23 @@
 import { HelmetProvider } from 'react-helmet-async';
 import React from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import "@/index.css";
 import App from "@/App";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+const rootElement = document.getElementById("root");
+
+const app = (
   <React.StrictMode>
     <HelmetProvider>
-      <HelmetProvider>
       <App />
     </HelmetProvider>
-    </HelmetProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
+
+// Se la pagina è già stata pre-renderizzata da react-snap, usa hydrateRoot
+// altrimenti usa createRoot per il rendering normale
+if (rootElement.hasChildNodes()) {
+  hydrateRoot(rootElement, app);
+} else {
+  createRoot(rootElement).render(app);
+}
