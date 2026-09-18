@@ -132,6 +132,37 @@ export const mockData = {
     }
   ],
 
+  faqs: [
+    {
+      question: "Cosa sono i fondi interprofessionali?",
+      answer: "I fondi interprofessionali sono organismi paritetici che finanziano la formazione continua dei lavoratori dipendenti. Le aziende vi aderiscono volontariamente destinando lo 0,30% dei contributi INPS al fondo scelto."
+    },
+    {
+      question: "Come funzionano i fondi interprofessionali?",
+      answer: "I fondi raccolgono lo 0,30% dei contributi INPS e li mettono a disposizione delle aziende aderenti per finanziare piani formativi tramite Conto Formazione o Avvisi pubblici."
+    },
+    {
+      question: "L'adesione ai fondi interprofessionali è gratuita?",
+      answer: "Sì, l'adesione è completamente gratuita. Le risorse provengono dallo 0,30% già versato all'INPS: l'azienda non paga nulla in più."
+    },
+    {
+      question: "Qual è la differenza tra Conto Formazione e Avviso?",
+      answer: "Il Conto Formazione è individuale per ogni azienda. L'Avviso è collettivo tramite bandi periodici, ideale per le PMI con quote ridotte."
+    },
+    {
+      question: "Quale fondo interprofessionale conviene scegliere?",
+      answer: "Dipende dal settore, CCNL, dimensione aziendale e tipo di formazione. MB Consulting ti guida nella scelta del fondo più adatto."
+    },
+    {
+      question: "MB Consulting gestisce tutto il processo?",
+      answer: "Sì. Dalla scelta del fondo alla progettazione del piano formativo fino alla rendicontazione finale: gestiamo tutto noi."
+    },
+    {
+      question: "In quanto tempo si ottiene la formazione finanziata?",
+      answer: "In media 2-6 mesi dalla scelta del fondo all'avvio della formazione, a seconda del fondo e della modalità di accesso."
+    }
+  ],
+
   contact: {
     email: "mariobruzzese@hotmail.com",
     phone: "+393291747521",

@@ -52,7 +52,7 @@ const FAQ = () => {
         </motion.div>
 
         <Accordion type="single" collapsible className="space-y-4 mb-16">
-          {mockData.faqs.map((faq, index) => (
+          {(mockData.faqs || []).map((faq, index) => (
             <motion.div
               key={index}
               initial={{ x: -50, opacity: 0 }}

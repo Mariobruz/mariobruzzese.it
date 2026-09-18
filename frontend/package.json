@@ -62,25 +62,10 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "postbuild": "react-snap || echo 'react-snap skipped in CI'",
+    "postbuild": "node scripts/prerender.js",
     "test": "craco test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
-  },
-  "reactSnap": {
-    "source": "build",
-    "destination": "build",
-    "inlineCss": false,
-    "crawl": true,
-    "skipThirdPartyRequests": true,
-    "include": [
-      "/",
-      "/servizi",
-      "/come-funziona",
-      "/perche-noi",
-      "/casi-studio",
-      "/faq"
-    ]
   },
   "browserslist": {
     "production": [
