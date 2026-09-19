@@ -23,6 +23,7 @@ const Header = () => {
     { name: 'Servizi', path: '/servizi' },
     { name: 'Perché Noi', path: '/perche-noi' },
     { name: 'Casi Studio', path: '/casi-studio' },
+    { name: 'Corsi Sicurezza', path: '/corsi-sicurezza' },
     { name: 'FAQ', path: '/faq' }
   ];
 
@@ -49,7 +50,7 @@ const Header = () => {
             <motion.img
               whileHover={{ scale: 1.05, rotate: 5 }}
               transition={{ duration: 0.3 }}
-              src="/logo.png"
+              src={process.env.PUBLIC_URL + "/logo.png"}
               alt="MB Consulting"
               className="h-20 w-auto"
             />

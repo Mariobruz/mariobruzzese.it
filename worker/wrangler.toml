@@ -1,0 +1,26 @@
+name = "iscrizioni-corsi"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+# Dominio su cui risponde il Worker. Il sito lo chiama a questo indirizzo.
+# routes = [{ pattern = "iscrizioni.mariobruzzese.it", custom_domain = true }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "iscrizioni-corsi"
+database_id = "DA_COMPILARE_DOPO_LA_CREAZIONE"
+
+[vars]
+# Valori non segreti: si possono tenere qui.
+SITO_URL = "https://www.mariobruzzese.it"
+ORIGINI_AMMESSE = "https://www.mariobruzzese.it,https://mariobruzzese.it"
+EMAIL_MITTENTE = "corsi@mariobruzzese.it"
+NOME_MITTENTE = "MB Consulting"
+EMAIL_AMMINISTRATORE = "DA_COMPILARE"
+INTESTATARIO_CONTO = "MB Consulting di Mario Bruzzese"
+
+# I segreti NON vanno qui. Si impostano con:
+#   wrangler secret put STRIPE_SECRET_KEY
+#   wrangler secret put STRIPE_WEBHOOK_SECRET
+#   wrangler secret put BREVO_API_KEY
+#   wrangler secret put IBAN

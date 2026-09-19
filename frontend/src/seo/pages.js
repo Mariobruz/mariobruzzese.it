@@ -81,6 +81,81 @@ const pages = [
     `,
   },
   {
+    slug: 'corsi-sicurezza',
+    title: `Corsi Sicurezza sul Lavoro Online — E-learning D.Lgs 81/08 | ${SITE}`,
+    description:
+      'Corsi di sicurezza sul lavoro online in e-learning asincrono: lavoratori, dirigenti, RLS, RSPP, formatori, HACCP. Attestato scaricabile dalla piattaforma a fine corso. Da 25 € IVA compresa.',
+    priority: '0.9',
+    changefreq: 'weekly',
+    schema: [{"@context":"https://schema.org","@type":"ItemList","name":"Corsi di sicurezza sul lavoro online","numberOfItems":28,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Course","name":"Formazione generale dei lavoratori","description":"4 ore di formazione e-learning asincrona. Tutti i lavoratori dipendenti, qualunque sia il settore.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":35,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":2,"item":{"@type":"Course","name":"Formazione generale dei lavoratori — in inglese","description":"4 ore di formazione e-learning asincrona. Lavoratori di lingua inglese.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":45,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":3,"item":{"@type":"Course","name":"Formazione specifica — rischio basso","description":"4 ore di formazione e-learning asincrona. Lavoratori di uffici, commercio, servizi e altri settori a rischio basso.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":39,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":4,"item":{"@type":"Course","name":"Formazione generale + specifica — rischio basso","description":"8 ore di formazione e-learning asincrona. Neoassunti in settori a rischio basso: assolve l’intero obbligo formativo.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":59,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":5,"item":{"@type":"Course","name":"Aggiornamento lavoratori — tutti i livelli di rischio","description":"6 ore di formazione e-learning asincrona. Lavoratori già formati, in scadenza quinquennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":49,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":6,"item":{"@type":"Course","name":"Aggiornamento lavoratori — rischio medio","description":"6 ore di formazione e-learning asincrona. Lavoratori di settori a rischio medio, in scadenza quinquennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":49,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":7,"item":{"@type":"Course","name":"Formazione datore di lavoro","description":"16 ore di formazione e-learning asincrona. Datori di lavoro.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":169,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":8,"item":{"@type":"Course","name":"Datore di lavoro RSPP — moduli I e II","description":"8 ore di formazione e-learning asincrona. Datori di lavoro che svolgono direttamente i compiti di RSPP.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":119,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":9,"item":{"@type":"Course","name":"Aggiornamento datore di lavoro RSPP","description":"8 ore di formazione e-learning asincrona. Datori di lavoro RSPP in scadenza quinquennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":89,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":10,"item":{"@type":"Course","name":"Modulo aggiuntivo \"Cantieri\" — datore di lavoro","description":"6 ore di formazione e-learning asincrona. Datori di lavoro di imprese che operano in cantiere.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":119,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":11,"item":{"@type":"Course","name":"Formazione dirigenti","description":"12 ore di formazione e-learning asincrona. Dirigenti con responsabilità organizzative in materia di sicurezza.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":149,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":12,"item":{"@type":"Course","name":"Aggiornamento dirigenti","description":"6 ore di formazione e-learning asincrona. Dirigenti già formati, in scadenza quinquennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":69,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":13,"item":{"@type":"Course","name":"Modulo aggiuntivo \"Cantieri\" — dirigenti","description":"6 ore di formazione e-learning asincrona. Dirigenti di imprese che operano in cantiere.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":119,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":14,"item":{"@type":"Course","name":"RSPP e ASPP — Modulo A","description":"28 ore di formazione e-learning asincrona. Aspiranti RSPP e ASPP: modulo base comune a tutti i settori.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":169,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":15,"item":{"@type":"Course","name":"Aggiornamento RSPP","description":"40 ore di formazione e-learning asincrona. RSPP in carica, aggiornamento quinquennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":149,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":16,"item":{"@type":"Course","name":"Aggiornamento ASPP","description":"20 ore di formazione e-learning asincrona. ASPP in carica, aggiornamento quinquennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":139,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":17,"item":{"@type":"Course","name":"Formazione RLS","description":"32 ore di formazione e-learning asincrona. Rappresentanti dei lavoratori per la sicurezza di nuova nomina.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":149,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":18,"item":{"@type":"Course","name":"Aggiornamento RLS — aziende fino a 50 lavoratori","description":"4 ore di formazione e-learning asincrona. RLS di imprese fino a 50 dipendenti, aggiornamento annuale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":59,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":19,"item":{"@type":"Course","name":"Aggiornamento RLS — aziende oltre 50 lavoratori","description":"8 ore di formazione e-learning asincrona. RLS di imprese con oltre 50 dipendenti, aggiornamento annuale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":89,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":20,"item":{"@type":"Course","name":"Coordinatore sicurezza — modulo normativo/giuridico","description":"8 ore di formazione e-learning asincrona. Aspiranti coordinatori per la progettazione e per l’esecuzione dei lavori.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":79,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":21,"item":{"@type":"Course","name":"Aggiornamento coordinatori CSP/CSE","description":"40 ore di formazione e-learning asincrona. Coordinatori in carica, aggiornamento quinquennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":199,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":22,"item":{"@type":"Course","name":"Formazione formatori — 40 ore","description":"40 ore di formazione e-learning asincrona. Chi vuole qualificarsi come formatore in materia di salute e sicurezza.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":269,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":23,"item":{"@type":"Course","name":"Formazione formatori — 24 ore","description":"24 ore di formazione e-learning asincrona. Percorso ridotto per chi possiede già parte dei requisiti.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":189,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":24,"item":{"@type":"Course","name":"Aggiornamento formatori","description":"24 ore di formazione e-learning asincrona. Formatori qualificati, aggiornamento triennale.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":149,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":25,"item":{"@type":"Course","name":"Responsabile industria alimentare (HACCP OSA)","description":"12 ore di formazione e-learning asincrona. Titolari e responsabili di imprese del settore alimentare.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":39,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":26,"item":{"@type":"Course","name":"Alimentaristi — rischio elevato (cat. A)","description":"8 ore di formazione e-learning asincrona. Chi manipola alimenti in attività a rischio elevato.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":29,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":27,"item":{"@type":"Course","name":"Alimentaristi — rischio medio (cat. B)","description":"6 ore di formazione e-learning asincrona. Chi manipola alimenti in attività a rischio medio.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":25,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}},{"@type":"ListItem","position":28,"item":{"@type":"Course","name":"Aggiornamento alimentaristi (cat. A e B)","description":"4 ore di formazione e-learning asincrona. Alimentaristi già formati, in scadenza.","provider":{"@type":"Organization","name":"EFEI Aula Magna"},"offers":{"@type":"Offer","price":25,"priceCurrency":"EUR","availability":"https://schema.org/InStock","category":"Corso e-learning"}}}]}, breadcrumb('Corsi sicurezza', `${BASE}/corsi-sicurezza`)],
+    noscript: `
+      <h1>Corsi di sicurezza sul lavoro online — e-learning D.Lgs 81/08</h1>
+      <p>MB Consulting promuove e vende 28 corsi di sicurezza sul lavoro in modalità e-learning asincrona, progettati, autorizzati ed erogati da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro, tramite l'Unità Operativa codice 2403. Si seguono da computer, tablet o telefono negli orari che preferisci; superato il test finale, l'attestato si scarica direttamente dalla piattaforma.</p>
+      <h2>Lavoratori</h2>
+      <p>Formazione obbligatoria per tutti i dipendenti</p>
+      <ul>
+        <li><strong>Formazione generale dei lavoratori</strong> — 4 ore, 35 € a partecipante, IVA compresa. Tutti i lavoratori dipendenti, qualunque sia il settore. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+        <li><strong>Formazione generale dei lavoratori — in inglese</strong> — 4 ore, 45 € a partecipante, IVA compresa. Lavoratori di lingua inglese. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+        <li><strong>Formazione specifica — rischio basso</strong> — 4 ore, 39 € a partecipante, IVA compresa. Lavoratori di uffici, commercio, servizi e altri settori a rischio basso. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+        <li><strong>Formazione generale + specifica — rischio basso</strong> — 8 ore, 59 € a partecipante, IVA compresa. Neoassunti in settori a rischio basso: assolve l’intero obbligo formativo. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+        <li><strong>Aggiornamento lavoratori — tutti i livelli di rischio</strong> — 6 ore, 49 € a partecipante, IVA compresa. Lavoratori già formati, in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+        <li><strong>Aggiornamento lavoratori — rischio medio</strong> — 6 ore, 49 € a partecipante, IVA compresa. Lavoratori di settori a rischio medio, in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+      </ul>
+      <h2>Datore di lavoro</h2>
+      <p>Obblighi formativi di chi guida l’azienda</p>
+      <ul>
+        <li><strong>Formazione datore di lavoro</strong> — 16 ore, 169 € a partecipante, IVA compresa. Datori di lavoro. Riferimento: D.Lgs. 81/2008.</li>
+        <li><strong>Datore di lavoro RSPP — moduli I e II</strong> — 8 ore, 119 € a partecipante, IVA compresa. Datori di lavoro che svolgono direttamente i compiti di RSPP. Riferimento: D.Lgs. 81/2008, art. 34.</li>
+        <li><strong>Aggiornamento datore di lavoro RSPP</strong> — 8 ore, 89 € a partecipante, IVA compresa. Datori di lavoro RSPP in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 34.</li>
+        <li><strong>Modulo aggiuntivo "Cantieri" — datore di lavoro</strong> — 6 ore, 119 € a partecipante, IVA compresa. Datori di lavoro di imprese che operano in cantiere. Riferimento: D.Lgs. 81/2008, Titolo IV.</li>
+      </ul>
+      <h2>Dirigenti</h2>
+      <p>Chi attua le direttive del datore di lavoro</p>
+      <ul>
+        <li><strong>Formazione dirigenti</strong> — 12 ore, 149 € a partecipante, IVA compresa. Dirigenti con responsabilità organizzative in materia di sicurezza. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+        <li><strong>Aggiornamento dirigenti</strong> — 6 ore, 69 € a partecipante, IVA compresa. Dirigenti già formati, in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 37.</li>
+        <li><strong>Modulo aggiuntivo "Cantieri" — dirigenti</strong> — 6 ore, 119 € a partecipante, IVA compresa. Dirigenti di imprese che operano in cantiere. Riferimento: D.Lgs. 81/2008, Titolo IV.</li>
+      </ul>
+      <h2>RSPP e ASPP</h2>
+      <p>Servizio di prevenzione e protezione</p>
+      <ul>
+        <li><strong>RSPP e ASPP — Modulo A</strong> — 28 ore, 169 € a partecipante, IVA compresa. Aspiranti RSPP e ASPP: modulo base comune a tutti i settori. Riferimento: D.Lgs. 81/2008, art. 32.</li>
+        <li><strong>Aggiornamento RSPP</strong> — 40 ore, 149 € a partecipante, IVA compresa. RSPP in carica, aggiornamento quinquennale. Riferimento: D.Lgs. 81/2008, art. 32.</li>
+        <li><strong>Aggiornamento ASPP</strong> — 20 ore, 139 € a partecipante, IVA compresa. ASPP in carica, aggiornamento quinquennale. Riferimento: D.Lgs. 81/2008, art. 32.</li>
+      </ul>
+      <h2>RLS</h2>
+      <p>Rappresentante dei lavoratori per la sicurezza</p>
+      <ul>
+        <li><strong>Formazione RLS</strong> — 32 ore, 149 € a partecipante, IVA compresa. Rappresentanti dei lavoratori per la sicurezza di nuova nomina. Riferimento: D.Lgs. 81/2008, art. 37 commi 10-11.</li>
+        <li><strong>Aggiornamento RLS — aziende fino a 50 lavoratori</strong> — 4 ore, 59 € a partecipante, IVA compresa. RLS di imprese fino a 50 dipendenti, aggiornamento annuale. Riferimento: D.Lgs. 81/2008, art. 37 comma 11.</li>
+        <li><strong>Aggiornamento RLS — aziende oltre 50 lavoratori</strong> — 8 ore, 89 € a partecipante, IVA compresa. RLS di imprese con oltre 50 dipendenti, aggiornamento annuale. Riferimento: D.Lgs. 81/2008, art. 37 comma 11.</li>
+      </ul>
+      <h2>Cantieri</h2>
+      <p>Coordinatori e moduli aggiuntivi per il settore edile</p>
+      <ul>
+        <li><strong>Coordinatore sicurezza — modulo normativo/giuridico</strong> — 8 ore, 79 € a partecipante, IVA compresa. Aspiranti coordinatori per la progettazione e per l’esecuzione dei lavori. Riferimento: D.Lgs. 81/2008, art. 98 e Allegato XIV.</li>
+        <li><strong>Aggiornamento coordinatori CSP/CSE</strong> — 40 ore, 199 € a partecipante, IVA compresa. Coordinatori in carica, aggiornamento quinquennale. Riferimento: D.Lgs. 81/2008, art. 98 e Allegato XIV.</li>
+      </ul>
+      <h2>Formatori</h2>
+      <p>Qualificazione del formatore in materia di sicurezza</p>
+      <ul>
+        <li><strong>Formazione formatori — 40 ore</strong> — 40 ore, 269 € a partecipante, IVA compresa. Chi vuole qualificarsi come formatore in materia di salute e sicurezza. Riferimento: D.I. 6 marzo 2013.</li>
+        <li><strong>Formazione formatori — 24 ore</strong> — 24 ore, 189 € a partecipante, IVA compresa. Percorso ridotto per chi possiede già parte dei requisiti. Riferimento: D.I. 6 marzo 2013.</li>
+        <li><strong>Aggiornamento formatori</strong> — 24 ore, 149 € a partecipante, IVA compresa. Formatori qualificati, aggiornamento triennale. Riferimento: D.I. 6 marzo 2013.</li>
+      </ul>
+      <h2>HACCP e alimentaristi</h2>
+      <p>Igiene degli alimenti per chi lavora nel settore alimentare</p>
+      <ul>
+        <li><strong>Responsabile industria alimentare (HACCP OSA)</strong> — 12 ore, 39 € a partecipante, IVA compresa. Titolari e responsabili di imprese del settore alimentare. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
+        <li><strong>Alimentaristi — rischio elevato (cat. A)</strong> — 8 ore, 29 € a partecipante, IVA compresa. Chi manipola alimenti in attività a rischio elevato. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
+        <li><strong>Alimentaristi — rischio medio (cat. B)</strong> — 6 ore, 25 € a partecipante, IVA compresa. Chi manipola alimenti in attività a rischio medio. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
+        <li><strong>Aggiornamento alimentaristi (cat. A e B)</strong> — 4 ore, 25 € a partecipante, IVA compresa. Alimentaristi già formati, in scadenza. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
+      </ul>
+      <h2>Come funziona l'iscrizione</h2>
+      <p>Scegli il corso e il numero di partecipanti, inserisci anagrafica e dati di fatturazione, paghi online. Entro 24 ore registriamo i partecipanti sulla piattaforma: ciascuno riceve un'email per confermare il proprio account, e l'indirizzo indicato diventa il suo nome utente. Confermato l'account, abbiniamo il corso e si può iniziare. Superato il test finale, l'attestato si scarica direttamente dalla piattaforma.</p>
+    `,
+  },
+  {
     slug: 'servizi',
     title: `Consulenza Fondi Interprofessionali per Aziende | ${SITE}`,
     description:
@@ -219,6 +294,65 @@ const pages = [
       <p>Dipende da settore, CCNL, dimensione aziendale e tipo di formazione desiderata. MB Consulting ti guida nella scelta.</p>
       <h2>In quanto tempo si ottiene la formazione finanziata?</h2>
       <p>In media 2-6 mesi dalla scelta del fondo all'avvio della formazione.</p>
+    `,
+  },
+  {
+    slug: 'condizioni-vendita',
+    title: `Condizioni generali di vendita — corsi sicurezza online | ${SITE}`,
+    description:
+      'Condizioni generali di vendita dei corsi di sicurezza sul lavoro online promossi da MB Consulting: prezzi, pagamento, attivazione, attestato, diritto di recesso.',
+    priority: '0.3',
+    changefreq: 'yearly',
+    schema: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Condizioni generali di vendita',
+        url: `${BASE}/condizioni-vendita`,
+        description:
+          'Condizioni applicabili all\u2019acquisto dei corsi di sicurezza sul lavoro in e-learning promossi da MB Consulting.',
+        isPartOf: { '@type': 'WebSite', name: SITE, url: BASE },
+      },
+      breadcrumb('Condizioni di vendita', `${BASE}/condizioni-vendita`),
+    ],
+    noscript: `
+      <h1>Condizioni generali di vendita</h1>
+      <p>Venditore: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), partita IVA 03504290796, REA RC-199357, PEC mbconsulting@casellapec.com.</p>
+      <p>I corsi sono progettati, autorizzati ed erogati da EFEI \u2014 Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unit\u00e0 Operativa codice 2403. MB Consulting cura promozione, iscrizione, incasso e assistenza.</p>
+      <p>I prezzi indicati sono finali, per partecipante. MB Consulting opera in regime forfettario: operazioni non soggette a IVA ai sensi dell'art. 1, commi 54-89, della Legge 190/2014.</p>
+      <p>Pagamento con carta tramite Stripe oppure con bonifico bancario. Entro 24 ore lavorative dal pagamento i dati vengono inseriti sulla piattaforma dell'ente; il partecipante riceve un'email di conferma dell'account e solo dopo la conferma il corso pu\u00f2 essergli abbinato.</p>
+      <p>L'attestato \u00e8 rilasciato da EFEI al superamento del test finale ed \u00e8 scaricabile direttamente dalla piattaforma.</p>
+      <p>Il consumatore ha diritto di recesso entro 14 giorni, che si estingue se chiede l'attivazione immediata del corso accettando la perdita del diritto, ai sensi dell'art. 59, comma 1, lett. o) del Codice del Consumo.</p>
+    `,
+  },
+  {
+    slug: 'privacy',
+    title: `Informativa privacy | ${SITE}`,
+    description:
+      'Come MB Consulting tratta i dati personali raccolti sul sito: finalit\u00e0, basi giuridiche, destinatari, tempi di conservazione e diritti dell\u2019interessato.',
+    priority: '0.3',
+    changefreq: 'yearly',
+    schema: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Informativa privacy',
+        url: `${BASE}/privacy`,
+        description:
+          'Informativa ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 sul trattamento dei dati raccolti tramite mariobruzzese.it.',
+        isPartOf: { '@type': 'WebSite', name: SITE, url: BASE },
+      },
+      breadcrumb('Privacy', `${BASE}/privacy`),
+    ],
+    noscript: `
+      <h1>Informativa privacy</h1>
+      <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), partita IVA 03504290796, privacy@mariobruzzese.it, PEC mbconsulting@casellapec.com.</p>
+      <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati anagrafici dei partecipanti (nome, cognome, codice fiscale, data e luogo di nascita, email, telefono, qualifica).</p>
+      <p>Finalit\u00e0: esecuzione del contratto, obblighi fiscali e documentazione dell'obbligo formativo, invio di comunicazioni commerciali previo consenso.</p>
+      <p>Destinatari: EFEI (titolare autonomo per l'erogazione del corso), Stripe, Brevo, Cloudflare, Formspree, GitHub, consulente fiscale.</p>
+      <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto; fino a revoca per le comunicazioni commerciali.</p>
+      <p>Diritti: accesso, rettifica, cancellazione, limitazione, portabilit\u00e0, opposizione e revoca del consenso, scrivendo a privacy@mariobruzzese.it; reclamo al Garante per la protezione dei dati personali.</p>
+      <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione, nessuno strumento di analisi o tracciamento pubblicitario.</p>
     `,
   },
 ];

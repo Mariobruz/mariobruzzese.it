@@ -1,0 +1,10 @@
+
+# --- aggiunte progetto ---
+node_modules/
+frontend/build/
+frontend/package-lock.json
+.env
+*.tgz
+~$*
+_test_write.txt
+Claude outputs/

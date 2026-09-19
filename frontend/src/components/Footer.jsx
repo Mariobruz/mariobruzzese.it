@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-4">
             <img
-              src="/logo.png"
+              src={process.env.PUBLIC_URL + "/logo.png"}
               alt="MB Consulting"
               className="h-20 w-auto"
             />
@@ -39,6 +39,11 @@ const Footer = () => {
               <li>
                 <a href="/casi-studio" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Casi Studio
+                </a>
+              </li>
+              <li>
+                <a href="/corsi-sicurezza" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Corsi Sicurezza
                 </a>
               </li>
               <li>
@@ -102,15 +107,18 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} MB Consulting di Mario Bruzzese. Tutti i diritti riservati.
+            <p className="text-gray-400 text-sm text-center md:text-left">
+              © {new Date().getFullYear()} MB Consulting di Mario Bruzzese — P. IVA 03504290796 — REA RC-199357
+              <br className="hidden md:block" />
+              <span className="md:hidden"> · </span>
+              Via Aspromonte 16, 89127 Reggio Calabria — PEC mbconsulting@casellapec.com
             </p>
-            <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Privacy Policy
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+              <a href="/privacy" className="text-gray-400 hover:text-white transition-colors">
+                Informativa privacy
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Cookie Policy
+              <a href="/condizioni-vendita" className="text-gray-400 hover:text-white transition-colors">
+                Condizioni di vendita
               </a>
             </div>
           </div>

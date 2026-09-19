@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import WhatsAppButton from "@/components/WhatsAppButton";
 import { Toaster } from "@/components/ui/toaster";
 import Home from "@/pages/Home";
 import HowItWorks from "@/pages/HowItWorks";
@@ -11,6 +10,9 @@ import Services from "@/pages/Services";
 import WhyChooseUs from "@/pages/WhyChooseUs";
 import CaseStudies from "@/pages/CaseStudies";
 import FAQ from "@/pages/FAQ";
+import CorsiSicurezza from "@/pages/CorsiSicurezza";
+import CondizioniVendita from "@/pages/CondizioniVendita";
+import Privacy from "@/pages/Privacy";
 
 function App() {
   return (
@@ -25,9 +27,11 @@ function App() {
           <Route path="/perche-noi" element={<WhyChooseUs />} />
           <Route path="/casi-studio" element={<CaseStudies />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/corsi-sicurezza" element={<CorsiSicurezza />} />
+          <Route path="/condizioni-vendita" element={<CondizioniVendita />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
         <Footer />
-        <WhatsAppButton />
         <Toaster />
       </BrowserRouter>
     </div>
