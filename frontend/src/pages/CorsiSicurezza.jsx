@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BadgeCheck, Clock, Laptop, RefreshCw, ShieldCheck, Users } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, CheckCircle2, Clock, Laptop, RefreshCw, ShieldCheck, Users, XCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
 import { Button } from '../components/ui/button';
@@ -23,6 +23,22 @@ export default function CorsiSicurezza() {
   const [categoriaAttiva, setCategoriaAttiva] = useState('tutte');
   const [dettaglio, setDettaglio] = useState(null);
   const [iscrizione, setIscrizione] = useState(null);
+
+  // Ritorno dal pagamento con carta: Stripe rimanda qui con ?iscrizione=ok&rif=...
+  const [ritorno, setRitorno] = useState(() => {
+    if (typeof window === 'undefined') return null;
+    const q = new URLSearchParams(window.location.search);
+    const esito = q.get('iscrizione');
+    if (esito !== 'ok' && esito !== 'annullata') return null;
+    return { esito, riferimento: q.get('rif') || '' };
+  });
+
+  const chiudiRitorno = () => {
+    setRitorno(null);
+    if (typeof window !== 'undefined') {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  };
 
   const corsi = useMemo(() => corsiPubblicabili(), []);
   const visibili = useMemo(
@@ -56,6 +72,62 @@ export default function CorsiSicurezza() {
     }),
     [corsi]
   );
+
+  if (ritorno) {
+    const ok = ritorno.esito === 'ok';
+    return (
+      <div className="min-h-screen pt-40 pb-20">
+        <SEOHead
+          title={ok ? 'Iscrizione confermata' : 'Pagamento annullato'}
+          description="Esito dell’iscrizione ai corsi di sicurezza sul lavoro."
+          canonical="https://www.mariobruzzese.it/corsi-sicurezza"
+          noIndex
+        />
+        <div className="max-w-xl mx-auto px-6 text-center">
+          {ok ? (
+            <CheckCircle2 className="w-14 h-14 text-green-600 mx-auto mb-6" />
+          ) : (
+            <XCircle className="w-14 h-14 text-gray-400 mx-auto mb-6" />
+          )}
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {ok ? 'Iscrizione confermata' : 'Pagamento annullato'}
+          </h1>
+          {ok ? (
+            <>
+              <p className="text-gray-600 mb-2">
+                Abbiamo ricevuto il pagamento. Il riepilogo è partito verso l’indirizzo email che hai indicato.
+              </p>
+              {ritorno.riferimento && (
+                <p className="text-gray-900 font-semibold mb-6">
+                  Riferimento della pratica: {ritorno.riferimento}
+                </p>
+              )}
+              <div className="bg-gray-50 rounded-xl p-5 text-sm text-gray-600 text-left mb-8">
+                <p className="mb-2">
+                  Entro 24 ore lavorative registriamo i partecipanti sulla piattaforma dell’ente.
+                </p>
+                <p className="mb-2">
+                  <strong>Passaggio necessario:</strong> ogni partecipante riceverà un’email per confermare
+                  il proprio account. Finché non la conferma, il corso non può essergli abbinato — se non
+                  arriva, va controllata anche la posta indesiderata.
+                </p>
+                <p>
+                  Superato il test finale, l’attestato si scarica direttamente dalla piattaforma.
+                </p>
+              </div>
+            </>
+          ) : (
+            <p className="text-gray-600 mb-8">
+              Non è stato addebitato nulla. Puoi riprendere l’iscrizione quando vuoi: i dati vanno reinseriti.
+            </p>
+          )}
+          <Button onClick={chiudiRitorno} className="bg-black text-white hover:bg-gray-800">
+            Torna ai corsi
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (iscrizione) {
     return (

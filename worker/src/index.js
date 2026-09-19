@@ -91,8 +91,10 @@ function verificaIscrizione(corpo) {
   });
 
   const consensi = corpo.consensi || {};
-  if (!consensi.privacy || !consensi.condizioni) {
-    aggiungi("Mancano i consensi obbligatori (condizioni di vendita e informativa privacy)");
+  if (!consensi.privacy || !consensi.condizioni || !consensi.attivazione) {
+    aggiungi(
+      'Mancano i consensi obbligatori (condizioni di vendita, informativa privacy e richiesta di attivazione immediata)'
+    );
   }
 
   const metodo = corpo.metodoPagamento === 'bonifico' ? 'bonifico' : 'carta';
@@ -109,7 +111,7 @@ async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, m
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
     .bind(
-      'provvisorio', corso.id, corso.titolo, corso.sku, corso.ore,
+      null, corso.id, corso.titolo, corso.sku, corso.ore,
       corso.prezzo, partecipanti.length, totale, metodo,
       metodo === 'carta' ? 'in_attesa_pagamento' : 'in_attesa_bonifico',
       JSON.stringify(fatturazione), JSON.stringify(consensi), adesso
@@ -200,11 +202,23 @@ async function gestisciWebhook(env, richiesta) {
   const evento = JSON.parse(corpoGrezzo);
   if (evento.type !== 'checkout.session.completed') return json({ ricevuto: true });
 
-  const riferimento = evento.data.object.client_reference_id;
+  const sessione = evento.data.object;
+  // con alcuni metodi di pagamento la sessione si chiude prima dell'incasso
+  if (sessione.payment_status !== 'paid') return json({ ricevuto: true });
+
+  const riferimento = sessione.client_reference_id;
   const ordine = await env.DB.prepare('SELECT * FROM ordini WHERE riferimento = ?')
     .bind(riferimento).first();
   if (!ordine) return json({ ricevuto: true });
   if (ordine.stato === 'pagato') return json({ ricevuto: true }); // Stripe può ripetere l'evento
+
+  const attesi = Math.round(Number(ordine.totale) * 100);
+  if (Number(sessione.amount_total) !== attesi) {
+    console.error('importo incassato diverso dal previsto', riferimento, sessione.amount_total, attesi);
+    await env.DB.prepare('UPDATE ordini SET stato = ? WHERE id = ?')
+      .bind('importo_da_verificare', ordine.id).run();
+    return json({ ricevuto: true });
+  }
 
   await env.DB.prepare('UPDATE ordini SET stato = ?, pagato_il = ? WHERE id = ?')
     .bind('pagato', new Date().toISOString(), ordine.id).run();
