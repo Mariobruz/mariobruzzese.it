@@ -274,7 +274,7 @@ export default function CorsiSicurezza() {
                 className="group bg-white border-2 border-gray-100 rounded-xl overflow-hidden hover:border-black transition-all duration-300 flex flex-col"
               >
                 <div className="aspect-[3/2] overflow-hidden">
-                  <img src={process.env.PUBLIC_URL + corso.immagine} alt={corso.titolo} className={`w-full h-full object-cover ${corso.ancoraggio || 'object-left'}`} loading="lazy" />
+                  <img src={process.env.PUBLIC_URL + corso.immagine} alt={corso.titolo} className="w-full h-full object-cover object-center" loading="lazy" />
                 </div>
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">

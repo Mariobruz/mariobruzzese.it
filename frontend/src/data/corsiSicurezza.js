@@ -57,7 +57,6 @@ export const corsi = [
   {
     id: 'formazione-specifica-rischio-basso-4h',
     // il titolo parte molto in alto: ancorando in alto non gli si mangia il margine
-    ancoraggio: 'object-left-top',
     categoria: 'lavoratori',
     titolo: 'Formazione specifica — rischio basso',
     titoloAttestato: 'CORSO DI FORMAZIONE SPECIFICA DEI LAVORATORI PER I SETTORI DELLA CLASSE DI RISCHIO BASSO - 4 ORE',
