@@ -1,14 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BadgeCheck, CheckCircle2, Clock, Laptop, RefreshCw, ShieldCheck, Users, XCircle } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, CheckCircle2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
 import { Button } from '../components/ui/button';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
 
+const ACCORDO = 'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR)';
+
 const VANTAGGI = [
   { icona: Laptop, titolo: 'Quando vuoi tu', testo: 'Corsi asincroni: si seguono da computer, tablet o telefono, negli orari che decidi tu. Nessuna aula, nessuna trasferta.' },
-  { icona: BadgeCheck, titolo: 'Attestato valido', testo: "Formazione erogata da EFEI, Organismo Paritetico nazionale per la salute e sicurezza sul lavoro. Superato il test finale, l'attestato si scarica direttamente dalla piattaforma." },
+  { icona: BadgeCheck, titolo: 'Attestato valido', testo: "Percorsi progettati ed erogati da EFEI, Organismo Paritetico nazionale, secondo il D.Lgs. 81/2008 e il nuovo Accordo Stato-Regioni del 17 aprile 2025. Superato il test finale, l'attestato si scarica dalla piattaforma." },
   { icona: Users, titolo: 'Anche per più dipendenti', testo: 'Iscrivi in una volta sola tutti i lavoratori da formare: i dati di ciascuno restano separati e tracciati.' },
 ];
 
@@ -148,7 +150,7 @@ export default function CorsiSicurezza() {
       <div className="min-h-screen pt-40 pb-20">
         <SEOHead
           title={dettaglio.titolo}
-          description={`${dettaglio.titolo}: ${dettaglio.ore} ore di e-learning asincrono. ${dettaglio.destinatari}. Attestato valido, ${dettaglio.prezzo} € a partecipante.`}
+          description={`${dettaglio.titolo}: ${dettaglio.ore} ore di e-learning asincrono, conforme al ${dettaglio.normativa} e all'Accordo Stato-Regioni del 17 aprile 2025. ${dettaglio.destinatari}. ${dettaglio.prezzo} € a partecipante, IVA compresa.`}
           canonical="https://www.mariobruzzese.it/corsi-sicurezza"
         />
         <div className="max-w-4xl mx-auto px-6">
@@ -169,6 +171,7 @@ export default function CorsiSicurezza() {
                 <div><dt className="inline font-semibold text-gray-900">Durata: </dt><dd className="inline">{dettaglio.ore} ore</dd></div>
                 <div><dt className="inline font-semibold text-gray-900">Destinatari: </dt><dd className="inline">{dettaglio.destinatari}</dd></div>
                 <div><dt className="inline font-semibold text-gray-900">Riferimento: </dt><dd className="inline">{dettaglio.normativa}</dd></div>
+                <div><dt className="inline font-semibold text-gray-900">Conformità: </dt><dd className="inline">{ACCORDO}</dd></div>
                 <div><dt className="inline font-semibold text-gray-900">Modalità: </dt><dd className="inline">e-learning asincrono</dd></div>
               </dl>
               <p className="text-3xl font-bold text-gray-900 mb-1">{dettaglio.prezzo}&nbsp;€</p>
@@ -189,7 +192,8 @@ export default function CorsiSicurezza() {
 
           <div className="mt-12 bg-gray-50 rounded-xl p-6 text-sm text-gray-600">
             Corso erogato da <strong>EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro</strong>
-            tramite l’Unità Operativa codice 2403. MB Consulting cura la promozione, l’iscrizione e l’assistenza;
+            tramite l’Unità Operativa codice 2403, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
+            all’<strong>{ACCORDO}</strong>. MB Consulting cura la promozione, l’iscrizione e l’assistenza;
             progettazione, erogazione e rilascio dell’attestato sono di EFEI. Superato il test finale, l’attestato si
             scarica direttamente dalla piattaforma.
           </div>
@@ -201,8 +205,8 @@ export default function CorsiSicurezza() {
   return (
     <>
       <SEOHead
-        title="Corsi Sicurezza sul Lavoro Online — E-learning D.Lgs 81/08"
-        description="Corsi di sicurezza sul lavoro online in e-learning: lavoratori, dirigenti, RLS, RSPP, formatori, HACCP. Attestato scaricabile dalla piattaforma a fine corso. Da 25 € IVA compresa."
+        title="Corsi Sicurezza sul Lavoro Online — D.Lgs 81/08 e Accordo Stato-Regioni 2025"
+        description="Corsi di sicurezza sul lavoro online in e-learning, conformi al D.Lgs 81/08 e all'Accordo Stato-Regioni del 17 aprile 2025: lavoratori, dirigenti, RLS, RSPP, formatori, HACCP. Attestato scaricabile dalla piattaforma. Da 25 € IVA compresa."
         canonical="https://www.mariobruzzese.it/corsi-sicurezza"
         schema={schema}
       />
@@ -212,9 +216,14 @@ export default function CorsiSicurezza() {
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.7 }} className="max-w-3xl mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 rounded-full mb-6 text-sm font-medium">
-              <ShieldCheck className="w-4 h-4" /> Formazione obbligatoria D.Lgs 81/08
-            </span>
+            <div className="flex flex-wrap gap-2 mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 rounded-full text-sm font-medium">
+                <ShieldCheck className="w-4 h-4" /> Formazione obbligatoria D.Lgs 81/08
+              </span>
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 rounded-full text-sm font-medium">
+                <ScrollText className="w-4 h-4" /> Accordo Stato-Regioni 17 aprile 2025
+              </span>
+            </div>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Corsi di sicurezza sul lavoro online
             </h1>
@@ -222,6 +231,17 @@ export default function CorsiSicurezza() {
               Metti in regola la tua azienda senza fermare il lavoro: {corsi.length} corsi in e-learning asincrono,
               erogati tramite l’Unità Operativa 2403 di EFEI, con attestato scaricabile dalla piattaforma a fine percorso.
             </p>
+
+            <div className="mt-8 border-l-2 border-gray-900 pl-5 text-[15px] text-gray-600 leading-relaxed">
+              <p>
+                I percorsi sono progettati ed erogati da EFEI in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong>
+                {' '}e all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025.
+              </p>
+              <p className="mt-2">
+                Dal <strong>24 maggio 2026</strong>, concluso il periodo transitorio, l’Accordo disciplina in via
+                esclusiva durata e contenuti minimi della formazione: i corsi qui proposti seguono il nuovo impianto.
+              </p>
+            </div>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-20">
@@ -282,7 +302,8 @@ export default function CorsiSicurezza() {
                     {corso.aggiornamento && <span className="inline-flex items-center gap-1"><RefreshCw className="w-3 h-3" /> aggiornamento</span>}
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2 leading-snug">{corso.titolo}</h3>
-                  <p className="text-sm text-gray-600 mb-6 flex-1">{corso.destinatari}</p>
+                  <p className="text-sm text-gray-600 mb-3 flex-1">{corso.destinatari}</p>
+                  <p className="text-xs text-gray-500 mb-5">{corso.normativa} · ASR 17/04/2025</p>
                   <div className="flex items-center justify-between gap-3">
                     <span>
                       <span className="block text-2xl font-bold text-gray-900 leading-none">{corso.prezzo}&nbsp;€</span>
@@ -314,9 +335,12 @@ export default function CorsiSicurezza() {
             I corsi sono progettati, autorizzati ed erogati in modalità e-learning asincrona da <strong>EFEI — Organismo
             Paritetico Salute e Sicurezza nei Luoghi di Lavoro</strong> (iscritto al n. 5 del Repertorio degli Organismi
             Paritetici del Ministero del Lavoro e delle Politiche Sociali), tramite la <strong>Unità Operativa codice 2403</strong>
-            e la piattaforma autorizzata EFEI. MB Consulting di Mario Bruzzese opera come mandatario per la promozione e la
-            vendita, in nome proprio e per finalità proprie, e non è un Organismo Paritetico. L’attestato è generato e
-            rilasciato da EFEI al superamento del test finale.
+            e la piattaforma autorizzata EFEI, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
+            all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025 ed
+            efficace senza più regime transitorio dal 24 maggio 2026. MB Consulting di Mario Bruzzese opera come
+            mandatario per la promozione e la vendita, in nome proprio e per finalità proprie, e non è un Organismo
+            Paritetico: la conformità dei percorsi, l’erogazione e il rilascio dell’attestato competono a EFEI.
+            L’attestato è generato e rilasciato da EFEI al superamento del test finale.
           </div>
         </div>
       </div>
