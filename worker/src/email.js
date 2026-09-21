@@ -104,7 +104,12 @@ export function emailClienteBonifico(env, { ordine, partecipanti, riferimento, t
         <tr><td style="padding:6px 16px 6px 0;color:#666">Importo</td><td><strong>${totale}&nbsp;€</strong></td></tr>
       </table>
       <p>Indica il riferimento <strong>${riferimento}</strong> nella causale: serve ad abbinare il
-      pagamento alla tua iscrizione senza scambi di email.</p>
+      pagamento alla tua iscrizione.</p>
+      <div style="background:#f3f4f6;border-left:4px solid #111;padding:12px 16px;margin:16px 0">
+        <strong>Appena fatto il bonifico, invia la contabile</strong> a
+        <a href="mailto:${env.EMAIL_AMMINISTRATORE}?subject=Contabile%20${riferimento}">${env.EMAIL_AMMINISTRATORE}</a>
+        indicando il riferimento <strong>${riferimento}</strong>: così acceleriamo la pratica di iscrizione.
+      </div>
       <p>Corso: <strong>${ordine.corso.titolo}</strong> (${ordine.corso.ore} ore), per:</p>
       <ul>${elencoPartecipanti(partecipanti)}</ul>
       <p>Ricevuto il bonifico, entro 24 ore registriamo i partecipanti sulla piattaforma.</p>

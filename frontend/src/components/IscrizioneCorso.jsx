@@ -245,7 +245,13 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
         <p className="text-gray-600 leading-relaxed mb-6">
           Abbiamo inviato a <strong>{esito.email}</strong> gli estremi per il bonifico
           {esito.riferimento ? <> e il riferimento <strong>{esito.riferimento}</strong></> : null}.
-          Indica il riferimento nella causale: serve ad abbinare il pagamento alla tua iscrizione senza scambi di email.
+          Indica il riferimento nella causale: serve ad abbinare il pagamento alla tua iscrizione.
+        </p>
+        <p className="text-gray-900 leading-relaxed mb-6 bg-gray-100 border-l-4 border-black px-4 py-3 text-left">
+          <strong>Appena fatto il bonifico, invia la contabile</strong> a{' '}
+          <a href="mailto:corsi@mariobruzzese.it" className="underline">corsi@mariobruzzese.it</a>
+          {esito.riferimento ? <> indicando il riferimento <strong>{esito.riferimento}</strong></> : null}:
+          così acceleriamo la pratica di iscrizione.
         </p>
         <p className="text-gray-600 leading-relaxed mb-10">
           Ricevuto il bonifico registriamo i partecipanti sulla piattaforma entro 24 ore. A ciascuno arriverà un’email
@@ -482,7 +488,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                 {metodoPagamento === 'bonifico' && (
                   <p className="text-sm text-gray-500 mt-3">
                     L’iscrizione viene registrata subito, ma i partecipanti vengono inseriti sulla piattaforma solo dopo
-                    l’accredito del bonifico.
+                    l’accredito del bonifico. Per accelerare, invia la contabile a corsi@mariobruzzese.it.
                   </p>
                 )}
               </div>
