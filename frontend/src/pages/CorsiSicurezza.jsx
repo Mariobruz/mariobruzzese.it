@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BadgeCheck, Check, CheckCircle2, Link2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
@@ -73,7 +73,6 @@ export default function CorsiSicurezza() {
   const dettaglio = corsoId ? corsi.find((c) => c.id === corsoId) || null : null;
   const iscrizione = dettaglio && pathname.replace(/\/$/, '').endsWith('/iscrizione') ? dettaglio : null;
   const BASE = '/corsi-sicurezza';
-  const setDettaglio = (c) => navigate(c ? `${BASE}/${c.id}` : BASE);
   const setIscrizione = (c) => navigate(c ? `${BASE}/${c.id}/iscrizione` : `${BASE}/${dettaglio.id}`);
 
   // Corso inesistente o non piu in vendita: torna al catalogo
@@ -85,6 +84,7 @@ export default function CorsiSicurezza() {
     [corsi, categoriaAttiva]
   );
 
+  // Formato "pagina riepilogo" di Google: posizione e indirizzo di ogni scheda corso
   const schema = useMemo(
     () => JSON.stringify({
       '@context': 'https://schema.org',
@@ -94,19 +94,7 @@ export default function CorsiSicurezza() {
       itemListElement: corsi.map((c, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        item: {
-          '@type': 'Course',
-          name: c.titolo,
-          description: `${c.ore} ore di formazione e-learning. ${c.destinatari}.`,
-          provider: { '@type': 'Organization', name: 'EFEI Aula Magna' },
-          offers: {
-            '@type': 'Offer',
-            price: c.prezzo,
-            priceCurrency: 'EUR',
-            category: 'Corso e-learning',
-            availability: 'https://schema.org/InStock',
-          },
-        },
+        url: `https://www.mariobruzzese.it/corsi-sicurezza/${c.id}`,
       })),
     }),
     [corsi]
@@ -187,15 +175,15 @@ export default function CorsiSicurezza() {
     return (
       <div className="min-h-screen pt-40 pb-20">
         <SEOHead
-          title={dettaglio.titolo}
-          description={`${dettaglio.titolo}: ${dettaglio.ore} ore di e-learning asincrono, conforme al ${dettaglio.normativa} e all'Accordo Stato-Regioni del 17 aprile 2025. ${dettaglio.destinatari}. ${dettaglio.prezzo} € a partecipante, IVA compresa.`}
+          title={dettaglio.seoTitolo}
+          description={dettaglio.seoDescrizione}
           canonical={`https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`}
         />
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex items-center justify-between gap-4 mb-8">
-            <button onClick={() => setDettaglio(null)} className="inline-flex items-center gap-2 text-gray-600 hover:text-black transition-colors">
+            <Link to={BASE} className="inline-flex items-center gap-2 text-gray-600 hover:text-black transition-colors">
               <ArrowLeft className="w-4 h-4" /> Torna al catalogo
-            </button>
+            </Link>
             <CopiaLink url={`https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`} />
           </div>
 
@@ -242,6 +230,25 @@ export default function CorsiSicurezza() {
             ))}
           </div>
 
+          {dettaglio.correlati.length > 0 && (
+            <section className="mt-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Altri corsi della stessa area</h2>
+              <ul className="grid sm:grid-cols-2 gap-3">
+                {dettaglio.correlati.map((x) => (
+                  <li key={x.id}>
+                    <Link
+                      to={`${BASE}/${x.id}`}
+                      className="flex items-center justify-between gap-4 border-2 border-gray-100 hover:border-black rounded-xl px-4 py-3 transition-colors"
+                    >
+                      <span className="font-medium text-gray-900">{x.titolo}</span>
+                      <span className="text-sm text-gray-500 whitespace-nowrap">{x.ore} ore · {x.prezzo}&nbsp;€</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <div className="mt-12 bg-gray-50 rounded-xl p-6 text-sm text-gray-600">
             Corso erogato da <strong>EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro</strong>
             tramite l’Unità Operativa codice 2403, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
@@ -261,8 +268,8 @@ export default function CorsiSicurezza() {
     <>
       <WhatsAppFisso testo="Ciao, vorrei informazioni sui corsi di sicurezza sul lavoro." />
       <SEOHead
-        title="Corsi Sicurezza sul Lavoro Online — D.Lgs 81/08 e Accordo Stato-Regioni 2025"
-        description="Corsi di sicurezza sul lavoro online in e-learning, conformi al D.Lgs 81/08 e all'Accordo Stato-Regioni del 17 aprile 2025: lavoratori, dirigenti, RLS, RSPP, formatori, HACCP. Attestato scaricabile dalla piattaforma. Da 25 € IVA compresa."
+        title="Corsi Sicurezza sul Lavoro Online – Accordo Stato-Regioni 2025"
+        description="Corsi di sicurezza sul lavoro online, Accordo Stato-Regioni 2025: lavoratori, datore di lavoro, RSPP, RLS, formatori, HACCP. Attestato con QR code, da 25 €."
         canonical="https://www.mariobruzzese.it/corsi-sicurezza"
         schema={schema}
       />
@@ -357,7 +364,9 @@ export default function CorsiSicurezza() {
                     <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {corso.ore} ore</span>
                     {corso.aggiornamento && <span className="inline-flex items-center gap-1"><RefreshCw className="w-3 h-3" /> aggiornamento</span>}
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2 leading-snug">{corso.titolo}</h3>
+                  <h3 className="font-bold text-gray-900 mb-2 leading-snug">
+                    <Link to={`${BASE}/${corso.id}`} className="hover:underline">{corso.titolo}</Link>
+                  </h3>
                   <p className="text-sm text-gray-600 mb-3 flex-1">{corso.destinatari}</p>
                   <p className={`text-xs text-gray-500 ${corso.avviso ? 'mb-2' : 'mb-5'}`}>{corso.normativa} · ASR 17/04/2025</p>
                   {corso.avviso && <p className="text-xs text-amber-800 mb-5">⚠ {corso.avviso}</p>}
@@ -371,8 +380,8 @@ export default function CorsiSicurezza() {
                       <span className="block text-2xl font-bold text-gray-900 leading-none">{corso.prezzo}&nbsp;€</span>
                       <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
                     </span>
-                    <Button onClick={() => setDettaglio(corso)} className="bg-black text-white hover:bg-gray-800">
-                      Dettagli
+                    <Button asChild className="bg-black text-white hover:bg-gray-800">
+                      <Link to={`${BASE}/${corso.id}`} aria-label={`Dettagli: ${corso.titolo}`}>Dettagli</Link>
                     </Button>
                   </div>
                 </div>

@@ -458,9 +458,70 @@ const oggiInItalia = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'E
 export const inLancio = (c) => Boolean(c.prezzoLancio && c.lancioFino && oggiInItalia() <= c.lancioFino);
 export const prezzoCorrente = (c) => (inLancio(c) ? c.prezzoLancio : c.prezzo);
 
+// ---------------------------------------------------------------- SEO
+// Titoli scritti come le persone cercano su Google ("corso haccp online",
+// "corso datore di lavoro 16 ore"...). Il titolo visibile in pagina resta quello del corso.
+const TITOLI_SEO = {
+  'formazione-generale-lavoratori-4h': 'Corso Sicurezza Lavoratori Online – Formazione Generale 4 ore',
+  'formazione-generale-lavoratori-4h-eng': 'Corso Sicurezza Lavoratori in Inglese Online – Generale 4 ore',
+  'formazione-specifica-rischio-basso-4h': 'Corso Sicurezza Rischio Basso Online – Formazione Specifica 4 ore',
+  'formazione-generale-specifica-rischio-basso-8h': 'Corso Sicurezza Lavoratori Rischio Basso Online 8 ore',
+  'aggiornamento-lavoratori-tutti-rischi-6h': 'Aggiornamento Sicurezza Lavoratori Online 6 ore – Tutti i Rischi',
+  'aggiornamento-lavoratori-rischio-medio-6h': 'Aggiornamento Sicurezza Lavoratori Rischio Medio Online 6 ore',
+  'datore-di-lavoro-16h': 'Corso Datore di Lavoro Sicurezza Online 16 ore – Accordo 2025',
+  'rspp-datore-lavoro-8h': 'Corso RSPP Datore di Lavoro Online 8 ore',
+  'aggiornamento-rspp-datore-lavoro-8h': 'Aggiornamento RSPP Datore di Lavoro Online 8 ore',
+  'modulo-cantieri-datore-6h': 'Modulo Cantieri Datore di Lavoro Online 6 ore – Accordo 2025',
+  'dirigenti-12h': 'Corso Dirigenti Sicurezza Online 12 ore – Accordo 2025',
+  'aggiornamento-dirigenti-6h': 'Aggiornamento Dirigenti Sicurezza Online 6 ore',
+  'modulo-cantieri-dirigenti-6h': 'Modulo Cantieri Dirigenti Online 6 ore – Accordo 2025',
+  'rspp-aspp-modulo-a-28h': 'Corso RSPP ASPP Modulo A Online 28 ore',
+  'aggiornamento-rspp-40h': 'Aggiornamento RSPP Online 40 ore',
+  'aggiornamento-aspp-20h': 'Aggiornamento ASPP Online 20 ore',
+  'rls-32h': 'Corso RLS Online 32 ore – Rappresentante dei Lavoratori',
+  'aggiornamento-rls-fino-50-4h': 'Aggiornamento RLS Online 4 ore – Aziende fino a 50 Lavoratori',
+  'aggiornamento-rls-oltre-50-8h': 'Aggiornamento RLS Online 8 ore – Aziende oltre 50 Lavoratori',
+  'coordinatore-modulo-giuridico-8h': 'Corso Coordinatore Sicurezza CSP CSE – Modulo Giuridico 8 ore',
+  'aggiornamento-csp-cse-40h': 'Aggiornamento Coordinatore Sicurezza CSP CSE 40 ore',
+  'formatori-40h': 'Corso Formatore Sicurezza sul Lavoro Online 40 ore',
+  'formatori-24h': 'Corso Formatore Sicurezza sul Lavoro Online 24 ore',
+  'aggiornamento-formatori-24h': 'Aggiornamento Formatore Sicurezza Online 24 ore',
+  'responsabile-industria-alimentare': 'Corso HACCP Responsabile Industria Alimentare Online 12 ore',
+  'osa-rischio-elevato-8h': 'Corso HACCP Online Rischio Elevato (Cat. A) 8 ore',
+  'osa-rischio-medio-6h': 'Corso HACCP Online Rischio Medio (Cat. B) 6 ore',
+  'aggiornamento-osa-4h': 'Aggiornamento HACCP Online 4 ore – Cat. A e B',
+};
+
+/** Titolo e descrizione per Google: descrizione entro ~160 caratteri. */
+export const seoCorso = (c, prezzo = c.prezzo) => {
+  const titolo = TITOLI_SEO[c.id] || `${c.titolo} — corso online ${c.ore} ore`;
+  const conformita = c.categoria === 'haccp' ? 'Reg. CE 852/2004' : 'Accordo Stato-Regioni 2025';
+  const varianti = [
+    `${titolo}. E-learning asincrono conforme a ${conformita}. ${prezzo} € a partecipante IVA compresa, attestato con QR code.`,
+    `${titolo}. E-learning conforme a ${conformita}. ${prezzo} € IVA compresa, attestato con QR code.`,
+    `${titolo}. E-learning, ${conformita}. ${prezzo} € IVA compresa, attestato con QR code.`,
+  ];
+  const descrizione = varianti.find((d) => d.length <= 160) || varianti[varianti.length - 1];
+  return { titolo, descrizione };
+};
+
 // I corsi con "sospeso" restano in archivio ma non si vendono.
 // "prezzo" restituito e quello da pagare oggi (di lancio, se attivo).
-export const corsiPubblicabili = () =>
-  corsi
+export const corsiPubblicabili = () => {
+  const pubblicabili = corsi
     .filter((c) => c.prezzo !== null && !c.sospeso)
     .map((c) => ({ ...c, prezzo: prezzoCorrente(c), lancio: inLancio(c) }));
+  return pubblicabili.map((c) => {
+    const seo = seoCorso(c);
+    return {
+      ...c,
+      seoTitolo: seo.titolo,
+      seoDescrizione: seo.descrizione,
+      // altri corsi della stessa area: collegamenti interni tra le schede
+      correlati: pubblicabili
+        .filter((x) => x.categoria === c.categoria && x.id !== c.id)
+        .slice(0, 4)
+        .map((x) => ({ id: x.id, titolo: x.titolo, ore: x.ore, prezzo: x.prezzo })),
+    };
+  });
+};

@@ -100,16 +100,18 @@ async function caricaCorsi() {
 
 function paginaCorso(c) {
   const url = `${BASE}/corsi-sicurezza/${c.id}`;
-  const descr =
-    `${c.titolo}: corso di sicurezza sul lavoro online, ${c.ore} ore in e-learning asincrono. ` +
-    `${c.destinatari}. ${c.prezzo} € a partecipante, IVA compresa. Attestato scaricabile dalla piattaforma.`;
-  const lista = (c.programma || [])
-    .filter((r) => r.startsWith('- '))
-    .map((r) => `<li>${esc(r.slice(2))}</li>`)
+  const descr = c.seoDescrizione;
+  // tutto il programma, non solo le righe a elenco: è il contenuto più ricco della pagina
+  const programma = (c.programma || [])
+    .map((r) => (r.startsWith('- ') ? `<li>${esc(r.slice(2))}</li>` : `<p>${esc(r)}</p>`))
+    .join('')
+    .replace(/((?:<li>.*?<\/li>)+)/g, '<ul>$1</ul>');
+  const correlati = (c.correlati || [])
+    .map((x) => `<li><a href="${BASE}/corsi-sicurezza/${x.id}">${esc(x.titolo)} — ${x.ore} ore, ${x.prezzo} €</a></li>`)
     .join('');
   return {
     slug: `corsi-sicurezza/${c.id}`,
-    title: `${c.titolo} — corso online ${c.ore} ore | MB Consulting`,
+    title: `${c.seoTitolo} | MB Consulting`,
     description: descr,
     image: `${BASE}${c.immagine}`,
     priority: '0.8',
@@ -121,12 +123,14 @@ function paginaCorso(c) {
         name: c.titolo,
         description: descr,
         url,
+        inLanguage: c.id.endsWith('-eng') ? 'en' : 'it',
+        educationalCredentialAwarded: 'Attestato di frequenza con verifica finale',
         image: `${BASE}${c.immagine}`,
-        provider: { '@type': 'Organization', name: 'EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro' },
+        provider: { '@type': 'Organization', name: 'EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro', sameAs: 'https://www.efeiaulamagna.it' },
         hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online', courseWorkload: `PT${c.ore}H` },
         offers: {
           '@type': 'Offer', price: c.prezzo, priceCurrency: 'EUR', availability: 'https://schema.org/InStock',
-          url, category: 'Corso e-learning',
+          url, category: 'Paid',
         },
       },
       {
@@ -140,13 +144,15 @@ function paginaCorso(c) {
       },
     ],
     noscript: `
-      <h1>${esc(c.titolo)} — corso online</h1>
+      <h1>${esc(c.seoTitolo)}</h1>
       <p><strong>Durata:</strong> ${c.ore} ore in e-learning asincrono. <strong>Destinatari:</strong> ${esc(c.destinatari)}. <strong>Riferimento:</strong> ${esc(c.normativa)}.</p>
       <p><strong>Prezzo:</strong> ${c.prezzo} € a partecipante, IVA compresa.</p>
       ${c.avviso ? `<p>${esc(c.avviso)}</p>` : ''}
       <p>Corso erogato da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unità Operativa 2403 e A.U.G.E. Università, promosso da MB Consulting. Superato il test finale, l'attestato si scarica dalla piattaforma.</p>
-      ${lista ? `<h2>Programma</h2><ul>${lista}</ul>` : ''}
+      ${programma ? `<h2>Programma del corso</h2>${programma}` : ''}
       <p><a href="${url}/iscrizione">Iscriviti al corso</a></p>
+      ${correlati ? `<h2>Altri corsi della stessa area</h2><ul>${correlati}</ul>` : ''}
+      <p><a href="${BASE}/corsi-sicurezza">Tutti i corsi di sicurezza sul lavoro online</a></p>
     `,
   };
 }
@@ -154,6 +160,28 @@ function paginaCorso(c) {
 async function main() {
 const corsi = await caricaCorsi();
 const schede = corsi.map(paginaCorso);
+
+// Catalogo: elenco dei corsi generato dal catalogo vero (niente prezzi scritti a mano).
+// Formato "pagina riepilogo" di Google: solo posizione e indirizzo di ogni scheda.
+const catalogo = pages.find((p) => p.slug === 'corsi-sicurezza');
+if (catalogo) {
+  catalogo.schema = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Corsi di sicurezza sul lavoro online',
+      numberOfItems: corsi.length,
+      itemListElement: corsi.map((c, i) => ({
+        '@type': 'ListItem', position: i + 1, url: `${BASE}/corsi-sicurezza/${c.id}`,
+      })),
+    },
+    ...catalogo.schema.filter((x) => x['@type'] !== 'ItemList'),
+  ];
+  // collegamenti a tutte le schede anche nella versione senza JavaScript
+  catalogo.noscript += `<h2>Tutti i corsi</h2><ul>${corsi
+    .map((c) => `<li><a href="${BASE}/corsi-sicurezza/${c.id}">${esc(c.seoTitolo)}</a> — ${c.prezzo} €</li>`)
+    .join('')}</ul>`;
+}
 const iscrizioni = schede.map((p) => ({
   ...p, slug: `${p.slug}/iscrizione`, canonical: `${BASE}/${p.slug}`, noindex: true,
   title: `Iscrizione — ${p.title}`,
