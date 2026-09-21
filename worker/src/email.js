@@ -18,6 +18,19 @@ function base64(testo) {
 
 const stile = `font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:15px;line-height:1.6;color:#111`;
 
+/** Versione in testo semplice dell'email HTML. */
+function soloTesto(html) {
+  return html
+    .replace(/<(br|\/p|\/h[1-6]|\/tr|\/li|\/div)[^>]*>/gi, '\n')
+    .replace(/<\/td>\s*<td[^>]*>/gi, ': ')
+    .replace(/<li[^>]*>/gi, '- ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n\s*\n\s*\n+/g, '\n\n')
+    .trim();
+}
+
 async function invia(env, { a, oggetto, html, allegati }) {
   const destinatari = (Array.isArray(a) ? a : [a]).map((email) => ({ email }));
   const risposta = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -33,6 +46,8 @@ async function invia(env, { a, oggetto, html, allegati }) {
       replyTo: { email: env.EMAIL_AMMINISTRATORE },
       subject: oggetto,
       htmlContent: html,
+      // versione solo testo: Outlook/Hotmail scarta o rallenta le email solo HTML
+      textContent: soloTesto(html),
       attachment: allegati,
     }),
   });
