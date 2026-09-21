@@ -55,6 +55,7 @@ function render(page) {
 
   // canonical + twitter card (inseriti prima di </head>)
   html = html.replace(/<link\s+rel="canonical"[^>]*>/gi, '');
+  if (page.noindex) html = html.replace(/<meta\s+name="robots"[^>]*>/gi, '');
   const head = [
     `<link rel="canonical" href="${url}"/>`,
     `<meta name="twitter:card" content="summary_large_image"/>`,
