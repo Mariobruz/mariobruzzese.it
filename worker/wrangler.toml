@@ -8,7 +8,7 @@ compatibility_date = "2026-09-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "iscrizioni-corsi"
-database_id = "DA_COMPILARE_DOPO_LA_CREAZIONE"
+database_id = "c36aa84d-e0a4-496e-aae3-f63ac225b356"
 
 [vars]
 # Valori non segreti: si possono tenere qui.
