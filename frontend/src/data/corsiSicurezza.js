@@ -125,7 +125,7 @@ export const corsi = [
     sku: 'cors-d_123',
     idEnte: 70,
     immagine: '/img/corsi/datore-di-lavoro-16h.webp',
-    prezzo: 199,
+    prezzo: 169,
     prezzoLancio: 149,
     lancioFino: '2026-10-31',
   },

@@ -61,7 +61,7 @@ export const catalogo = [
     "titolo": "Formazione datore di lavoro",
     "titoloAttestato": "CORSO DI FORMAZIONE DATORE DI LAVORO - 16 ORE",
     "ore": 16,
-    "prezzo": 199,
+    "prezzo": 169,
     "prezzoLancio": 149,
     "lancioFino": "2026-10-31",
     "sku": "cors-d_123"
