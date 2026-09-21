@@ -31,7 +31,7 @@ const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function render(page) {
-  const url = page.slug ? `${BASE}/${page.slug}` : `${BASE}/`;
+  const url = page.canonical || (page.slug ? `${BASE}/${page.slug}` : `${BASE}/`);
   let html = shell;
 
   // <title>
@@ -51,7 +51,7 @@ function render(page) {
       `<meta property="og:description" content="${esc(page.description)}"/>`
     )
     .replace(/<meta\s+property="og:url"[^>]*>/i, `<meta property="og:url" content="${url}"/>`)
-    .replace(/<meta\s+property="og:image"[^>]*>/i, `<meta property="og:image" content="${OG_IMG}"/>`);
+    .replace(/<meta\s+property="og:image"[^>]*>/i, `<meta property="og:image" content="${page.image || OG_IMG}"/>`);
 
   // canonical + twitter card (inseriti prima di </head>)
   html = html.replace(/<link\s+rel="canonical"[^>]*>/gi, '');
@@ -60,7 +60,8 @@ function render(page) {
     `<meta name="twitter:card" content="summary_large_image"/>`,
     `<meta name="twitter:title" content="${esc(page.title)}"/>`,
     `<meta name="twitter:description" content="${esc(page.description)}"/>`,
-    `<meta name="twitter:image" content="${OG_IMG}"/>`,
+    `<meta name="twitter:image" content="${page.image || OG_IMG}"/>`,
+    page.noindex ? `<meta name="robots" content="noindex,follow"/>` : '',
   ].join('');
   html = html.replace(/<\/head>/i, `${head}</head>`);
 
@@ -80,8 +81,85 @@ function render(page) {
   return html;
 }
 
+/**
+ * Carica il catalogo corsi (moduli ES del frontend) senza bundler: incolla il
+ * file dei programmi al posto dell'import e lo importa come data URL.
+ */
+async function caricaCorsi() {
+  const dir = path.join(__dirname, '..', 'src', 'data');
+  const programmi = fs
+    .readFileSync(path.join(dir, 'programmiCorsi.js'), 'utf8')
+    .replace('export const programmi', 'const programmi');
+  const sorgente = fs
+    .readFileSync(path.join(dir, 'corsiSicurezza.js'), 'utf8')
+    .replace(/^import \{ programmi \} from '\.\/programmiCorsi';$/m, programmi);
+  const modulo = await import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
+  return modulo.corsiPubblicabili();
+}
+
+function paginaCorso(c) {
+  const url = `${BASE}/corsi-sicurezza/${c.id}`;
+  const descr =
+    `${c.titolo}: corso di sicurezza sul lavoro online, ${c.ore} ore in e-learning asincrono. ` +
+    `${c.destinatari}. ${c.prezzo} € a partecipante, IVA compresa. Attestato scaricabile dalla piattaforma.`;
+  const lista = (c.programma || [])
+    .filter((r) => r.startsWith('- '))
+    .map((r) => `<li>${esc(r.slice(2))}</li>`)
+    .join('');
+  return {
+    slug: `corsi-sicurezza/${c.id}`,
+    title: `${c.titolo} — corso online ${c.ore} ore | MB Consulting`,
+    description: descr,
+    image: `${BASE}${c.immagine}`,
+    priority: '0.8',
+    changefreq: 'monthly',
+    schema: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Course',
+        name: c.titolo,
+        description: descr,
+        url,
+        image: `${BASE}${c.immagine}`,
+        provider: { '@type': 'Organization', name: 'EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro' },
+        hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online', courseWorkload: `PT${c.ore}H` },
+        offers: {
+          '@type': 'Offer', price: c.prezzo, priceCurrency: 'EUR', availability: 'https://schema.org/InStock',
+          url, category: 'Corso e-learning',
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Corsi sicurezza', item: `${BASE}/corsi-sicurezza` },
+          { '@type': 'ListItem', position: 3, name: c.titolo, item: url },
+        ],
+      },
+    ],
+    noscript: `
+      <h1>${esc(c.titolo)} — corso online</h1>
+      <p><strong>Durata:</strong> ${c.ore} ore in e-learning asincrono. <strong>Destinatari:</strong> ${esc(c.destinatari)}. <strong>Riferimento:</strong> ${esc(c.normativa)}.</p>
+      <p><strong>Prezzo:</strong> ${c.prezzo} € a partecipante, IVA compresa.</p>
+      ${c.avviso ? `<p>${esc(c.avviso)}</p>` : ''}
+      <p>Corso erogato da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unità Operativa 2403 e A.U.G.E. Università, promosso da MB Consulting. Superato il test finale, l'attestato si scarica dalla piattaforma.</p>
+      ${lista ? `<h2>Programma</h2><ul>${lista}</ul>` : ''}
+      <p><a href="${url}/iscrizione">Iscriviti al corso</a></p>
+    `,
+  };
+}
+
+async function main() {
+const corsi = await caricaCorsi();
+const schede = corsi.map(paginaCorso);
+const iscrizioni = schede.map((p) => ({
+  ...p, slug: `${p.slug}/iscrizione`, canonical: `${BASE}/${p.slug}`, noindex: true,
+  title: `Iscrizione — ${p.title}`,
+}));
+
 console.log('\n\x1b[1mPrerender delle rotte\x1b[0m');
-for (const page of pages) {
+for (const page of [...pages, ...schede, ...iscrizioni]) {
   const html = render(page);
   if (!page.slug) {
     fs.writeFileSync(shellPath, html, 'utf8');
@@ -98,7 +176,7 @@ for (const page of pages) {
 const today = new Date().toISOString().slice(0, 10);
 const sitemap =
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  pages
+  [...pages, ...schede]
     .map(
       (p) =>
         `  <url><loc>${p.slug ? `${BASE}/${p.slug}` : `${BASE}/`}</loc><lastmod>${today}</lastmod><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>`
@@ -108,4 +186,10 @@ const sitemap =
 fs.writeFileSync(path.join(BUILD, 'sitemap.xml'), sitemap, 'utf8');
 ok('sitemap.xml rigenerata');
 
-console.log(`\n\x1b[32m✓\x1b[0m Prerender completato: ${pages.length} rotte.\n`);
+console.log(`\n\x1b[32m✓\x1b[0m Prerender completato: ${pages.length} pagine + ${schede.length} schede corso (+ ${iscrizioni.length} iscrizioni).\n`);
+}
+
+main().catch((e) => {
+  console.error('✗ Prerender fallito:', e);
+  process.exit(1);
+});

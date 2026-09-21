@@ -28,6 +28,8 @@ function App() {
           <Route path="/casi-studio" element={<CaseStudies />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/corsi-sicurezza" element={<CorsiSicurezza />} />
+          <Route path="/corsi-sicurezza/:corsoId" element={<CorsiSicurezza />} />
+          <Route path="/corsi-sicurezza/:corsoId/iscrizione" element={<CorsiSicurezza />} />
           <Route path="/condizioni-vendita" element={<CondizioniVendita />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>

@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BadgeCheck, CheckCircle2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, Check, CheckCircle2, Link2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
 import { Button } from '../components/ui/button';
@@ -21,10 +22,31 @@ const PASSI = [
   { n: '04', titolo: 'Inizi il corso', testo: 'Confermato l’account, abbiniamo il corso acquistato e si può partire. Superato il test finale, l’attestato si scarica dalla piattaforma.' },
 ];
 
+/** Copia negli appunti l'indirizzo della scheda: comodo per campagne e messaggi. */
+function CopiaLink({ url }) {
+  const [copiato, setCopiato] = useState(false);
+  const copia = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiato(true);
+      setTimeout(() => setCopiato(false), 2000);
+    } catch (e) {
+      window.prompt('Copia il link del corso:', url);
+    }
+  };
+  return (
+    <button onClick={copia} className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-black transition-colors">
+      {copiato ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
+      {copiato ? 'Link copiato' : 'Copia link del corso'}
+    </button>
+  );
+}
+
 export default function CorsiSicurezza() {
   const [categoriaAttiva, setCategoriaAttiva] = useState('tutte');
-  const [dettaglio, setDettaglio] = useState(null);
-  const [iscrizione, setIscrizione] = useState(null);
+  const { corsoId } = useParams();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   // Ritorno dal pagamento con carta: Stripe rimanda qui con ?iscrizione=ok&rif=...
   const [ritorno, setRitorno] = useState(() => {
@@ -43,6 +65,20 @@ export default function CorsiSicurezza() {
   };
 
   const corsi = useMemo(() => corsiPubblicabili(), []);
+
+  // Ogni corso ha il suo indirizzo, da usare nelle campagne:
+  //   /corsi-sicurezza/<id>              scheda del corso
+  //   /corsi-sicurezza/<id>/iscrizione   direttamente al modulo d'acquisto
+  const dettaglio = corsoId ? corsi.find((c) => c.id === corsoId) || null : null;
+  const iscrizione = dettaglio && pathname.replace(/\/$/, '').endsWith('/iscrizione') ? dettaglio : null;
+  const BASE = '/corsi-sicurezza';
+  const setDettaglio = (c) => navigate(c ? `${BASE}/${c.id}` : BASE);
+  const setIscrizione = (c) => navigate(c ? `${BASE}/${c.id}/iscrizione` : `${BASE}/${dettaglio.id}`);
+
+  // Corso inesistente o non piu in vendita: torna al catalogo
+  useEffect(() => {
+    if (corsoId && !dettaglio) navigate(BASE, { replace: true });
+  }, [corsoId, dettaglio, navigate]);
   const visibili = useMemo(
     () => (categoriaAttiva === 'tutte' ? corsi : corsi.filter((c) => c.categoria === categoriaAttiva)),
     [corsi, categoriaAttiva]
@@ -137,7 +173,7 @@ export default function CorsiSicurezza() {
         <SEOHead
           title={`Iscrizione: ${iscrizione.titolo}`}
           description={`Iscriviti al corso ${iscrizione.titolo}, ${iscrizione.ore} ore in e-learning.`}
-          canonical="https://www.mariobruzzese.it/corsi-sicurezza"
+          canonical={`https://www.mariobruzzese.it/corsi-sicurezza/${iscrizione.id}`}
           noIndex
         />
         <IscrizioneCorso corso={iscrizione} onIndietro={() => setIscrizione(null)} />
@@ -151,12 +187,15 @@ export default function CorsiSicurezza() {
         <SEOHead
           title={dettaglio.titolo}
           description={`${dettaglio.titolo}: ${dettaglio.ore} ore di e-learning asincrono, conforme al ${dettaglio.normativa} e all'Accordo Stato-Regioni del 17 aprile 2025. ${dettaglio.destinatari}. ${dettaglio.prezzo} € a partecipante, IVA compresa.`}
-          canonical="https://www.mariobruzzese.it/corsi-sicurezza"
+          canonical={`https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`}
         />
         <div className="max-w-4xl mx-auto px-6">
-          <button onClick={() => setDettaglio(null)} className="inline-flex items-center gap-2 text-gray-600 hover:text-black mb-8 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Torna al catalogo
-          </button>
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <button onClick={() => setDettaglio(null)} className="inline-flex items-center gap-2 text-gray-600 hover:text-black transition-colors">
+              <ArrowLeft className="w-4 h-4" /> Torna al catalogo
+            </button>
+            <CopiaLink url={`https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`} />
+          </div>
 
           <div className="grid md:grid-cols-2 gap-10 mb-12">
             <img src={process.env.PUBLIC_URL + dettaglio.immagine} alt={dettaglio.titolo} className="rounded-xl w-full border border-gray-100" loading="lazy" />
