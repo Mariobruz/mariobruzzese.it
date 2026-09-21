@@ -174,6 +174,7 @@ export default function CorsiSicurezza() {
                 <div><dt className="inline font-semibold text-gray-900">Conformità: </dt><dd className="inline">{ACCORDO}</dd></div>
                 <div><dt className="inline font-semibold text-gray-900">Modalità: </dt><dd className="inline">e-learning asincrono</dd></div>
               </dl>
+              {dettaglio.avviso && <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-6">{dettaglio.avviso}</p>}
               <p className="text-3xl font-bold text-gray-900 mb-1">{dettaglio.prezzo}&nbsp;€</p>
               <p className="text-sm text-gray-500 mb-6">a partecipante, IVA compresa</p>
               <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 w-full">
@@ -304,7 +305,8 @@ export default function CorsiSicurezza() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2 leading-snug">{corso.titolo}</h3>
                   <p className="text-sm text-gray-600 mb-3 flex-1">{corso.destinatari}</p>
-                  <p className="text-xs text-gray-500 mb-5">{corso.normativa} · ASR 17/04/2025</p>
+                  <p className={`text-xs text-gray-500 ${corso.avviso ? 'mb-2' : 'mb-5'}`}>{corso.normativa} · ASR 17/04/2025</p>
+                  {corso.avviso && <p className="text-xs text-amber-800 mb-5">⚠ {corso.avviso}</p>}
                   <div className="flex items-center justify-between gap-3">
                     <span>
                       <span className="block text-2xl font-bold text-gray-900 leading-none">{corso.prezzo}&nbsp;€</span>

@@ -234,4 +234,8 @@ export const catalogo = [
   }
 ];
 
-export const corsoPerId = (id) => catalogo.find((c) => c.id === id) || null;
+// Corsi non vendibili in e-learning secondo il Vademecum EFEI: il server li rifiuta.
+const SOSPESI = new Set(['rspp-datore-lavoro-8h', 'aggiornamento-csp-cse-40h']);
+
+export const corsoPerId = (id) =>
+  (SOSPESI.has(id) ? null : catalogo.find((c) => c.id === id)) || null;

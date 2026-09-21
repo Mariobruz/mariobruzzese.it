@@ -129,6 +129,7 @@ export const corsi = [
   },
   {
     id: 'rspp-datore-lavoro-8h',
+    sospeso: "Vademecum EFEI: formazione DL-RSPP non consentita in e-learning (solo presenza o videoconferenza sincrona)",
     categoria: 'datore',
     titolo: 'Datore di lavoro RSPP — moduli I e II',
     titoloAttestato: 'CORSO DI FORMAZIONE PER LO SVOLGIMENTO DIRETTO DA PARTE DEL DATORE DI LAVORO DEI COMPITI DI RESPONSABILE AL SERVIZIO DI PREVENZIONE E PROTEZIONE - MODULI I E II - 8 ORE',
@@ -261,6 +262,7 @@ export const corsi = [
   // ----------------------------------------------------------------------- RLS
   {
     id: 'rls-32h',
+    avviso: 'Attivabile in e-learning solo se previsto dal CCNL applicato dall’azienda (art. 37, commi 11 e 12, D.Lgs. 81/2008).',
     categoria: 'rls',
     titolo: 'Formazione RLS',
     titoloAttestato: 'CORSO DI FORMAZIONE PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA (RLS) - 32 ORE',
@@ -275,6 +277,7 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-rls-fino-50-4h',
+    avviso: 'Attivabile in e-learning solo se previsto dal CCNL applicato dall’azienda (art. 37, commi 11 e 12, D.Lgs. 81/2008).',
     categoria: 'rls',
     titolo: 'Aggiornamento RLS — aziende fino a 50 lavoratori',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA PER IMPRESE CHE OCCUPANO FINO AI 50 LAVORATORI - 4 ORE',
@@ -289,6 +292,7 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-rls-oltre-50-8h',
+    avviso: 'Attivabile in e-learning solo se previsto dal CCNL applicato dall’azienda (art. 37, commi 11 e 12, D.Lgs. 81/2008).',
     categoria: 'rls',
     titolo: 'Aggiornamento RLS — aziende oltre 50 lavoratori',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA PER IMPRESE CHE OCCUPANO PIÙ DI 50 LAVORATORI - 8 ORE',
@@ -319,6 +323,7 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-csp-cse-40h',
+    sospeso: "Vademecum EFEI: per l'aggiornamento coordinatori l'e-learning e consentito solo per il modulo giuridico",
     categoria: 'cantieri',
     titolo: 'Aggiornamento coordinatori CSP/CSE',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO COORDINATORE PER LA PROGETTAZIONE E PER L’ESECUZIONE DEI LAVORI - 40 ORE',
@@ -379,6 +384,7 @@ export const corsi = [
   // ---------------------------------------------------------------------- HACCP
   {
     id: 'responsabile-industria-alimentare',
+    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Responsabile industria alimentare (HACCP OSA)',
     titoloAttestato: 'CORSO DI FORMAZIONE PER RESPONSABILE INDUSTRIA ALIMENTARE - (HACCP OSA)',
@@ -393,6 +399,7 @@ export const corsi = [
   },
   {
     id: 'osa-rischio-elevato-8h',
+    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Alimentaristi — rischio elevato (cat. A)',
     titoloAttestato: 'CORSO DI FORMAZIONE PER OPERATORI DEL SETTORE ALIMENTARE RISCHIO ELEVATO CAT. A (OSA - HACCP ORE 8)',
@@ -407,6 +414,7 @@ export const corsi = [
   },
   {
     id: 'osa-rischio-medio-6h',
+    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Alimentaristi — rischio medio (cat. B)',
     titoloAttestato: 'CORSO DI FORMAZIONE PER OPERATORI DEL SETTORE ALIMENTARE - RISCHIO MEDIO CAT.B (OSA - HACCP ORE 6)',
@@ -421,6 +429,7 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-osa-4h',
+    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Aggiornamento alimentaristi (cat. A e B)',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO DI OPERATORI DEL SETTORE ALIMENTARE CAT.A E CAT.B (OSA - RISCHIO ELEVATO E MEDIO - HACCP ORE 4)',
@@ -442,4 +451,5 @@ export const scontiQuantita = [];
 // Ogni corso porta con sé il programma didattico ufficiale dell'ente.
 corsi.forEach((c) => { c.programma = programmi[c.id] || []; });
 
-export const corsiPubblicabili = () => corsi.filter((c) => c.prezzo !== null);
+// I corsi con "sospeso" restano in archivio ma non si vendono.
+export const corsiPubblicabili = () => corsi.filter((c) => c.prezzo !== null && !c.sospeso);

@@ -124,6 +124,11 @@ const CondizioniVendita = () => (
         ]}
       />
       <p>
+        Per le aziende con sede in <strong>Sicilia</strong> la regolamentazione regionale impone di comunicare il
+        corso con almeno 20 giorni di anticipo; in <strong>Piemonte</strong> 15 giorni per i corsi RSPP/ASPP e per
+        coordinatori. In questi casi il termine di 24 ore si intende sostituito da quello regionale.
+      </p>
+      <p>
         Il secondo passaggio dipende dal Partecipante: finché l’account non viene confermato, il corso non può essere
         attivato e il ritardo non è imputabile a MB Consulting. Si raccomanda di controllare anche la cartella della
         posta indesiderata.

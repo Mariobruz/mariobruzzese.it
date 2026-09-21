@@ -265,6 +265,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
         <p className="text-gray-600">
           {corso.ore} ore · e-learning asincrono · {corso.prezzo}&nbsp;€ a partecipante, IVA compresa
         </p>
+        {corso.avviso && <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mt-4">{corso.avviso}</p>}
       </div>
 
       <div className="flex items-center gap-2 mb-10">
@@ -529,6 +530,10 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                   tramite l’Unità Operativa codice 2403. Dopo il pagamento l’iscrizione viene trasmessa per l’autorizzazione;
                   a conferma, ogni partecipante riceve le credenziali all’indirizzo indicato:
                   <strong>l’email del partecipante è anche il suo nome utente</strong>.
+                </p>
+                <p className="mb-2">
+                  Per aziende con sede in Sicilia il corso va comunicato all’ente con 20 giorni di anticipo
+                  (15 giorni in Piemonte per RSPP/ASPP e coordinatori): l’attivazione segue quei tempi.
                 </p>
                 <p className="mb-2">
                   <strong>Attenzione al passaggio successivo:</strong> ogni partecipante riceverà dalla piattaforma
