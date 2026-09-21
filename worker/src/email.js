@@ -150,7 +150,7 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
     ['Telefono', f.telefono],
     ['Indirizzo', f.indirizzo],
     ['Nazione', 'Italia'],
-    ['Regione', f.regione],
+    ['Regione', f.regione || (province.find((x) => x.sigla === (f.provincia || '').toUpperCase()) || {}).regione],
     ['Provincia', nomeProvincia(f.provincia)],
     ['Comune', f.citta],
     ['CAP', f.cap],
