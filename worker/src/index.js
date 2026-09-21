@@ -14,6 +14,7 @@ import { csvImportEfei, nomeFileCsv } from './csv';
 import { creaSessionePagamento, verificaWebhook } from './stripe';
 import { emailAmministratore, emailClienteBonifico, emailClienteCarta, inviaEmail } from './email';
 import {
+  validaAteco,
   validaCap,
   validaCodiceFiscale,
   validaDataNascita,
@@ -72,6 +73,7 @@ function verificaIscrizione(corpo) {
   aggiungi(validaObbligatorio(f.provincia, 'La provincia'));
   aggiungi(validaEmail(f.email));
   aggiungi(validaTelefono(f.telefono));
+  aggiungi(validaAteco(f.ateco));
 
   const visti = new Set();
   partecipanti.forEach((p, i) => {

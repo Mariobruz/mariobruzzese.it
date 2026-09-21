@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, CreditCard, Landmark, Loader2, Lock, Minus, Plus, Send, User } from 'lucide-react';
 import { Button } from './ui/button';
 import {
+  validaAteco,
   validaCap,
   validaCodiceFiscale,
   validaDataNascita,
@@ -27,7 +28,7 @@ const partecipanteVuoto = () => ({
 const fatturazioneVuota = {
   tipo: 'azienda',
   ragioneSociale: '', partitaIva: '', indirizzo: '', cap: '', citta: '', provincia: '',
-  sdi: '', pec: '', referente: '', email: '', telefono: '',
+  sdi: '', pec: '', referente: '', email: '', telefono: '', ateco: '',
   nome: '', cognome: '', codiceFiscale: '',
 };
 
@@ -122,6 +123,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
     e.f_provincia = validaObbligatorio(fatturazione.provincia, 'La provincia');
     e.f_email = validaEmail(fatturazione.email);
     e.f_telefono = validaTelefono(fatturazione.telefono);
+    e.f_ateco = validaAteco(fatturazione.ateco);
     return e;
   };
 
@@ -363,7 +365,20 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                 <Campo label="Città" value={fatturazione.citta} onChange={(v) => aggiornaFatturazione('citta', v)} errore={errori.f_citta} />
                 <Selezione label="Provincia" value={fatturazione.provincia} onChange={(v) => aggiornaFatturazione('provincia', v)} errore={errori.f_provincia} opzioni={OPZIONI_PROVINCE} />
                 <Campo label="Email" tipo="email" value={fatturazione.email} onChange={(v) => aggiornaFatturazione('email', v)} errore={errori.f_email} />
-                <Campo label="Telefono" tipo="tel" value={fatturazione.telefono} onChange={(v) => aggiornaFatturazione('telefono', v)} errore={errori.f_telefono} larghezza="sm:col-span-2" />
+                <Campo label="Telefono" tipo="tel" value={fatturazione.telefono} onChange={(v) => aggiornaFatturazione('telefono', v)} errore={errori.f_telefono} />
+                <Campo
+                  label={fatturazione.tipo === 'azienda' ? 'Codice ATECO dell’azienda' : 'Codice ATECO dell’attività svolta'}
+                  value={fatturazione.ateco}
+                  onChange={(v) => aggiornaFatturazione('ateco', v)}
+                  errore={errori.f_ateco}
+                  placeholder="es. 47.11"
+                />
+                <p className="sm:col-span-2 -mt-2 text-xs text-gray-500">
+                  Il codice ATECO compare sull’attestato come settore di appartenenza e determina la classe di rischio.
+                  {fatturazione.tipo === 'azienda'
+                    ? ' Lo trovi nella visura camerale o nel cassetto fiscale.'
+                    : ' Indica quello dell’attività in cui lavori o per cui segui il corso.'}
+                </p>
               </div>
             </section>
           )}
@@ -422,6 +437,10 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                   <span className="font-medium text-right">
                     {fatturazione.tipo === 'azienda' ? fatturazione.ragioneSociale : `${fatturazione.nome} ${fatturazione.cognome}`}
                   </span>
+                </div>
+                <div className="p-5 flex justify-between gap-4">
+                  <span className="text-gray-600">Codice ATECO</span>
+                  <span className="font-medium text-right">{fatturazione.ateco}</span>
                 </div>
                 <div className="p-5">
                   <span className="text-gray-600 block mb-2">Partecipanti</span>

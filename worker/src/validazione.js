@@ -91,6 +91,14 @@ export function validaObbligatorio(valore, etichetta) {
   return null;
 }
 
+/** Codice ATECO: 2 cifre, poi fino a due gruppi da 1-2 cifre (es. 55.1, 82.99, 47.11.40). */
+export function validaAteco(valore) {
+  const ateco = (valore || '').trim();
+  if (!ateco) return 'Il codice ATECO è obbligatorio';
+  if (!/^\d{2}(\.\d{1,2}){0,2}$/.test(ateco)) return 'Formato ATECO non valido (es. 47.11 o 82.99.99)';
+  return null;
+}
+
 export function validaCap(valore) {
   const cap = (valore || '').trim();
   if (!cap) return 'Il CAP è obbligatorio';

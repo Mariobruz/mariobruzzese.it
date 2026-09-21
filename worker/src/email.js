@@ -114,6 +114,7 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
       <p>${intestatario}<br>
       ${f.tipo === 'azienda' ? `P.IVA ${f.partitaIva}<br>` : `C.F. ${f.codiceFiscale}<br>`}
       ${f.indirizzo}, ${f.cap} ${f.citta} (${f.provincia}) — ${f.regione}<br>
+      ATECO ${f.ateco || '—'}<br>
       ${f.email} · ${f.telefono}${f.sdi ? `<br>SDI ${f.sdi}` : ''}${f.pec ? `<br>PEC ${f.pec}` : ''}</p>
       <h3>Partecipanti</h3>
       <ul>${elencoPartecipanti(partecipanti)}</ul>

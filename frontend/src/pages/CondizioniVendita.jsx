@@ -147,8 +147,9 @@ const CondizioniVendita = () => (
 
     <Sezione numero="10" titolo="Attestato">
       <p>
-        L’attestato è rilasciato da EFEI al superamento del test finale e riporta anche la denominazione
-        dell’Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro. È scaricabile direttamente dalla
+        L’attestato è rilasciato al superamento del test finale e indica come soggetti formatori EFEI e A.U.G.E.
+        Università – Ateneo delle Professioni, Dipartimento Salute e Sicurezza sul Lavoro. È verificabile tramite
+        QR code ed è valido per il riconoscimento dei CFU secondo i regolamenti AUGE. È scaricabile direttamente dalla
         piattaforma, in qualsiasi momento successivo, nell’area riservata del Partecipante.
       </p>
       <p>

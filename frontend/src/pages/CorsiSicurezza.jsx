@@ -10,7 +10,7 @@ const ACCORDO = 'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR)'
 
 const VANTAGGI = [
   { icona: Laptop, titolo: 'Quando vuoi tu', testo: 'Corsi asincroni: si seguono da computer, tablet o telefono, negli orari che decidi tu. Nessuna aula, nessuna trasferta.' },
-  { icona: BadgeCheck, titolo: 'Attestato valido', testo: "Percorsi progettati ed erogati da EFEI, Organismo Paritetico nazionale, secondo il D.Lgs. 81/2008 e il nuovo Accordo Stato-Regioni del 17 aprile 2025. L'attestato riporta anche l'Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro, e si scarica dalla piattaforma." },
+  { icona: BadgeCheck, titolo: 'Attestato valido', testo: "Percorsi progettati ed erogati da EFEI, Organismo Paritetico nazionale, secondo il D.Lgs. 81/2008 e il nuovo Accordo Stato-Regioni del 17 aprile 2025. L'attestato, firmato da EFEI e da A.U.G.E. Università – Dipartimento Salute e Sicurezza sul Lavoro, è valido per il riconoscimento dei CFU secondo i regolamenti AUGE ed è verificabile tramite QR code." },
   { icona: Users, titolo: 'Anche per più dipendenti', testo: 'Iscrivi in una volta sola tutti i lavoratori da formare: i dati di ciascuno restano separati e tracciati.' },
 ];
 
@@ -195,9 +195,10 @@ export default function CorsiSicurezza() {
             Corso erogato da <strong>EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro</strong>
             tramite l’Unità Operativa codice 2403, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
             all’<strong>{ACCORDO}</strong>. MB Consulting cura la promozione, l’iscrizione e l’assistenza;
-            progettazione, erogazione e rilascio dell’attestato sono di EFEI. Sull’attestato figura anche
-            l’<strong>Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro</strong>. Superato il test finale, l’attestato si
-            scarica direttamente dalla piattaforma.
+            l’erogazione è di EFEI e di <strong>A.U.G.E. Università – Ateneo delle Professioni, Dipartimento Salute e
+            Sicurezza sul Lavoro</strong>, indicati entrambi sull’attestato come soggetti formatori. Superato il test
+            finale, l’attestato si scarica dalla piattaforma: è verificabile tramite QR code ed è valido per il
+            riconoscimento dei CFU secondo i regolamenti AUGE.
           </div>
         </div>
       </div>
@@ -343,8 +344,9 @@ export default function CorsiSicurezza() {
             efficace senza più regime transitorio dal 24 maggio 2026. MB Consulting di Mario Bruzzese opera come
             mandatario per la promozione e la vendita, in nome proprio e per finalità proprie, e non è un Organismo
             Paritetico: la conformità dei percorsi, l’erogazione e il rilascio dell’attestato competono a EFEI.
-            L’attestato è generato e rilasciato da EFEI al superamento del test finale e riporta anche
-            l’<strong>Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro</strong>.
+            L’attestato è rilasciato al superamento del test finale e indica come soggetti formatori EFEI e
+            <strong>A.U.G.E. Università – Ateneo delle Professioni, Dipartimento Salute e Sicurezza sul Lavoro</strong>;
+            è verificabile tramite QR code e valido per il riconoscimento dei CFU secondo i regolamenti AUGE.
           </div>
         </div>
       </div>
