@@ -532,10 +532,6 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                   <strong>l’email del partecipante è anche il suo nome utente</strong>.
                 </p>
                 <p className="mb-2">
-                  Per aziende con sede in Sicilia il corso va comunicato all’ente con 20 giorni di anticipo
-                  (15 giorni in Piemonte per RSPP/ASPP e coordinatori): l’attivazione segue quei tempi.
-                </p>
-                <p className="mb-2">
                   <strong>Attenzione al passaggio successivo:</strong> ogni partecipante riceverà dalla piattaforma
                   un’email per confermare il proprio account. Finché non la conferma, il corso non può essergli
                   abbinato. Se non arriva, va controllata anche la posta indesiderata.

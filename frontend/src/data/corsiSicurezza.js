@@ -384,7 +384,6 @@ export const corsi = [
   // ---------------------------------------------------------------------- HACCP
   {
     id: 'responsabile-industria-alimentare',
-    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Responsabile industria alimentare (HACCP OSA)',
     titoloAttestato: 'CORSO DI FORMAZIONE PER RESPONSABILE INDUSTRIA ALIMENTARE - (HACCP OSA)',
@@ -399,7 +398,6 @@ export const corsi = [
   },
   {
     id: 'osa-rischio-elevato-8h',
-    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Alimentaristi — rischio elevato (cat. A)',
     titoloAttestato: 'CORSO DI FORMAZIONE PER OPERATORI DEL SETTORE ALIMENTARE RISCHIO ELEVATO CAT. A (OSA - HACCP ORE 8)',
@@ -414,7 +412,6 @@ export const corsi = [
   },
   {
     id: 'osa-rischio-medio-6h',
-    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Alimentaristi — rischio medio (cat. B)',
     titoloAttestato: 'CORSO DI FORMAZIONE PER OPERATORI DEL SETTORE ALIMENTARE - RISCHIO MEDIO CAT.B (OSA - HACCP ORE 6)',
@@ -429,7 +426,6 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-osa-4h',
-    avviso: 'Valido solo per attività con sede in Lombardia, Lazio, Veneto, Basilicata e Provincia autonoma di Bolzano: la formazione alimentaristi è disciplinata a livello regionale.',
     categoria: 'haccp',
     titolo: 'Aggiornamento alimentaristi (cat. A e B)',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO DI OPERATORI DEL SETTORE ALIMENTARE CAT.A E CAT.B (OSA - RISCHIO ELEVATO E MEDIO - HACCP ORE 4)',
