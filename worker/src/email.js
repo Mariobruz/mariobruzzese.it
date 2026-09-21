@@ -1,3 +1,4 @@
+import { province } from './province';
 /**
  * email.js — invio tramite Brevo (api.brevo.com, dati in UE).
  *
@@ -99,35 +100,107 @@ export function emailClienteBonifico(env, { ordine, partecipanti, riferimento, t
   };
 }
 
+const esc = (v) => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const nomeProvincia = (sigla) => (province.find((p) => p.sigla === (sigla || '').toUpperCase()) || {}).nome || sigla || '';
+const dataIt = (iso) => {
+  const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : iso || '';
+};
+
+/** Tabella a due colonne: etichetta | valore, pronta da copiare campo per campo. */
+function tabella(titolo, righe, nota) {
+  const td = 'padding:6px 12px;border:1px solid #ddd;vertical-align:top';
+  return `<h3 style="margin:28px 0 8px">${titolo}</h3>
+    ${nota ? `<p style="color:#666;font-size:13px;margin:0 0 8px">${nota}</p>` : ''}
+    <table style="border-collapse:collapse;font-size:14px">
+      ${righe
+        .filter(([, v]) => v !== undefined)
+        .map(([k, v]) => `<tr><td style="${td};color:#666;white-space:nowrap">${k}</td><td style="${td}"><strong>${esc(v) || '—'}</strong></td></tr>`)
+        .join('')}
+    </table>`;
+}
+
 export function emailAmministratore(env, { ordine, partecipanti, riferimento, totale, stato, csv, nomeFile }) {
   const f = ordine.fatturazione;
-  const intestatario = f.tipo === 'azienda' ? f.ragioneSociale : `${f.nome} ${f.cognome}`;
+  const azienda = f.tipo === 'azienda';
+  const intestatario = azienda ? f.ragioneSociale : `${f.nome} ${f.cognome}`;
   const etichetta = stato === 'pagato' ? 'PAGATO' : 'IN ATTESA DI BONIFICO';
+  const n = partecipanti.length;
+
+  const fattura = tabella('1 · Dati per la fattura', [
+    ['Intestatario', intestatario],
+    [azienda ? 'Partita IVA' : 'Codice fiscale', azienda ? f.partitaIva : f.codiceFiscale],
+    ['Indirizzo', f.indirizzo],
+    ['CAP · Comune · Provincia', `${f.cap} ${f.citta} (${(f.provincia || '').toUpperCase()})`],
+    ['Codice SDI', azienda ? f.sdi : undefined],
+    ['PEC', azienda ? f.pec : undefined],
+    ['Email', f.email],
+    ['Descrizione', `${ordine.corso.titolo} — corso e-learning ${ordine.corso.ore} ore — rif. ${riferimento}`],
+    ['Quantità × prezzo', `${n} × ${ordine.corso.prezzo} €`],
+    ['Totale', `${totale} € — operazione in regime forfettario, non soggetta a IVA (art. 1, cc. 54-89, L. 190/2014)`],
+    ['Pagamento', stato === 'pagato' ? 'Carta (Stripe) — incassato' : 'Bonifico — in attesa'],
+  ], azienda ? '' : 'Cliente privato: fattura elettronica al codice fiscale, codice destinatario 0000000.');
+
+  const piattaforma = tabella('2 · Piattaforma EFEI → Anagrafiche → Crea azienda', [
+    ['Tipologia', azienda ? 'Azienda' : 'Privato'],
+    ['Codice', '(progressivo della piattaforma)'],
+    ['Ragione sociale', intestatario],
+    ['Email', f.email],
+    ['Email PEC', f.pec || ''],
+    ['Telefono', f.telefono],
+    ['Indirizzo', f.indirizzo],
+    ['Nazione', 'Italia'],
+    ['Regione', f.regione],
+    ['Provincia', nomeProvincia(f.provincia)],
+    ['Comune', f.citta],
+    ['CAP', f.cap],
+    ['Partita IVA', azienda ? f.partitaIva : '— (privato)'],
+    ['Codice fiscale', azienda ? '' : f.codiceFiscale],
+    ['SDI', f.sdi || ''],
+    ['Codici ATECO', f.ateco],
+    ['Referente', azienda ? f.referente : undefined],
+  ], azienda
+    ? 'Crea l’azienda prima di importare il CSV: il CSV la collega ai partecipanti tramite la partita IVA.'
+    : 'Cliente privato, senza partita IVA: nel CSV la colonna azienda resta vuota.');
+
+  const partecipantiHtml = partecipanti
+    .map((p, i) =>
+      tabella(`3 · Partecipante ${i + 1} di ${n}`, [
+        ['Nome', p.nome],
+        ['Cognome', p.cognome],
+        ['Email (username)', p.email],
+        ['Codice fiscale', (p.codiceFiscale || '').toUpperCase()],
+        ['Sesso', p.sesso],
+        ['Data di nascita', dataIt(p.dataNascita)],
+        ['Comune di nascita', p.comuneNascita],
+        ['Provincia di nascita', nomeProvincia(p.provinciaNascita)],
+        ['Regione di nascita', p.regioneNascita],
+        ['Nazione di nascita', 'Italia'],
+        ['Telefono', p.telefono],
+        ['Qualifica', p.qualifica],
+        ['Corso (SKU)', ordine.corso.sku],
+      ])
+    )
+    .join('');
+
   return {
     a: env.EMAIL_AMMINISTRATORE,
-    oggetto: `[${etichetta}] ${riferimento} — ${partecipanti.length} partecipante${partecipanti.length > 1 ? 'i' : ''} — ${ordine.corso.titolo}`,
+    oggetto: `[${etichetta}] ${riferimento} — ${n} partecipant${n > 1 ? 'i' : 'e'} — ${ordine.corso.titolo}`,
     html: `<div style="${stile}">
-      <h2>${etichetta} · ${riferimento}</h2>
-      <p><strong>${ordine.corso.titolo}</strong> (${ordine.corso.ore} ore) — SKU <code>${ordine.corso.sku}</code><br>
-      ${partecipanti.length} × ${ordine.corso.prezzo}&nbsp;€ = <strong>${totale}&nbsp;€</strong></p>
-      <h3>Intestatario</h3>
-      <p>${intestatario}<br>
-      ${f.tipo === 'azienda' ? `P.IVA ${f.partitaIva}<br>` : `C.F. ${f.codiceFiscale}<br>`}
-      ${f.indirizzo}, ${f.cap} ${f.citta} (${f.provincia}) — ${f.regione}<br>
-      ATECO ${f.ateco || '—'}<br>
-      ${f.email} · ${f.telefono}${f.sdi ? `<br>SDI ${f.sdi}` : ''}${f.pec ? `<br>PEC ${f.pec}` : ''}</p>
-      <h3>Partecipanti</h3>
-      <ul>${elencoPartecipanti(partecipanti)}</ul>
-      <p><strong>In allegato il CSV pronto per "Importa utenti"</strong> sulla piattaforma.
-      ${stato === 'pagato'
-        ? 'L’ordine è pagato: puoi caricarlo subito.'
-        : 'Attendi l’accredito del bonifico prima di caricarlo.'}</p>
-      <p style="color:#666;font-size:13px">Ricorda: se l’azienda non è ancora presente in piattaforma,
-      va creata prima del caricamento.</p>
+      <h2 style="margin-bottom:4px">${etichetta} · ${riferimento}</h2>
+      <p style="margin-top:0"><strong>${esc(ordine.corso.titolo)}</strong> (${ordine.corso.ore} ore) — SKU <code>${esc(ordine.corso.sku)}</code>
+      — ${n} × ${ordine.corso.prezzo}&nbsp;€ = <strong>${totale}&nbsp;€</strong></p>
+      <p style="background:#f5f5f5;padding:12px;border-radius:8px">
+        ${stato === 'pagato'
+          ? '<strong>Pagato.</strong> Entro 24 ore: crea l’azienda (sezione 2), importa il CSV allegato con «Importa utenti», abbina il corso dopo la conferma dell’account.'
+          : '<strong>In attesa del bonifico</strong> con causale ' + riferimento + '. Non caricare nulla in piattaforma prima dell’accredito.'}
+      </p>
+      ${fattura}
+      ${piattaforma}
+      ${partecipantiHtml}
+      <p style="margin-top:28px"><strong>Allegato:</strong> ${esc(nomeFile)} — CSV pronto per «Importa utenti».</p>
     </div>`,
-    allegati: csv
-      ? [{ name: nomeFile, content: base64(csv) }]
-      : undefined,
+    allegati: csv ? [{ name: nomeFile, content: base64(csv) }] : undefined,
   };
 }
 

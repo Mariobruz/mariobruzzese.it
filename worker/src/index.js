@@ -235,7 +235,7 @@ async function gestisciWebhook(env, richiesta) {
     nome: p.nome, cognome: p.cognome, email: p.email, codiceFiscale: p.codice_fiscale,
     dataNascita: p.data_nascita, comuneNascita: p.comune_nascita,
     provinciaNascita: p.provincia_nascita, regioneNascita: p.regione_nascita,
-    telefono: p.telefono, qualifica: p.qualifica,
+    telefono: p.telefono, qualifica: p.qualifica, sesso: p.sesso,
   }));
 
   await inviaNotifiche(env, {
