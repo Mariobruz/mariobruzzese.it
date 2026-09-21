@@ -125,7 +125,9 @@ export const corsi = [
     sku: 'cors-d_123',
     idEnte: 70,
     immagine: '/img/corsi/datore-di-lavoro-16h.webp',
-    prezzo: 169,
+    prezzo: 199,
+    prezzoLancio: 149,
+    lancioFino: '2026-10-31',
   },
   {
     id: 'rspp-datore-lavoro-8h',
@@ -450,5 +452,17 @@ export const scontiQuantita = [];
 // Ogni corso porta con sé il programma didattico ufficiale dell'ente.
 corsi.forEach((c) => { c.programma = programmi[c.id] || []; });
 
+
+// ---------------------------------------------------------------- PREZZO DI LANCIO
+// "prezzo" e il prezzo pieno; "prezzoLancio" vale fino a "lancioFino" compreso
+// (data italiana). Scaduto il lancio, il prezzo torna da solo quello pieno.
+const oggiInItalia = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' });
+export const inLancio = (c) => Boolean(c.prezzoLancio && c.lancioFino && oggiInItalia() <= c.lancioFino);
+export const prezzoCorrente = (c) => (inLancio(c) ? c.prezzoLancio : c.prezzo);
+
 // I corsi con "sospeso" restano in archivio ma non si vendono.
-export const corsiPubblicabili = () => corsi.filter((c) => c.prezzo !== null && !c.sospeso);
+// "prezzo" restituito e quello da pagare oggi (di lancio, se attivo).
+export const corsiPubblicabili = () =>
+  corsi
+    .filter((c) => c.prezzo !== null && !c.sospeso)
+    .map((c) => ({ ...c, prezzo: prezzoCorrente(c), lancio: inLancio(c) }));

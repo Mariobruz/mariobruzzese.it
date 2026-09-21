@@ -61,7 +61,9 @@ export const catalogo = [
     "titolo": "Formazione datore di lavoro",
     "titoloAttestato": "CORSO DI FORMAZIONE DATORE DI LAVORO - 16 ORE",
     "ore": 16,
-    "prezzo": 169,
+    "prezzo": 199,
+    "prezzoLancio": 149,
+    "lancioFino": "2026-10-31",
     "sku": "cors-d_123"
   },
   {
@@ -237,5 +239,14 @@ export const catalogo = [
 // Corsi non vendibili in e-learning secondo il Vademecum EFEI: il server li rifiuta.
 const SOSPESI = new Set(['rspp-datore-lavoro-8h', 'aggiornamento-csp-cse-40h']);
 
-export const corsoPerId = (id) =>
-  (SOSPESI.has(id) ? null : catalogo.find((c) => c.id === id)) || null;
+// ---------------------------------------------------------------- PREZZO DI LANCIO
+// "prezzo" e il prezzo pieno; "prezzoLancio" vale fino a "lancioFino" compreso
+// (data italiana). Scaduto il lancio, il prezzo torna da solo quello pieno.
+const oggiInItalia = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Rome' });
+export const inLancio = (c) => Boolean(c.prezzoLancio && c.lancioFino && oggiInItalia() <= c.lancioFino);
+export const prezzoCorrente = (c) => (inLancio(c) ? c.prezzoLancio : c.prezzo);
+
+export const corsoPerId = (id) => {
+  const c = SOSPESI.has(id) ? null : catalogo.find((x) => x.id === id);
+  return c ? { ...c, prezzo: prezzoCorrente(c) } : null;
+};

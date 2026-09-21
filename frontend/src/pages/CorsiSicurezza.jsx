@@ -175,6 +175,11 @@ export default function CorsiSicurezza() {
                 <div><dt className="inline font-semibold text-gray-900">Modalità: </dt><dd className="inline">e-learning asincrono</dd></div>
               </dl>
               {dettaglio.avviso && <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-6">{dettaglio.avviso}</p>}
+              {dettaglio.lancio && (
+                <p className="inline-block text-xs font-semibold uppercase tracking-wide text-white bg-black rounded px-2.5 py-1 mb-2">
+                  Prezzo di lancio · fino al 31 ottobre
+                </p>
+              )}
               <p className="text-3xl font-bold text-gray-900 mb-1">{dettaglio.prezzo}&nbsp;€</p>
               <p className="text-sm text-gray-500 mb-6">a partecipante, IVA compresa</p>
               <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 w-full">
@@ -310,6 +315,11 @@ export default function CorsiSicurezza() {
                   {corso.avviso && <p className="text-xs text-amber-800 mb-5">⚠ {corso.avviso}</p>}
                   <div className="flex items-center justify-between gap-3">
                     <span>
+                      {corso.lancio && (
+                        <span className="inline-block text-[11px] font-semibold uppercase tracking-wide text-white bg-black rounded px-2 py-0.5 mb-1.5">
+                          Prezzo di lancio · fino al 31 ottobre
+                        </span>
+                      )}
                       <span className="block text-2xl font-bold text-gray-900 leading-none">{corso.prezzo}&nbsp;€</span>
                       <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
                     </span>
