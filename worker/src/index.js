@@ -19,17 +19,62 @@ import {
   validaCodiceFiscale,
   validaDataNascita,
   validaEmail,
+  validaFatturazioneElettronica,
   validaObbligatorio,
   validaPartitaIva,
   validaTelefono,
 } from './validazione';
+import { province } from './province';
 
 const MAX_PARTECIPANTI = 50;
+const MAX_CORPO = 100000; // caratteri: 50 partecipanti stanno ampiamente sotto
+
+// Solo questi campi vengono accettati e salvati, con la lunghezza massima.
+// Tutto il resto che arriva nella richiesta viene scartato.
+const LIMITI_FATTURAZIONE = {
+  tipo: 10, ragioneSociale: 150, partitaIva: 20, referente: 120, sdi: 10, pec: 120,
+  nome: 60, cognome: 60, codiceFiscale: 20,
+  indirizzo: 150, cap: 10, citta: 80, provincia: 4, regione: 40, nazione: 30,
+  email: 120, telefono: 25, ateco: 20,
+};
+const LIMITI_PARTECIPANTE = {
+  nome: 60, cognome: 60, codiceFiscale: 20, dataNascita: 10, sesso: 1,
+  comuneNascita: 80, provinciaNascita: 4, regioneNascita: 40, nazioneNascita: 30,
+  email: 120, telefono: 25, qualifica: 80,
+};
+
+// caratteri di markup e di controllo: in un'anagrafica non servono mai
+const VIETATI = /[<>\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
+// link nei nomi: è il modo per usare le nostre email come veicolo di phishing
+const LINK = /https?:|:\/\/|www\.|\.(com|it|net|org|ru|xyz|info|io|top|link)\b/i;
+
+function pulisci(sorgente, limiti, dove, errori) {
+  const s = sorgente && typeof sorgente === 'object' ? sorgente : {};
+  const pulito = {};
+  for (const [campo, massimo] of Object.entries(limiti)) {
+    const v = s[campo];
+    if (v === undefined || v === null) { pulito[campo] = ''; continue; }
+    if (typeof v !== 'string' && typeof v !== 'number') {
+      errori.push(`${dove}: campo ${campo} non valido`);
+      pulito[campo] = '';
+      continue;
+    }
+    const t = String(v).trim();
+    if (t.length > massimo) errori.push(`${dove}: il campo ${campo} è troppo lungo (max ${massimo} caratteri)`);
+    if (VIETATI.test(t)) errori.push(`${dove}: il campo ${campo} contiene caratteri non ammessi`);
+    pulito[campo] = t.slice(0, massimo);
+  }
+  return pulito;
+}
+
+const provinciaValida = (sigla) => province.some((p) => p.sigla === String(sigla || '').toUpperCase());
+
+const SICUREZZA = { 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-store' };
 
 const json = (dati, stato = 200, intestazioni = {}) =>
   new Response(JSON.stringify(dati), {
     status: stato,
-    headers: { 'Content-Type': 'application/json; charset=utf-8', ...intestazioni },
+    headers: { 'Content-Type': 'application/json; charset=utf-8', ...SICUREZZA, ...intestazioni },
   });
 
 function intestazioniCors(env, richiesta) {
@@ -53,24 +98,30 @@ function verificaIscrizione(corpo) {
   const corso = corsoPerId(corpo && corpo.corso && corpo.corso.id);
   if (!corso) return { errori: ['Corso non riconosciuto'], corso: null };
 
-  const f = corpo.fatturazione || {};
-  const partecipanti = Array.isArray(corpo.partecipanti) ? corpo.partecipanti : [];
-
-  if (!partecipanti.length) aggiungi('Nessun partecipante indicato');
-  if (partecipanti.length > MAX_PARTECIPANTI) aggiungi(`Massimo ${MAX_PARTECIPANTI} partecipanti per ordine`);
+  const f = pulisci(corpo.fatturazione, LIMITI_FATTURAZIONE, 'Intestazione', errori);
+  f.tipo = f.tipo === 'azienda' ? 'azienda' : 'privato';
+  const grezzi = Array.isArray(corpo.partecipanti) ? corpo.partecipanti : [];
+  if (!grezzi.length) aggiungi('Nessun partecipante indicato');
+  if (grezzi.length > MAX_PARTECIPANTI) {
+    return { errori: [`Massimo ${MAX_PARTECIPANTI} partecipanti per ordine`], corso };
+  }
+  const partecipanti = grezzi.map((p, i) => pulisci(p, LIMITI_PARTECIPANTE, `Partecipante ${i + 1}`, errori));
 
   if (f.tipo === 'azienda') {
     aggiungi(validaObbligatorio(f.ragioneSociale, 'La ragione sociale'));
     aggiungi(validaPartitaIva(f.partitaIva));
+    aggiungi(validaObbligatorio(f.referente, 'Il referente'));
+    aggiungi(validaFatturazioneElettronica(f.sdi, f.pec));
   } else {
     aggiungi(validaObbligatorio(f.nome, 'Il nome'));
     aggiungi(validaObbligatorio(f.cognome, 'Il cognome'));
     aggiungi(validaCodiceFiscale(f.codiceFiscale));
+    if (LINK.test(f.nome) || LINK.test(f.cognome)) aggiungi('Nome e cognome non possono contenere link');
   }
   aggiungi(validaObbligatorio(f.indirizzo, "L'indirizzo"));
   aggiungi(validaCap(f.cap));
   aggiungi(validaObbligatorio(f.citta, 'La città'));
-  aggiungi(validaObbligatorio(f.provincia, 'La provincia'));
+  if (!provinciaValida(f.provincia)) aggiungi('Provincia non valida');
   aggiungi(validaEmail(f.email));
   aggiungi(validaTelefono(f.telefono));
   aggiungi(validaAteco(f.ateco));
@@ -87,12 +138,23 @@ function verificaIscrizione(corpo) {
     e(validaObbligatorio(p.provinciaNascita, 'la provincia di nascita'));
     e(validaObbligatorio(p.qualifica, 'la qualifica'));
     e(validaEmail(p.email));
+    if (p.provinciaNascita && !provinciaValida(p.provinciaNascita)) e('provincia di nascita non valida');
+    if (p.dataNascita && !/^\d{4}-\d{2}-\d{2}$/.test(p.dataNascita)) e('data di nascita non valida');
+    if (LINK.test(p.nome) || LINK.test(p.cognome)) e('nome e cognome non possono contenere link');
     const cf = (p.codiceFiscale || '').toUpperCase();
     if (cf && visti.has(cf)) e('codice fiscale ripetuto');
     visti.add(cf);
   });
 
-  const consensi = corpo.consensi || {};
+  // solo vero/falso: nel database finisce la prova di cosa è stato accettato, nient'altro
+  const c = (corpo.consensi && typeof corpo.consensi === 'object') ? corpo.consensi : {};
+  const consensi = {
+    privacy: c.privacy === true,
+    condizioni: c.condizioni === true,
+    attivazione: c.attivazione === true,
+    ccnl: c.ccnl === true,
+    marketing: c.marketing === true,
+  };
   if (!consensi.privacy || !consensi.condizioni || !consensi.attivazione) {
     aggiungi(
       'Mancano i consensi obbligatori (condizioni di vendita, informativa privacy e richiesta di attivazione immediata)'
@@ -162,12 +224,48 @@ async function inviaNotifiche(env, { ordine, partecipanti, riferimento, totale, 
   });
 }
 
+/** Verifica anti-bot Cloudflare Turnstile. Finché il segreto non è impostato resta spenta. */
+async function verificaTurnstile(env, token, ip) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (!token || typeof token !== 'string' || token.length > 2048) return false;
+  const modulo = new FormData();
+  modulo.append('secret', env.TURNSTILE_SECRET);
+  modulo.append('response', token);
+  if (ip) modulo.append('remoteip', ip);
+  try {
+    const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: modulo });
+    const esito = await r.json();
+    return esito.success === true;
+  } catch (e) {
+    console.error('Turnstile non raggiungibile', e.message);
+    return false;
+  }
+}
+
 async function gestisciIscrizione(env, richiesta) {
+  const ip = richiesta.headers.get('CF-Connecting-IP') || '';
+
+  // freno ai bot: poche iscrizioni al minuto dallo stesso indirizzo
+  if (env.LIMITE_ISCRIZIONI) {
+    const { success } = await env.LIMITE_ISCRIZIONI.limit({ key: ip || 'sconosciuto' });
+    if (!success) return json({ errore: 'Troppe richieste: riprova fra un minuto' }, 429);
+  }
+
+  const dichiarata = Number(richiesta.headers.get('Content-Length') || 0);
+  if (dichiarata > MAX_CORPO) return json({ errore: 'Richiesta troppo grande' }, 413);
+
   let corpo;
   try {
-    corpo = await richiesta.json();
+    const testo = await richiesta.text();
+    if (testo.length > MAX_CORPO) return json({ errore: 'Richiesta troppo grande' }, 413);
+    corpo = JSON.parse(testo);
   } catch (e) {
     return json({ errore: 'Richiesta non leggibile' }, 400);
+  }
+  if (!corpo || typeof corpo !== 'object') return json({ errore: 'Richiesta non leggibile' }, 400);
+
+  if (!(await verificaTurnstile(env, corpo.turnstile, ip))) {
+    return json({ errore: 'Verifica anti-bot non superata: ricarica la pagina e riprova' }, 403);
   }
 
   const controllo = verificaIscrizione(corpo);
@@ -205,7 +303,12 @@ async function gestisciWebhook(env, richiesta) {
   const valido = await verificaWebhook(env, corpoGrezzo, richiesta.headers.get('Stripe-Signature'));
   if (!valido) return json({ errore: 'Firma non valida' }, 400);
 
-  const evento = JSON.parse(corpoGrezzo);
+  let evento;
+  try {
+    evento = JSON.parse(corpoGrezzo);
+  } catch (e) {
+    return json({ errore: 'Evento non leggibile' }, 400);
+  }
   if (evento.type !== 'checkout.session.completed') return json({ ricevuto: true });
 
   const sessione = evento.data.object;
@@ -218,16 +321,25 @@ async function gestisciWebhook(env, richiesta) {
   if (!ordine) return json({ ricevuto: true });
   if (ordine.stato === 'pagato') return json({ ricevuto: true }); // Stripe può ripetere l'evento
 
+  // la sessione deve essere proprio quella creata per questo ordine
+  if (ordine.stripe_session_id && ordine.stripe_session_id !== sessione.id) {
+    console.error('sessione Stripe non corrispondente', riferimento, sessione.id);
+    return json({ ricevuto: true });
+  }
+
   const attesi = Math.round(Number(ordine.totale) * 100);
-  if (Number(sessione.amount_total) !== attesi) {
+  if (Number(sessione.amount_total) !== attesi || String(sessione.currency).toLowerCase() !== 'eur') {
     console.error('importo incassato diverso dal previsto', riferimento, sessione.amount_total, attesi);
     await env.DB.prepare('UPDATE ordini SET stato = ? WHERE id = ?')
       .bind('importo_da_verificare', ordine.id).run();
     return json({ ricevuto: true });
   }
 
-  await env.DB.prepare('UPDATE ordini SET stato = ?, pagato_il = ? WHERE id = ?')
-    .bind('pagato', new Date().toISOString(), ordine.id).run();
+  // aggiornamento condizionato: se Stripe manda l'evento due volte insieme, uno solo passa
+  const aggiornato = await env.DB.prepare(
+    "UPDATE ordini SET stato = 'pagato', pagato_il = ? WHERE id = ? AND stato != 'pagato'"
+  ).bind(new Date().toISOString(), ordine.id).run();
+  if (!aggiornato.meta || !aggiornato.meta.changes) return json({ ricevuto: true });
 
   const righe = await env.DB.prepare('SELECT * FROM partecipanti WHERE ordine_id = ?')
     .bind(ordine.id).all();

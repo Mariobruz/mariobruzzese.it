@@ -9,6 +9,13 @@ compatibility_date = "2026-09-01"
 [triggers]
 crons = ["0 8 * * 1"]
 
+# Freno ai bot: massimo 5 iscrizioni al minuto dallo stesso indirizzo IP
+[[unsafe.bindings]]
+name = "LIMITE_ISCRIZIONI"
+type = "ratelimit"
+namespace_id = "2403"
+simple = { limit = 5, period = 60 }
+
 [[d1_databases]]
 binding = "DB"
 database_name = "iscrizioni-corsi"
@@ -28,3 +35,4 @@ INTESTATARIO_CONTO = "MB Consulting di Mario Bruzzese"
 #   wrangler secret put STRIPE_WEBHOOK_SECRET
 #   wrangler secret put BREVO_API_KEY
 #   wrangler secret put IBAN
+#   wrangler secret put TURNSTILE_SECRET   (anti-bot, facoltativo)

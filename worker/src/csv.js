@@ -30,7 +30,10 @@ export function dataItaliana(iso) {
 }
 
 function cella(valore) {
-  const v = valore === null || valore === undefined ? '' : String(valore);
+  let v = valore === null || valore === undefined ? '' : String(valore);
+  // Excel esegue come formula una cella che inizia con = + - @: la neutralizziamo.
+  // I numeri di telefono tipo +39 333 1234567 restano come sono.
+  if (/^[=+\-@\t\r]/.test(v) && !/^\+?\d[\d\s]*$/.test(v)) v = `'${v}`;
   return /[",;\n\r]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
 }
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, CreditCard, Landmark, Loader2, Lock, Minus, Plus, Send, User } from 'lucide-react';
 import { Button } from './ui/button';
@@ -17,6 +17,46 @@ import {
 import { province, regioneDiProvincia } from '../data/province';
 
 const ENDPOINT = process.env.REACT_APP_ISCRIZIONI_URL;
+// Chiave pubblica di Cloudflare Turnstile (anti-bot). Se non c'è, il controllo resta spento.
+const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY;
+
+/** Verifica anti-bot Cloudflare Turnstile: il più delle volte è invisibile per chi compila. */
+function Turnstile({ onToken }) {
+  const box = useRef(null);
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return undefined;
+    let id;
+    let chiuso = false;
+    const disegna = () => {
+      if (chiuso || !box.current || !window.turnstile || id !== undefined) return;
+      id = window.turnstile.render(box.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        language: 'it',
+        callback: onToken,
+        'expired-callback': () => onToken(''),
+        'error-callback': () => onToken(''),
+      });
+    };
+    if (window.turnstile) disegna();
+    else {
+      let script = document.getElementById('cf-turnstile');
+      if (!script) {
+        script = document.createElement('script');
+        script.id = 'cf-turnstile';
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.async = true;
+        document.head.appendChild(script);
+      }
+      script.addEventListener('load', disegna);
+    }
+    return () => {
+      chiuso = true;
+      if (id !== undefined && window.turnstile) window.turnstile.remove(id);
+    };
+  }, [onToken]);
+  if (!TURNSTILE_SITE_KEY) return null;
+  return <div ref={box} className="mt-2" />;
+}
 
 const PASSI = ['Partecipanti', 'Intestazione', 'Anagrafiche', 'Riepilogo'];
 
@@ -80,6 +120,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   const [consensi, setConsensi] = useState({ privacy: false, condizioni: false, attivazione: false, ccnl: false, marketing: false });
   const [errori, setErrori] = useState({});
   const [invio, setInvio] = useState(false);
+  const [tokenAntibot, setTokenAntibot] = useState('');
   const [erroreInvio, setErroreInvio] = useState(null);
   const [metodoPagamento, setMetodoPagamento] = useState('carta');
   const [esito, setEsito] = useState(null);
@@ -190,6 +231,10 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
       setErroreInvio('Per proseguire devi accettare le condizioni, l’informativa privacy e la richiesta di attivazione immediata.');
       return;
     }
+    if (TURNSTILE_SITE_KEY && !tokenAntibot) {
+      setErroreInvio('Attendi il completamento della verifica anti-bot qui sopra, poi riprova.');
+      return;
+    }
     if (!ENDPOINT) {
       setErroreInvio('Iscrizioni non ancora attive: riprova più tardi o scrivici.');
       return;
@@ -217,9 +262,14 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
           consensi,
           metodoPagamento,
           totale,
+          turnstile: tokenAntibot || undefined,
         }),
       });
-      if (!risposta.ok) throw new Error('richiesta rifiutata');
+      if (!risposta.ok) {
+        const err = new Error('richiesta rifiutata');
+        err.stato = risposta.status;
+        throw err;
+      }
       const dati = await risposta.json();
       if (metodoPagamento === 'carta') {
         if (!dati.checkoutUrl) throw new Error('risposta senza link di pagamento');
@@ -228,8 +278,15 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
       }
       setEsito({ riferimento: dati.riferimento || '', email: fatturazione.email });
     } catch (err) {
+      // il token anti-bot vale una volta sola: se l'invio fallisce ne serve uno nuovo
+      setTokenAntibot('');
+      if (TURNSTILE_SITE_KEY && window.turnstile) window.turnstile.reset();
       setErroreInvio(
-        metodoPagamento === 'carta'
+        err.stato === 429
+          ? 'Troppi tentativi ravvicinati: attendi un minuto e riprova. I dati inseriti restano qui.'
+          : err.stato === 403
+          ? 'La verifica anti-bot non è andata a buon fine: attendi che si completi e riprova.'
+          : metodoPagamento === 'carta'
           ? 'Non siamo riusciti ad avviare il pagamento. Riprova fra poco: i dati inseriti restano qui.'
           : "Non siamo riusciti a registrare l'iscrizione. Riprova fra poco: i dati inseriti restano qui."
       );
@@ -581,6 +638,8 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                   Al superamento del test finale l’attestato — rilasciato da EFEI, con l’indicazione dell’Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro — è scaricabile direttamente dalla piattaforma, in qualsiasi momento.
                 </p>
               </div>
+
+              <Turnstile onToken={setTokenAntibot} />
 
               {erroreInvio && (
                 <div className="border-2 border-red-200 bg-red-50 text-red-700 rounded-xl p-4 text-sm">{erroreInvio}</div>

@@ -16,6 +16,11 @@ function base64(testo) {
   return btoa(binaria);
 }
 
+/** Tutto ciò che scrive il cliente passa di qui prima di finire in un'email HTML. */
+const esc = (v) => String(v == null ? '' : v)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
 const stile = `font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:15px;line-height:1.6;color:#111`;
 
 /** Versione in testo semplice dell'email HTML. */
@@ -60,7 +65,7 @@ async function invia(env, { a, oggetto, html, allegati }) {
 
 const elencoPartecipanti = (partecipanti) =>
   partecipanti
-    .map((p) => `<li>${p.nome} ${p.cognome} — <strong>${p.email}</strong></li>`)
+    .map((p) => `<li>${esc(p.nome)} ${esc(p.cognome)} — <strong>${esc(p.email)}</strong></li>`)
     .join('');
 
 const avvisoConferma = `
@@ -120,7 +125,6 @@ export function emailClienteBonifico(env, { ordine, partecipanti, riferimento, t
   };
 }
 
-const esc = (v) => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const nomeProvincia = (sigla) => (province.find((p) => p.sigla === (sigla || '').toUpperCase()) || {}).nome || sigla || '';
 const dataIt = (iso) => {
   const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
