@@ -125,9 +125,7 @@ export const corsi = [
     sku: 'cors-d_123',
     idEnte: 70,
     immagine: '/img/corsi/datore-di-lavoro-16h.webp',
-    prezzo: 169,
-    prezzoLancio: 149,
-    lancioFino: '2026-10-31',
+    prezzo: 149,
   },
   {
     id: 'rspp-datore-lavoro-8h',
