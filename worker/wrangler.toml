@@ -28,7 +28,7 @@ ORIGINI_AMMESSE = "https://www.mariobruzzese.it,https://mariobruzzese.it"
 EMAIL_MITTENTE = "corsi@mariobruzzese.it"
 NOME_MITTENTE = "MB Consulting"
 EMAIL_AMMINISTRATORE = "corsi@mariobruzzese.it"
-INTESTATARIO_CONTO = "MB Consulting di Mario Bruzzese"
+INTESTATARIO_CONTO = "Mario Bruzzese"
 
 # I segreti NON vanno qui. Si impostano con:
 #   wrangler secret put STRIPE_SECRET_KEY
