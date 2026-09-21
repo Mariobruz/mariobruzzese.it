@@ -276,4 +276,17 @@ export default {
 
     return json({ errore: 'Non trovato' }, 404);
   },
+
+  /**
+   * Ogni lunedi: una chiamata a Brevo tiene attiva la chiave API, che
+   * altrimenti scade dopo 90 giorni senza utilizzo. L'esito resta nei log
+   * del Worker (wrangler tail / dashboard Cloudflare).
+   */
+  async scheduled(_evento, env) {
+    const r = await fetch('https://api.brevo.com/v3/account', {
+      headers: { 'api-key': env.BREVO_API_KEY, Accept: 'application/json' },
+    });
+    if (!r.ok) console.error('Brevo: chiave API non valida o scaduta', r.status);
+    else console.log('Brevo: chiave API attiva');
+  },
 };

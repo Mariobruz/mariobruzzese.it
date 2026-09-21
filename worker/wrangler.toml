@@ -5,6 +5,10 @@ compatibility_date = "2026-09-01"
 # Dominio su cui risponde il Worker. Il sito lo chiama a questo indirizzo.
 # routes = [{ pattern = "iscrizioni.mariobruzzese.it", custom_domain = true }]
 
+# Ogni lunedi alle 8 (UTC): tiene attiva la chiave API di Brevo
+[triggers]
+crons = ["0 8 * * 1"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "iscrizioni-corsi"
