@@ -19,7 +19,6 @@ const Privacy = () => (
         <p className="font-semibold text-gray-900 mb-1">MB Consulting di Mario Bruzzese</p>
         <p>Via Aspromonte 16, 89127 Reggio Calabria (RC)</p>
         <p>Partita IVA 03504290796</p>
-        <p>PEC: mbconsulting@casellapec.com</p>
         <p>Email: privacy@mariobruzzese.it</p>
       </div>
       <p>
@@ -137,7 +136,7 @@ const Privacy = () => (
         liceità del trattamento effettuato prima della revoca.
       </p>
       <p>
-        Le richieste vanno inviate a privacy@mariobruzzese.it oppure via PEC a mbconsulting@casellapec.com. Il
+        Le richieste vanno inviate a privacy@mariobruzzese.it. Il
         titolare risponde entro un mese, prorogabile di due mesi in caso di richieste complesse.
       </p>
       <p>

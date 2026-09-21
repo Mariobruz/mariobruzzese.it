@@ -19,9 +19,7 @@ const CondizioniVendita = () => (
       <div className="bg-gray-50 rounded-xl p-5 text-[15px]">
         <p className="font-semibold text-gray-900 mb-1">MB Consulting di Mario Bruzzese</p>
         <p>Impresa individuale — Via Aspromonte 16, 89127 Reggio Calabria (RC)</p>
-        <p>Partita IVA 03504290796 — Codice fiscale BRZMRA71H19I872A</p>
-        <p>REA RC-199357 — Camera di Commercio di Reggio Calabria</p>
-        <p>PEC: mbconsulting@casellapec.com</p>
+        <p>Partita IVA 03504290796 — REA RC-199357</p>
         <p>Email: corsi@mariobruzzese.it — Telefono: +39 329 1747521</p>
       </div>
       <p>
@@ -149,7 +147,8 @@ const CondizioniVendita = () => (
 
     <Sezione numero="10" titolo="Attestato">
       <p>
-        L’attestato è rilasciato da EFEI al superamento del test finale ed è scaricabile direttamente dalla
+        L’attestato è rilasciato da EFEI al superamento del test finale e riporta anche la denominazione
+        dell’Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro. È scaricabile direttamente dalla
         piattaforma, in qualsiasi momento successivo, nell’area riservata del Partecipante.
       </p>
       <p>
@@ -168,7 +167,7 @@ const CondizioniVendita = () => (
       </p>
       <p>
         Il consumatore ha diritto di recedere dal contratto entro 14 giorni dalla conclusione, senza dover fornire
-        motivazione, comunicandolo a corsi@mariobruzzese.it o via PEC a mbconsulting@casellapec.com. Il rimborso
+        motivazione, comunicandolo a corsi@mariobruzzese.it. Il rimborso
         avviene entro 14 giorni dalla ricezione della comunicazione, con lo stesso mezzo di pagamento utilizzato.
       </p>
       <p>

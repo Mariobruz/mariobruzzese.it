@@ -108,10 +108,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © {new Date().getFullYear()} MB Consulting di Mario Bruzzese — P. IVA 03504290796 — REA RC-199357
-              <br className="hidden md:block" />
-              <span className="md:hidden"> · </span>
-              Via Aspromonte 16, 89127 Reggio Calabria — PEC mbconsulting@casellapec.com
+              © {new Date().getFullYear()} MB Consulting di Mario Bruzzese — P. IVA 03504290796
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
               <a href="/privacy" className="text-gray-400 hover:text-white transition-colors">

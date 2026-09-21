@@ -66,7 +66,7 @@ export function emailClienteCarta(env, { ordine, partecipanti, riferimento }) {
       <ul>${elencoPartecipanti(partecipanti)}</ul>
       <p>Entro 24 ore registriamo i partecipanti sulla piattaforma.</p>
       ${avvisoConferma}
-      <p>Superato il test finale, l’attestato si scarica direttamente dalla piattaforma.</p>
+      <p>Superato il test finale, l’attestato — rilasciato da EFEI, con l’indicazione dell’Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro — si scarica direttamente dalla piattaforma.</p>
       <p style="color:#666;font-size:13px">MB Consulting di Mario Bruzzese — mandataria per la promozione
       e la vendita dei prodotti formativi EFEI, Unità Operativa codice 2403.</p>
     </div>`,

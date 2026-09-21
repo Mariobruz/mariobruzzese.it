@@ -536,7 +536,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                   abbinato. Se non arriva, va controllata anche la posta indesiderata.
                 </p>
                 <p>
-                  Al superamento del test finale l’attestato è scaricabile direttamente dalla piattaforma, in qualsiasi momento.
+                  Al superamento del test finale l’attestato — rilasciato da EFEI, con l’indicazione dell’Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro — è scaricabile direttamente dalla piattaforma, in qualsiasi momento.
                 </p>
               </div>
 
