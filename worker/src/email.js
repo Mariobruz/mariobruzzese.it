@@ -141,7 +141,11 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
     ['Pagamento', stato === 'pagato' ? 'Carta (Stripe) — incassato' : 'Bonifico — in attesa'],
   ], azienda ? '' : 'Cliente privato: fattura elettronica al codice fiscale, codice destinatario 0000000.');
 
-  const piattaforma = tabella('2 · Piattaforma EFEI → Anagrafiche → Crea azienda', [
+  const piattaforma = !azienda
+    ? `<h3 style="margin:28px 0 8px">2 · Piattaforma EFEI</h3>
+      <p><strong>Cliente privato: nessuna azienda da creare.</strong> Importa direttamente il CSV allegato:
+      l’utente viene creato senza azienda (la colonna AZIENDA è vuota).</p>`
+    : tabella('2 · Piattaforma EFEI → Anagrafiche → Crea azienda', [
     ['Tipologia', azienda ? 'Azienda' : 'Privato'],
     ['Codice', '(progressivo della piattaforma)'],
     ['Ragione sociale', intestatario],
@@ -159,9 +163,7 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
     ['SDI', f.sdi || ''],
     ['Codici ATECO', f.ateco],
     ['Referente', azienda ? f.referente : undefined],
-  ], azienda
-    ? 'Crea l’azienda prima di importare il CSV: il CSV la collega ai partecipanti tramite la partita IVA.'
-    : 'Cliente privato, senza partita IVA: nel CSV la colonna azienda resta vuota.');
+  ], 'Crea l’azienda prima di importare il CSV: il CSV la collega ai partecipanti tramite la partita IVA.');
 
   const partecipantiHtml = partecipanti
     .map((p, i) =>
@@ -192,7 +194,9 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
       — ${n} × ${ordine.corso.prezzo}&nbsp;€ = <strong>${totale}&nbsp;€</strong></p>
       <p style="background:#f5f5f5;padding:12px;border-radius:8px">
         ${stato === 'pagato'
-          ? '<strong>Pagato.</strong> Entro 24 ore: crea l’azienda (sezione 2), importa il CSV allegato con «Importa utenti», abbina il corso dopo la conferma dell’account.'
+          ? (azienda
+            ? '<strong>Pagato.</strong> Entro 24 ore: crea l’azienda (sezione 2), importa il CSV allegato con «Importa utenti», abbina il corso dopo la conferma dell’account.'
+            : '<strong>Pagato.</strong> Entro 24 ore: importa il CSV allegato con «Importa utenti» (privato, nessuna azienda da creare), abbina il corso dopo la conferma dell’account.')
           : '<strong>In attesa del bonifico</strong> con causale ' + riferimento + '. Non caricare nulla in piattaforma prima dell’accredito.'}
       </p>
       ${fattura}
