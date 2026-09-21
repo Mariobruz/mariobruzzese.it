@@ -87,7 +87,8 @@ export function validaTelefono(valore, obbligatorio = true) {
 }
 
 export function validaObbligatorio(valore, etichetta) {
-  if (!valore || !String(valore).trim()) return `${etichetta} è obbligatorio`;
+  // "La ragione sociale", "la qualifica" → obbligatoria; "Il nome", "L'indirizzo" → obbligatorio
+  if (!valore || !String(valore).trim()) return `${etichetta} è obbligatori${/^la /i.test(etichetta) ? 'a' : 'o'}`;
   return null;
 }
 
