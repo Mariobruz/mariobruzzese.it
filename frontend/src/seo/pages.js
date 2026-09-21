@@ -348,8 +348,8 @@ const pages = [
       <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), privacy@mariobruzzese.it.</p>
       <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati anagrafici dei partecipanti (nome, cognome, codice fiscale, data e luogo di nascita, email, telefono, qualifica).</p>
       <p>Finalit\u00e0: esecuzione del contratto, obblighi fiscali e documentazione dell'obbligo formativo, invio di comunicazioni commerciali previo consenso.</p>
-      <p>Destinatari: EFEI (titolare autonomo per l'erogazione del corso), Stripe, Brevo, Cloudflare, Formspree, GitHub, consulente fiscale.</p>
-      <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto; fino a revoca per le comunicazioni commerciali.</p>
+      <p>Destinatari: EFEI (titolare autonomo per l'erogazione del corso), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), consulente fiscale.</p>
+      <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto e WhatsApp; fino a revoca per le comunicazioni commerciali.</p>
       <p>Diritti: accesso, rettifica, cancellazione, limitazione, portabilit\u00e0, opposizione e revoca del consenso, scrivendo a privacy@mariobruzzese.it; reclamo al Garante per la protezione dei dati personali.</p>
       <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione, nessuno strumento di analisi o tracciamento pubblicitario.</p>
     `,

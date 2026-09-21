@@ -5,7 +5,7 @@ const Privacy = () => (
   <DocumentoLegale
     titolo="Informativa privacy"
     sommario="Informativa resa ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 sul trattamento dei dati personali raccolti tramite il sito mariobruzzese.it."
-    aggiornamento="19 settembre 2026"
+    aggiornamento="21 settembre 2026"
     seo={{
       title: 'Informativa privacy',
       description:
@@ -37,6 +37,12 @@ const Privacy = () => (
         <strong>Dati del modulo di contatto.</strong> Nome, indirizzo email, eventuale azienda e testo del messaggio.
       </p>
       <p>
+        <strong>Dati dei messaggi WhatsApp.</strong> Se scegli di contattarci con il pulsante WhatsApp, riceviamo il tuo
+        numero di telefono, il nome del profilo e il contenuto dei messaggi che ci invii. Il pulsante è un semplice
+        collegamento: il sito non trasmette a WhatsApp alcun dato finché non decidi di aprire la chat e di inviare il
+        messaggio.
+      </p>
+      <p>
         <strong>Dati del modulo di iscrizione ai corsi.</strong> In particolare:
       </p>
       <Elenco
@@ -55,7 +61,7 @@ const Privacy = () => (
     <Sezione numero="3" titolo="Perché li trattiamo e in base a quale fondamento">
       <Elenco
         voci={[
-          'Gestire la richiesta inviata tramite il modulo di contatto e rispondere — base giuridica: misure precontrattuali su richiesta dell’interessato, art. 6.1.b.',
+          'Gestire la richiesta inviata tramite il modulo di contatto o tramite WhatsApp e rispondere — base giuridica: misure precontrattuali su richiesta dell’interessato, art. 6.1.b.',
           'Registrare l’iscrizione, incassare il corrispettivo e trasmettere i dati all’ente erogatore per l’apertura dell’account e l’abbinamento del corso — base giuridica: esecuzione del contratto, art. 6.1.b (per i partecipanti che non siano anche il cliente: legittimo interesse del datore di lavoro e del titolare all’adempimento dell’obbligo formativo, art. 6.1.f).',
           'Emettere il documento fiscale e conservare le scritture contabili — base giuridica: obbligo di legge, art. 6.1.c.',
           'Documentare l’assolvimento degli obblighi formativi previsti dal D.Lgs. 81/2008 — base giuridica: obbligo di legge, art. 6.1.c.',
@@ -79,6 +85,7 @@ const Privacy = () => (
           'Brevo (Sendinblue SAS), per l’invio delle email transazionali e delle comunicazioni commerciali, in qualità di responsabile del trattamento.',
           'Cloudflare, Inc., che ospita il servizio applicativo e il database in cui sono registrati gli ordini, in qualità di responsabile del trattamento.',
           'Formspree, Inc., che recapita i messaggi inviati tramite il modulo di contatto.',
+          'WhatsApp Ireland Ltd. (gruppo Meta), se scegli di scriverci su WhatsApp. WhatsApp tratta i dati della conversazione in qualità di titolare autonomo, secondo la propria informativa (whatsapp.com/legal).',
           'GitHub, Inc., che ospita le pagine del sito.',
           'Il consulente fiscale del titolare e, se richiesto, le autorità competenti.',
         ]}
@@ -102,7 +109,7 @@ const Privacy = () => (
         voci={[
           'Dati contrattuali, contabili e fiscali: 10 anni dalla conclusione dell’esercizio, come previsto dall’art. 2220 del codice civile e dalla normativa tributaria.',
           'Dati relativi all’assolvimento dell’obbligo formativo: per il periodo in cui l’attestato conserva validità e comunque per la durata degli obblighi di conservazione del datore di lavoro.',
-          'Messaggi ricevuti dal modulo di contatto: 24 mesi dall’ultimo scambio, salvo che diano origine a un rapporto contrattuale.',
+          'Messaggi ricevuti dal modulo di contatto o su WhatsApp: 24 mesi dall’ultimo scambio, salvo che diano origine a un rapporto contrattuale.',
           'Dati trattati per finalità di comunicazione commerciale: fino alla revoca del consenso e comunque non oltre 24 mesi dall’ultimo contatto.',
         ]}
       />
@@ -153,7 +160,8 @@ const Privacy = () => (
       </p>
       <p>
         I servizi esterni richiamati durante il pagamento (Stripe) possono utilizzare cookie propri, necessari alla
-        prevenzione delle frodi, secondo le rispettive informative.
+        prevenzione delle frodi, secondo le rispettive informative. Il pulsante WhatsApp non carica script né cookie
+        sul sito: apre WhatsApp solo quando viene cliccato.
       </p>
     </Sezione>
 
