@@ -76,7 +76,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   const [passo, setPasso] = useState(0);
   const [partecipanti, setPartecipanti] = useState([partecipanteVuoto()]);
   const [fatturazione, setFatturazione] = useState(fatturazioneVuota);
-  const [consensi, setConsensi] = useState({ privacy: false, condizioni: false, attivazione: false, marketing: false });
+  const [consensi, setConsensi] = useState({ privacy: false, condizioni: false, attivazione: false, ccnl: false, marketing: false });
   const [errori, setErrori] = useState({});
   const [invio, setInvio] = useState(false);
   const [erroreInvio, setErroreInvio] = useState(null);
@@ -180,6 +180,10 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   };
 
   const inviaEPaga = async () => {
+    if (corso.richiedeCcnl && !consensi.ccnl) {
+      setErroreInvio('Per i corsi RLS devi confermare che il CCNL applicato ammette la formazione in e-learning.');
+      return;
+    }
     if (!consensi.privacy || !consensi.condizioni || !consensi.attivazione) {
       setErroreInvio('Per proseguire devi accettare le condizioni, l’informativa privacy e la richiesta di attivazione immediata.');
       return;
@@ -504,6 +508,18 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                       </>
                     ),
                   },
+                  ...(corso.richiedeCcnl
+                    ? [{
+                        id: 'ccnl',
+                        obbligatorio: true,
+                        testo: (
+                          <>
+                            Dichiaro che il CCNL applicato in azienda, o l’accordo collettivo di riferimento, consente
+                            di svolgere la formazione RLS in modalità e-learning.
+                          </>
+                        ),
+                      }]
+                    : []),
                   {
                     id: 'marketing',
                     obbligatorio: false,

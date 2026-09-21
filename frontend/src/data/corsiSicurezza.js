@@ -262,7 +262,8 @@ export const corsi = [
   // ----------------------------------------------------------------------- RLS
   {
     id: 'rls-32h',
-    avviso: 'Attivabile in e-learning solo se previsto dal CCNL applicato dall’azienda (art. 37, commi 11 e 12, D.Lgs. 81/2008).',
+    avviso: 'La formazione RLS non è regolata dall’Accordo Stato-Regioni ma dal contratto collettivo (CCNL) applicato in azienda (art. 37, comma 11, D.Lgs. 81/2008): è il CCNL a stabilire se il corso può essere seguito online. Prima di iscriverti verifica che il tuo CCNL, o l’accordo collettivo di riferimento, ammetta la formazione RLS in e-learning; se hai dubbi scrivici e la verifichiamo noi.',
+    richiedeCcnl: true,
     categoria: 'rls',
     titolo: 'Formazione RLS',
     titoloAttestato: 'CORSO DI FORMAZIONE PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA (RLS) - 32 ORE',
@@ -277,7 +278,8 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-rls-fino-50-4h',
-    avviso: 'Attivabile in e-learning solo se previsto dal CCNL applicato dall’azienda (art. 37, commi 11 e 12, D.Lgs. 81/2008).',
+    avviso: 'La formazione RLS non è regolata dall’Accordo Stato-Regioni ma dal contratto collettivo (CCNL) applicato in azienda (art. 37, comma 11, D.Lgs. 81/2008): è il CCNL a stabilire se il corso può essere seguito online. Prima di iscriverti verifica che il tuo CCNL, o l’accordo collettivo di riferimento, ammetta la formazione RLS in e-learning; se hai dubbi scrivici e la verifichiamo noi.',
+    richiedeCcnl: true,
     categoria: 'rls',
     titolo: 'Aggiornamento RLS — aziende fino a 50 lavoratori',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA PER IMPRESE CHE OCCUPANO FINO AI 50 LAVORATORI - 4 ORE',
@@ -292,7 +294,8 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-rls-oltre-50-8h',
-    avviso: 'Attivabile in e-learning solo se previsto dal CCNL applicato dall’azienda (art. 37, commi 11 e 12, D.Lgs. 81/2008).',
+    avviso: 'La formazione RLS non è regolata dall’Accordo Stato-Regioni ma dal contratto collettivo (CCNL) applicato in azienda (art. 37, comma 11, D.Lgs. 81/2008): è il CCNL a stabilire se il corso può essere seguito online. Prima di iscriverti verifica che il tuo CCNL, o l’accordo collettivo di riferimento, ammetta la formazione RLS in e-learning; se hai dubbi scrivici e la verifichiamo noi.',
+    richiedeCcnl: true,
     categoria: 'rls',
     titolo: 'Aggiornamento RLS — aziende oltre 50 lavoratori',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA PER IMPRESE CHE OCCUPANO PIÙ DI 50 LAVORATORI - 8 ORE',

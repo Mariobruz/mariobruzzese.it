@@ -97,6 +97,10 @@ function verificaIscrizione(corpo) {
     );
   }
 
+  if (/(^|-)rls-/.test(corso.id) && !consensi.ccnl) {
+    aggiungi('Per i corsi RLS serve la dichiarazione sul CCNL che ammette la formazione in e-learning');
+  }
+
   const metodo = corpo.metodoPagamento === 'bonifico' ? 'bonifico' : 'carta';
 
   return { errori, corso, fatturazione: f, partecipanti, consensi, metodo };
