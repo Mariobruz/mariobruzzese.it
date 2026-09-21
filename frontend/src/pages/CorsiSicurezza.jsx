@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, BadgeCheck, Check, CheckCircle2, Link2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
+import { WhatsAppFisso, WhatsAppLink } from '../components/WhatsApp';
 import { Button } from '../components/ui/button';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
 
@@ -177,6 +178,7 @@ export default function CorsiSicurezza() {
           noIndex
         />
         <IscrizioneCorso corso={iscrizione} onIndietro={() => setIscrizione(null)} />
+        <WhatsAppFisso testo={`Ciao, sto compilando l’iscrizione al corso «${iscrizione.titolo}» e ho una domanda.`} />
       </div>
     );
   }
@@ -224,6 +226,11 @@ export default function CorsiSicurezza() {
               <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 w-full">
                 Iscriviti ora
               </Button>
+              <div className="mt-3">
+                <WhatsAppLink testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}» (${dettaglio.ore} ore): https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`}>
+                  Hai domande? Scrivici su WhatsApp
+                </WhatsAppLink>
+              </div>
             </div>
           </div>
 
@@ -245,12 +252,14 @@ export default function CorsiSicurezza() {
             riconoscimento dei CFU secondo i regolamenti AUGE.
           </div>
         </div>
+        <WhatsAppFisso testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}».`} />
       </div>
     );
   }
 
   return (
     <>
+      <WhatsAppFisso testo="Ciao, vorrei informazioni sui corsi di sicurezza sul lavoro." />
       <SEOHead
         title="Corsi Sicurezza sul Lavoro Online — D.Lgs 81/08 e Accordo Stato-Regioni 2025"
         description="Corsi di sicurezza sul lavoro online in e-learning, conformi al D.Lgs 81/08 e all'Accordo Stato-Regioni del 17 aprile 2025: lavoratori, dirigenti, RLS, RSPP, formatori, HACCP. Attestato scaricabile dalla piattaforma. Da 25 € IVA compresa."
