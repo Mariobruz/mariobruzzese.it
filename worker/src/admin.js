@@ -9,6 +9,7 @@
 import { csvImportEfei, nomeFileCsv } from './csv';
 import { emailClienteCarta, inviaEmail } from './email';
 import { PAGINA, SCRIPT } from './admin-pagina';
+import { statisticheVisite } from './visite';
 
 const STATI_ATTIVI = ['in_attesa_bonifico', 'pagato', 'caricato', 'importo_da_verificare'];
 
@@ -216,6 +217,15 @@ export default {
         return risposta(csv, 200, 'text/csv; charset=utf-8', {
           'Content-Disposition': `attachment; filename="${nomeFileCsv(ordine.riferimento)}"`,
         });
+      }
+
+      if (metodo === 'GET' && pathname === '/api/visite') {
+        try {
+          return risposta(await statisticheVisite(env, Number(url.searchParams.get('giorni')) || 7));
+        } catch (e) {
+          console.error('statistiche visite', e.message);
+          return risposta({ configurato: true, errore: 'Cloudflare non ha risposto: ' + e.message });
+        }
       }
 
       m = pathname.match(/^\/api\/ordini\/(\d+)\/azione$/);

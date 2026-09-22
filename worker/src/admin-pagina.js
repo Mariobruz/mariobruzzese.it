@@ -68,16 +68,45 @@ export const PAGINA = `<!doctype html>
   .avviso { background:var(--ambra-bg); color:var(--ambra); border-radius:10px; padding:10px 12px; font-size:14px; }
   .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--nero); color:var(--bianco); padding:10px 16px; border-radius:8px; font-size:14px; display:none; }
   .tabella { overflow-x:auto; }
+  .schede-vista { display:flex; gap:4px; }
+  .schede-vista button { border:0; background:none; font:inherit; font-weight:600; padding:6px 12px; border-radius:8px; cursor:pointer; color:var(--grigio); }
+  .schede-vista button.attivo { background:var(--nero); color:var(--bianco); }
+  .riquadro { background:var(--bianco); border:1px solid var(--bordo); border-radius:12px; padding:16px; margin-bottom:16px; }
+  .riquadro h2 { font-size:15px; margin:0 0 12px; }
+  .griglia2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .grafico { display:flex; align-items:flex-end; gap:3px; height:160px; padding-top:18px; }
+  .grafico .col { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-width:0; }
+  .grafico .bar { width:100%; max-width:38px; background:var(--blu); border-radius:4px 4px 0 0; min-height:2px; position:relative; }
+  .grafico .bar span { position:absolute; top:-17px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--grigio); white-space:nowrap; }
+  .grafico .giorno { font-size:11px; color:var(--grigio); margin-top:4px; white-space:nowrap; }
+  .lista-barre { display:flex; flex-direction:column; gap:8px; font-size:14px; }
+  .lista-barre .voce { display:grid; grid-template-columns:1fr auto; gap:2px 10px; }
+  .lista-barre .nome { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lista-barre .traccia { grid-column:1 / -1; height:6px; background:var(--neutro-bg); border-radius:3px; overflow:hidden; }
+  .lista-barre .riemp { height:100%; background:var(--blu); border-radius:3px; }
+  .nota { font-size:13px; color:var(--grigio); margin:4px 0 16px; }
+  table.dati tbody tr { cursor:default; }
+  table.dati tbody tr:hover { background:none; }
+  .istruzioni { background:var(--bianco); border:1px solid var(--bordo); border-radius:12px; padding:18px 20px; }
+  .istruzioni ol { padding-left:20px; } .istruzioni code { background:var(--neutro-bg); padding:1px 5px; border-radius:4px; }
   @media (max-width:760px) { .solo-largo { display:none; } dl { grid-template-columns:1fr; } dt { margin-top:6px; }
     th, td { padding:8px; } .badge { white-space:normal; } main { padding:14px 10px 60px; } .contatore .valore { font-size:22px; } }
 </style>
 </head>
 <body>
 <header>
-  <h1>Ordini corsi sicurezza</h1>
+  <h1>Corsi sicurezza</h1>
+  <nav class="schede-vista" aria-label="Sezioni">
+    <button id="tab-ordini" class="attivo">Ordini</button>
+    <button id="tab-visite">Visite e conversioni</button>
+  </nav>
   <span class="utente" id="utente"></span>
 </header>
-<main>
+<main id="vista-visite" hidden>
+  <div class="barra" id="periodi"></div>
+  <div id="visite-corpo"><div class="vuoto">Caricamento…</div></div>
+</main>
+<main id="vista-ordini">
   <section class="contatori" id="contatori" aria-label="Riepilogo"></section>
   <div class="barra" id="filtri" role="tablist"></div>
   <div class="barra"><input type="search" id="cerca" placeholder="Cerca per riferimento, cliente, email, P. IVA, corso…" aria-label="Cerca"></div>
@@ -324,6 +353,99 @@ function mostra(o) {
   );
 }
 
+// --- visite e conversioni (Cloudflare Web Analytics + ordini)
+const PERIODI = [{ g: 1, testo: 'Ultime 24 ore' }, { g: 7, testo: 'Ultimi 7 giorni' }, { g: 30, testo: 'Ultimi 30 giorni' }];
+let periodo = 7;
+const intero = (n) => (Number(n) || 0).toLocaleString('it-IT');
+const perc = (a, b) => b ? (a / b * 100).toLocaleString('it-IT', { maximumFractionDigits: 1 }) + '%' : '—';
+const NOMI_DISPOSITIVI = { desktop: 'Computer', mobile: 'Smartphone', tablet: 'Tablet' };
+
+function mostraVista(nome) {
+  const visite = nome === 'visite';
+  document.getElementById('vista-ordini').hidden = visite;
+  document.getElementById('vista-visite').hidden = !visite;
+  document.getElementById('tab-ordini').classList.toggle('attivo', !visite);
+  document.getElementById('tab-visite').classList.toggle('attivo', visite);
+  if (location.hash !== (visite ? '#visite' : '')) history.replaceState(null, '', visite ? '#visite' : location.pathname);
+  if (visite) caricaVisite();
+}
+
+function listaBarre(voci) {
+  const max = Math.max(1, ...voci.map((v) => v.valore));
+  if (!voci.length) return el('div', { class: 'secondario', text: 'Nessun dato nel periodo.' });
+  return el('div', { class: 'lista-barre' }, ...voci.map((v) => {
+    const riemp = el('div', { class: 'riemp' }); riemp.style.width = Math.round(v.valore / max * 100) + '%';
+    return el('div', { class: 'voce', title: v.nome },
+      el('span', { class: 'nome', text: v.nome }), el('strong', { text: intero(v.valore) }),
+      el('div', { class: 'traccia' }, riemp));
+  }));
+}
+
+function grafico(giorni) {
+  if (!giorni.length) return el('div', { class: 'secondario', text: 'Nessuna visita nel periodo.' });
+  const max = Math.max(1, ...giorni.map((g) => g.visite));
+  return el('div', { class: 'grafico' }, ...giorni.map((g) => {
+    const b = el('div', { class: 'bar', title: dataBreve(g.data) + ': ' + g.visite + ' visite' }, el('span', { text: String(g.visite) }));
+    b.style.height = Math.max(1, Math.round(g.visite / max * 100)) + '%';
+    const [, m, d] = g.data.split('-');
+    return el('div', { class: 'col' }, b, el('div', { class: 'giorno', text: d + '/' + m }));
+  }));
+}
+
+function disegnaVisite(v) {
+  const corpo = document.getElementById('visite-corpo');
+  if (!v.configurato) {
+    corpo.replaceChildren(el('div', { class: 'istruzioni' },
+      el('h2', { text: 'Collega le statistiche di Cloudflare' }),
+      el('p', { text: 'Serve un token di sola lettura. Una volta fatto, qui vedi visite, provenienze e, per ogni corso, quante persone passano dalla scheda al modulo fino al pagamento.' }),
+      el('ol', null,
+        el('li', { text: 'Cloudflare → icona profilo → Il mio profilo → Token API → Crea token → Crea token personalizzato.' }),
+        el('li', { text: 'Autorizzazioni: Account → Analisi dell’account (Account Analytics) → Lettura. Nient’altro.' }),
+        el('li', null, 'Dal terminale, nella cartella worker: ', el('code', { text: 'npx wrangler secret put CF_API_TOKEN -c admin.toml' }), ' e incolla il token.'))));
+    return;
+  }
+  if (v.errore) { corpo.replaceChildren(el('div', { class: 'avviso', text: v.errore })); return; }
+  const card = (etichetta, valore, sotto) => el('div', { class: 'contatore' },
+    el('div', { class: 'etichetta', text: etichetta }), el('div', { class: 'valore', text: valore }), el('div', { class: 'sotto', text: sotto }));
+  const righeCorsi = v.corsi.map((c) => el('tr', null,
+    el('td', null, c.titolo, el('div', { class: 'secondario', text: c.ore + ' ore' })),
+    el('td', { class: 'num', text: intero(c.scheda) }),
+    el('td', { class: 'num' }, intero(c.modulo), el('div', { class: 'secondario', text: perc(c.modulo, c.scheda) })),
+    el('td', { class: 'num', text: intero(c.ordini) }),
+    el('td', { class: 'num' }, intero(c.pagati), el('div', { class: 'secondario', text: perc(c.pagati, c.scheda) })),
+    el('td', { class: 'num', text: euro(c.incassato) })));
+  corpo.replaceChildren(
+    el('section', { class: 'contatori' },
+      card('Visite', intero(v.totale.visite), intero(v.totale.visualizzazioni) + ' pagine viste'),
+      card('Moduli d’iscrizione aperti', intero(v.moduloAperto), perc(v.moduloAperto, v.totale.visite) + ' delle visite'),
+      card('Ordini creati', intero(v.ordini), 'nel periodo'),
+      card('Ordini pagati', intero(v.pagati), euro(v.incassato)),
+      card('Conversione', perc(v.pagati, v.totale.visite), 'visite → ordini pagati')),
+    el('div', { class: 'riquadro' }, el('h2', { text: 'Visite al giorno' }), grafico(v.perGiorno)),
+    el('div', { class: 'riquadro' }, el('h2', { text: 'Corsi: dalla scheda al pagamento' }),
+      v.corsi.length ? el('div', { class: 'tabella' }, el('table', { class: 'dati' },
+        el('thead', null, el('tr', null, el('th', { text: 'Corso' }), el('th', { class: 'num', text: 'Visite scheda' }),
+          el('th', { class: 'num', text: 'Modulo aperto' }), el('th', { class: 'num', text: 'Ordini' }),
+          el('th', { class: 'num', text: 'Pagati' }), el('th', { class: 'num', text: 'Incassato' }))),
+        el('tbody', null, ...righeCorsi))) : el('div', { class: 'secondario', text: 'Nessuna visita alle schede dei corsi nel periodo.' })),
+    el('div', { class: 'griglia2' },
+      el('div', { class: 'riquadro' }, el('h2', { text: 'Da dove arrivano' }), listaBarre(v.provenienze.map((p) => ({ nome: p.nome, valore: p.visite })))),
+      el('div', { class: 'riquadro' }, el('h2', { text: 'Pagine più viste' }), listaBarre(v.pagine.map((p) => ({ nome: p.percorso, valore: p.visualizzazioni })))),
+      el('div', { class: 'riquadro' }, el('h2', { text: 'Dispositivi' }), listaBarre(v.dispositivi.map((d) => ({ nome: NOMI_DISPOSITIVI[d.tipo] || d.tipo, valore: d.visite }))))),
+    el('p', { class: 'nota', text: 'Dati anonimi di Cloudflare Web Analytics, senza cookie: su molto traffico Cloudflare usa un campione, quindi i numeri sono indicativi. "Google" comprende sia la ricerca normale sia gli annunci Google Ads. Chi blocca gli script non viene contato, mentre gli ordini sono sempre esatti. Aggiornato: ' + data(v.aggiornato) + '.' }),
+  );
+}
+
+async function caricaVisite() {
+  document.getElementById('periodi').replaceChildren(...PERIODI.map((p) => el('button', {
+    class: 'filtro' + (p.g === periodo ? ' attivo' : ''), onclick: () => { periodo = p.g; caricaVisite(); } }, p.testo)));
+  try {
+    disegnaVisite(await api('/api/visite?giorni=' + periodo));
+  } catch (e) {
+    document.getElementById('visite-corpo').replaceChildren(el('div', { class: 'avviso', text: e.message }));
+  }
+}
+
 async function carica() {
   const dati = await api('/api/ordini');
   ordini = dati.ordini;
@@ -334,6 +456,9 @@ async function carica() {
 document.getElementById('velo').addEventListener('click', chiudi);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') chiudi(); });
 document.getElementById('cerca').addEventListener('input', (e) => { ricerca = e.target.value; disegna(); });
+document.getElementById('tab-ordini').addEventListener('click', () => mostraVista('ordini'));
+document.getElementById('tab-visite').addEventListener('click', () => mostraVista('visite'));
+if (location.hash === '#visite') mostraVista('visite');
 carica().catch((e) => { document.getElementById('righe').replaceChildren(el('tr', null, el('td', { colspan: '6', text: 'Errore: ' + e.message }))); });
 setInterval(() => { if (!document.hidden) carica().catch(() => {}); }, 120000);
 `;
