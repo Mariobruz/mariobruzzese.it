@@ -5,7 +5,7 @@ const Privacy = () => (
   <DocumentoLegale
     titolo="Informativa privacy"
     sommario="Informativa resa ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 sul trattamento dei dati personali raccolti tramite il sito mariobruzzese.it."
-    aggiornamento="21 settembre 2026"
+    aggiornamento="22 settembre 2026"
     seo={{
       title: 'Informativa privacy',
       description:
@@ -31,7 +31,9 @@ const Privacy = () => (
       <p>
         <strong>Dati di navigazione.</strong> Il sito è ospitato su GitHub Pages. I sistemi informatici registrano,
         per il solo funzionamento tecnico, dati come indirizzo IP, tipo di browser e pagine richieste. Il sito non
-        utilizza cookie di profilazione né strumenti di analisi o tracciamento pubblicitario.
+        utilizza cookie di profilazione né strumenti di tracciamento pubblicitario. Per sapere quante persone visitano
+        le pagine usiamo Cloudflare Web Analytics, che raccoglie statistiche aggregate e anonime (pagine viste,
+        provenienza della visita, tipo di dispositivo) senza installare cookie e senza identificare il singolo visitatore.
       </p>
       <p>
         <strong>Dati del modulo di contatto.</strong> Nome, indirizzo email, eventuale azienda e testo del messaggio.
@@ -87,6 +89,7 @@ const Privacy = () => (
           'Formspree, Inc., che recapita i messaggi inviati tramite il modulo di contatto.',
           'WhatsApp Ireland Ltd. (gruppo Meta), se scegli di scriverci su WhatsApp. WhatsApp tratta i dati della conversazione in qualità di titolare autonomo, secondo la propria informativa (whatsapp.com/legal).',
           'GitHub, Inc., che ospita le pagine del sito.',
+          'Cloudflare, Inc., per le statistiche anonime di visita (Cloudflare Web Analytics), senza cookie.',
           'Il consulente fiscale del titolare e, se richiesto, le autorità competenti.',
         ]}
       />
@@ -155,8 +158,8 @@ const Privacy = () => (
     <Sezione numero="10" titolo="Cookie">
       <p>
         Il sito utilizza esclusivamente cookie tecnici necessari al proprio funzionamento, per i quali non è
-        richiesto il consenso ai sensi dell’art. 122 del D.Lgs. 196/2003. Non sono presenti cookie di profilazione,
-        strumenti di analisi statistica né pixel pubblicitari di terze parti.
+        richiesto il consenso ai sensi dell’art. 122 del D.Lgs. 196/2003. Non sono presenti cookie di profilazione
+        né pixel pubblicitari di terze parti. Le statistiche di visita (Cloudflare Web Analytics) non usano cookie.
       </p>
       <p>
         I servizi esterni richiamati durante il pagamento (Stripe) possono utilizzare cookie propri, necessari alla

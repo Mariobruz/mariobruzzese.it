@@ -352,7 +352,7 @@ const pages = [
       <p>Destinatari: EFEI (titolare autonomo per l'erogazione del corso), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), consulente fiscale.</p>
       <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto e WhatsApp; fino a revoca per le comunicazioni commerciali.</p>
       <p>Diritti: accesso, rettifica, cancellazione, limitazione, portabilit\u00e0, opposizione e revoca del consenso, scrivendo a privacy@mariobruzzese.it; reclamo al Garante per la protezione dei dati personali.</p>
-      <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione, nessuno strumento di analisi o tracciamento pubblicitario.</p>
+      <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione né tracciamento pubblicitario. Le statistiche di visita sono anonime e senza cookie (Cloudflare Web Analytics).</p>
     `,
   },
 ];
