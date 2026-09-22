@@ -23,6 +23,8 @@ ACCESS_AUD = "bdcc249f2bd6479d2ba673d21fad8866d7ced617a29169ef4e2ef5d08ebafa04"
 EMAIL_MITTENTE = "corsi@mariobruzzese.it"
 NOME_MITTENTE = "MB Consulting"
 EMAIL_AMMINISTRATORE = "corsi@mariobruzzese.it"
+# Account Cloudflare da cui leggere le statistiche di visita (non è un segreto)
+CF_ACCOUNT_ID = "cb511a5045db1f2dc8b568a6eac340e1"
 
 # Segreto (lo stesso del Worker pubblico):
 #   npx wrangler secret put BREVO_API_KEY -c admin.toml
