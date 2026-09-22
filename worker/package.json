@@ -7,7 +7,8 @@
     "deploy": "wrangler deploy",
     "db:crea": "wrangler d1 create iscrizioni-corsi",
     "db:struttura": "wrangler d1 execute iscrizioni-corsi --file=schema.sql --remote",
-    "ordini": "wrangler d1 execute iscrizioni-corsi --remote --command=\"SELECT riferimento, corso_titolo, partecipanti_n, totale, stato, creato_il FROM ordini ORDER BY id DESC LIMIT 20\""
+    "ordini": "wrangler d1 execute iscrizioni-corsi --remote --command=\"SELECT riferimento, corso_titolo, partecipanti_n, totale, stato, creato_il FROM ordini ORDER BY id DESC LIMIT 20\"",
+    "deploy:admin": "wrangler deploy -c admin.toml"
   },
   "devDependencies": {
     "wrangler": "^3.90.0"

@@ -319,7 +319,8 @@ async function gestisciWebhook(env, richiesta) {
   const ordine = await env.DB.prepare('SELECT * FROM ordini WHERE riferimento = ?')
     .bind(riferimento).first();
   if (!ordine) return json({ ricevuto: true });
-  if (ordine.stato === 'pagato') return json({ ricevuto: true }); // Stripe può ripetere l'evento
+  // Stripe può ripetere l'evento: si procede solo se l'ordine aspetta ancora il pagamento
+  if (ordine.stato !== 'in_attesa_pagamento') return json({ ricevuto: true });
 
   // la sessione deve essere proprio quella creata per questo ordine
   if (ordine.stripe_session_id && ordine.stripe_session_id !== sessione.id) {
@@ -337,7 +338,7 @@ async function gestisciWebhook(env, richiesta) {
 
   // aggiornamento condizionato: se Stripe manda l'evento due volte insieme, uno solo passa
   const aggiornato = await env.DB.prepare(
-    "UPDATE ordini SET stato = 'pagato', pagato_il = ? WHERE id = ? AND stato != 'pagato'"
+    "UPDATE ordini SET stato = 'pagato', pagato_il = ? WHERE id = ? AND stato = 'in_attesa_pagamento'"
   ).bind(new Date().toISOString(), ordine.id).run();
   if (!aggiornato.meta || !aggiornato.meta.changes) return json({ ricevuto: true });
 

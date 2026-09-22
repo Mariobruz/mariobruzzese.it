@@ -1,0 +1,28 @@
+# Pannello ordini (Worker separato da quello pubblico delle iscrizioni).
+# Si pubblica con:  npm run deploy:admin
+# L'intero indirizzo admin-corsi.<account>.workers.dev va protetto con
+# Cloudflare Access; il codice verifica comunque il token di Access e,
+# finché ACCESS_TEAM_DOMAIN e ACCESS_AUD sono vuoti, resta tutto chiuso.
+name = "admin-corsi"
+main = "src/admin.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "iscrizioni-corsi"
+database_id = "c36aa84d-e0a4-496e-aae3-f63ac225b356"
+
+[vars]
+# Email che possono entrare nel pannello (le stesse da autorizzare in Access)
+ADMIN_EMAILS = "corsi@mariobruzzese.it,mario.bruz@gmail.com"
+# Da compilare dopo aver attivato Cloudflare Access (vedi istruzioni)
+ACCESS_TEAM_DOMAIN = ""
+ACCESS_AUD = ""
+# Per l'email di conferma quando segni un bonifico come ricevuto
+EMAIL_MITTENTE = "corsi@mariobruzzese.it"
+NOME_MITTENTE = "MB Consulting"
+EMAIL_AMMINISTRATORE = "corsi@mariobruzzese.it"
+
+# Segreto (lo stesso del Worker pubblico):
+#   npx wrangler secret put BREVO_API_KEY -c admin.toml
