@@ -8,14 +8,14 @@ export const linkWhatsApp = (testo) =>
   `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(testo)}`;
 
 /** Pulsante fisso in basso a destra: apre la chat con un messaggio già scritto. */
-export function WhatsAppFisso({ testo }) {
+export function WhatsAppFisso({ testo, sopraBarra = false }) {
   return (
     <a
       href={linkWhatsApp(testo)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Scrivici su WhatsApp"
-      className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white shadow-lg px-4 py-3 md:px-5 font-semibold hover:bg-[#1ebe5b] transition-colors"
+      className={`fixed ${sopraBarra ? 'bottom-24 md:bottom-5' : 'bottom-5'} right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white shadow-lg px-4 py-3 md:px-5 font-semibold hover:bg-[#1ebe5b] transition-colors`}
     >
       <MessageCircle className="w-6 h-6" />
       <span className="hidden sm:inline">Scrivici su WhatsApp</span>

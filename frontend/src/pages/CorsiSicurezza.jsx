@@ -79,6 +79,17 @@ export default function CorsiSicurezza() {
   useEffect(() => {
     if (corsoId && !dettaglio) navigate(BASE, { replace: true });
   }, [corsoId, dettaglio, navigate]);
+
+  // Su smartphone il pulsante "Iscriviti ora" resta sempre a portata di dito:
+  // quando quello principale esce dallo schermo compare una barra fissa in basso.
+  const [ctaEl, ctaPrincipale] = useState(null);
+  const [ctaVisibile, setCtaVisibile] = useState(true);
+  useEffect(() => {
+    if (!ctaEl || typeof IntersectionObserver === 'undefined') { setCtaVisibile(true); return undefined; }
+    const osservatore = new IntersectionObserver(([voce]) => setCtaVisibile(voce.isIntersecting), { threshold: 0 });
+    osservatore.observe(ctaEl);
+    return () => osservatore.disconnect();
+  }, [ctaEl]);
   const visibili = useMemo(
     () => (categoriaAttiva === 'tutte' ? corsi : corsi.filter((c) => c.categoria === categoriaAttiva)),
     [corsi, categoriaAttiva]
@@ -173,7 +184,7 @@ export default function CorsiSicurezza() {
 
   if (dettaglio) {
     return (
-      <div className="min-h-screen pt-40 pb-20">
+      <div className="min-h-screen pt-28 md:pt-40 pb-28 md:pb-20">
         <SEOHead
           title={dettaglio.seoTitolo}
           description={dettaglio.seoDescrizione}
@@ -211,9 +222,11 @@ export default function CorsiSicurezza() {
               )}
               <p className="text-3xl font-bold text-gray-900 mb-1">{dettaglio.prezzo}&nbsp;€</p>
               <p className="text-sm text-gray-500 mb-6">a partecipante, IVA compresa</p>
-              <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 w-full">
-                Iscriviti ora
-              </Button>
+              <div ref={ctaPrincipale}>
+                <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 w-full">
+                  Iscriviti ora
+                </Button>
+              </div>
               <div className="mt-3">
                 <WhatsAppLink testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}» (${dettaglio.ore} ore): https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`}>
                   Hai domande? Scrivici su WhatsApp
@@ -228,6 +241,16 @@ export default function CorsiSicurezza() {
             {dettaglio.programma.map((riga, i) => (
               <p key={i}>{riga}</p>
             ))}
+          </div>
+
+          <div className="mt-10 border-2 border-black rounded-xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-bold text-gray-900">{dettaglio.titolo} · {dettaglio.ore} ore</p>
+              <p className="text-sm text-gray-600">100% online, attestato con QR code. {dettaglio.prezzo}&nbsp;€ a partecipante.</p>
+            </div>
+            <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 whitespace-nowrap">
+              Iscriviti ora
+            </Button>
           </div>
 
           {dettaglio.correlati.length > 0 && (
@@ -259,7 +282,18 @@ export default function CorsiSicurezza() {
             riconoscimento dei CFU secondo i regolamenti AUGE.
           </div>
         </div>
-        <WhatsAppFisso testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}».`} />
+        {!ctaVisibile && (
+          <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-lg font-bold text-gray-900 leading-tight">{dettaglio.prezzo}&nbsp;€</p>
+              <p className="text-xs text-gray-500 truncate">{dettaglio.ore} ore · 100% online</p>
+            </div>
+            <Button onClick={() => setIscrizione(dettaglio)} className="bg-black text-white hover:bg-gray-800 px-6">
+              Iscriviti ora
+            </Button>
+          </div>
+        )}
+        <WhatsAppFisso sopraBarra={!ctaVisibile} testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}».`} />
       </div>
     );
   }
