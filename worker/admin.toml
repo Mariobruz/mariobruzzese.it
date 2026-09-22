@@ -17,8 +17,8 @@ database_id = "c36aa84d-e0a4-496e-aae3-f63ac225b356"
 # Email che possono entrare nel pannello (le stesse da autorizzare in Access)
 ADMIN_EMAILS = "corsi@mariobruzzese.it,mario.bruz@gmail.com"
 # Da compilare dopo aver attivato Cloudflare Access (vedi istruzioni)
-ACCESS_TEAM_DOMAIN = ""
-ACCESS_AUD = ""
+ACCESS_TEAM_DOMAIN = "restless-rice-1e6d.cloudflareaccess.com"
+ACCESS_AUD = "bdcc249f2bd6479d2ba673d21fad8866d7ced617a29169ef4e2ef5d08ebafa04"
 # Per l'email di conferma quando segni un bonifico come ricevuto
 EMAIL_MITTENTE = "corsi@mariobruzzese.it"
 NOME_MITTENTE = "MB Consulting"
