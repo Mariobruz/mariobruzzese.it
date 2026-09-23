@@ -25,7 +25,26 @@ function Esito({ divisione }) {
         Formazione dei lavoratori: {l.generale} ore di generale + {l.specifica} ore di specifica,
         <strong> {l.totale} ore in tutto</strong>. Aggiornamento di 6 ore ogni 5 anni.
       </p>
-      <div className="mt-4">
+      <div className="mt-4 border-t border-current/20 pt-4 mb-4">
+        <p className="text-sm">
+          <strong>Hai dipendenti?</strong> Con i fondi interprofessionali la formazione può essere finanziata al 100%:
+          non è una spesa in più, usi lo 0,30% che la tua azienda versa già all’INPS. Ci pensiamo noi ad adesione,
+          piano formativo e rendicontazione.
+        </p>
+        <div className="mt-3 flex flex-col sm:flex-row gap-3">
+          <WhatsAppLink testo={`Ciao, il mio codice ATECO è ${codice}: vorrei sapere se posso finanziare la formazione dei miei dipendenti con i fondi interprofessionali.`}>
+            Chiedi se puoi finanziarlo
+          </WhatsAppLink>
+          <Link
+            to="/servizi"
+            className="inline-flex items-center justify-center w-full rounded-md border-2 border-gray-300 bg-white/70 text-gray-900 font-semibold px-4 py-2.5 hover:border-gray-900 transition-colors"
+          >
+            Come funzionano i fondi
+          </Link>
+        </div>
+      </div>
+
+      <div>
         {l.corso ? (
           <Link
             to={`/corsi-sicurezza/${l.corso}`}
