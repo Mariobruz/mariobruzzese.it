@@ -160,6 +160,8 @@ const Privacy = () => (
         Il sito utilizza esclusivamente cookie tecnici necessari al proprio funzionamento, per i quali non è
         richiesto il consenso ai sensi dell’art. 122 del D.Lgs. 196/2003. Non sono presenti cookie di profilazione
         né pixel pubblicitari di terze parti. Le statistiche di visita (Cloudflare Web Analytics) non usano cookie.
+        Il sito salva nel browser una sola impostazione tecnica, e solo se richiesta: chi cura il sito può escludersi
+        dalle statistiche, così i conteggi riguardano i visitatori reali.
       </p>
       <p>
         I servizi esterni richiamati durante il pagamento (Stripe) possono utilizzare cookie propri, necessari alla
