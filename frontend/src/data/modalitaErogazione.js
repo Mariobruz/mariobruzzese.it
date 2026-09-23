@@ -37,6 +37,7 @@ export const righeModalita = [
   r('Datore di lavoro', SI, SI, 30, NP, 'Colloquio o test (30 domande)'),
   r('Aggiornamento datore di lavoro', SI, SI, 30, NP, 'Colloquio o test (10 domande)'),
   r('RSPP datore di lavoro', SI, NO, 30, NP, 'Colloquio o test (30 domande)'),
+  r('Aggiornamento RSPP datore di lavoro', SI, SI, 30, NP, 'Colloquio o test (10 domande)'),
   r('RSPP / ASPP', SI, 'Consentita solo per il modulo A', 30, NP, 'Colloquio o test (30 domande)'),
   r('Aggiornamento RSPP / ASPP', SI, SI, 30, NP, 'Colloquio o test (10 domande)'),
   r('RLS', SI, 'Consentita solo se prevista dal CCNL', 30, NP, 'Colloquio o test*'),
