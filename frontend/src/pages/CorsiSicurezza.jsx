@@ -460,18 +460,26 @@ export default function CorsiSicurezza() {
 
           <section className="mb-24 border-2 border-gray-100 rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Quanto dura e quando scade ogni corso</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Non sai quale corso ti serve?</h2>
               <p className="text-gray-600 max-w-2xl">
-                Ore di ciascun percorso, scadenza dell’attestato e modalità ammesse — aula, videoconferenza o
-                e-learning — secondo l’Accordo Stato-Regioni del 17 aprile 2025.
+                Dal codice ATECO scopri se la tua attività è a rischio basso, medio o alto e quante ore servono ai
+                lavoratori. Nell’altra pagina, durata e scadenza di ogni corso secondo l’Accordo Stato-Regioni 2025.
               </p>
             </div>
-            <Link
-              to="/durata-scadenza-corsi-sicurezza"
-              className="inline-flex items-center justify-center rounded-md border-2 border-black text-gray-900 font-semibold px-6 py-3 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
-            >
-              Vedi durate e scadenze
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                to="/durata-scadenza-corsi-sicurezza"
+                className="inline-flex items-center justify-center rounded-md border-2 border-black text-gray-900 font-semibold px-6 py-3 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
+              >
+                Durate e scadenze
+              </Link>
+              <Link
+                to="/codice-ateco-livello-di-rischio"
+                className="inline-flex items-center justify-center rounded-md border-2 border-black text-gray-900 font-semibold px-6 py-3 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
+              >
+                Il mio codice ATECO
+              </Link>
+            </div>
           </section>
 
           <div className="bg-gray-50 rounded-2xl p-8 text-sm text-gray-600 leading-relaxed">

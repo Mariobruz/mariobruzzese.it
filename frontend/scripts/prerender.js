@@ -100,6 +100,11 @@ async function caricaCorsi() {
 
 let SCADENZE = {};
 
+async function caricaAteco() {
+  const sorgente = fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'rischioAteco.js'), 'utf8');
+  return import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
+}
+
 async function caricaModalita() {
   const sorgente = fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'modalitaErogazione.js'), 'utf8');
   return import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
@@ -202,6 +207,23 @@ if (scadenze) {
   scadenze.noscript += `<table border="1" cellpadding="6" cellspacing="0"><thead><tr>${intestazioni}</tr></thead><tbody>${corpo}</tbody></table>`;
   scadenze.noscript += `<ul>${noteModalita.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>`;
   scadenze.noscript += `<p><a href="${BASE}/corsi-sicurezza">Vedi i corsi di sicurezza sul lavoro online</a></p>`;
+}
+
+// Codice ATECO e livello di rischio: anche qui il contenuto deve stare nell'HTML
+const { divisioni, livelli, sezioni, noteAteco } = await caricaAteco();
+const ateco = pages.find((p) => p.slug === 'codice-ateco-livello-di-rischio');
+if (ateco) {
+  for (const liv of ['basso', 'medio', 'alto']) {
+    const l = livelli[liv];
+    const righe = divisioni
+      .filter((d) => d[3] === liv)
+      .map((d) => `<tr><td>${esc(d[0])}</td><td>${esc(d[2])}</td><td>${esc(d[1])} — ${esc(sezioni[d[1]])}</td></tr>`)
+      .join('');
+    ateco.noscript += `<h2>${esc(l.nome)} — ${l.totale} ore di formazione (${l.generale} generale + ${l.specifica} specifica)</h2>`;
+    ateco.noscript += `<table border="1" cellpadding="6" cellspacing="0"><thead><tr><th>Codice ATECO</th><th>Settore</th><th>Sezione</th></tr></thead><tbody>${righe}</tbody></table>`;
+  }
+  ateco.noscript += `<ul>${noteAteco.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>`;
+  ateco.noscript += `<p><a href="${BASE}/corsi-sicurezza">Corsi di sicurezza sul lavoro online</a> — <a href="${BASE}/durata-scadenza-corsi-sicurezza">durata e scadenza di ogni corso</a></p>`;
 }
 
 const iscrizioni = schede.map((p) => ({

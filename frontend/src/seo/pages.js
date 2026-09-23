@@ -370,6 +370,21 @@ const pages = [
       <p>La stessa tabella indica come si pu\u00f2 seguire ciascun corso: presenza fisica, videoconferenza sincrona o e-learning, con il numero massimo di partecipanti in aula, il rapporto tra docente e allievi nella parte pratica e il tipo di verifica finale.</p>
     `,
   },
+  {
+    slug: 'codice-ateco-livello-di-rischio',
+    title: `Codice ATECO e Livello di Rischio: Basso, Medio o Alto | Ore di Formazione`,
+    description:
+      'Cerca il tuo codice ATECO e scopri se l\u2019attivit\u00e0 \u00e8 a rischio basso, medio o alto e quante ore di formazione servono ai lavoratori secondo l\u2019Accordo Stato-Regioni 2025.',
+    priority: '0.8',
+    changefreq: 'monthly',
+    schema: [breadcrumb('Codice ATECO e livello di rischio', `${BASE}/codice-ateco-livello-di-rischio`)],
+    // le tabelle per livello le genera scripts/prerender.js dai dati del sito
+    noscript: `
+      <h1>Codice ATECO e livello di rischio: basso, medio o alto</h1>
+      <p>Il settore di appartenenza dell\u2019azienda stabilisce la durata della formazione dei lavoratori: 8 ore complessive per i settori a rischio basso (4 di formazione generale e 4 di specifica), 12 ore per il rischio medio (4 + 8) e 16 ore per il rischio alto (4 + 12). L\u2019aggiornamento \u00e8 di 6 ore ogni 5 anni per tutti i livelli.</p>
+      <p>La classificazione che segue \u00e8 quella dell\u2019Allegato IV dell\u2019Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR), con le corrispondenze ATECO 2007. Il codice ATECO indica il livello di partenza: la durata definitiva dipende dalla valutazione dei rischi dell\u2019azienda e le ore dell\u2019Accordo sono minime.</p>
+    `,
+  },
 ];
 
 module.exports = { SITE, BASE, OG_IMG, pages };
