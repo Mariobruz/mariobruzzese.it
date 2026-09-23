@@ -8,17 +8,21 @@ const CAMPI = colonneModalita.filter((c) => c.id !== 'corso');
  * Su schermo largo è una tabella, su smartphone diventa un elenco di schede:
  * sette colonne su un telefono sarebbero illeggibili.
  */
-export default function ModalitaErogazione() {
+export default function ModalitaErogazione({ senzaTitolo = false }) {
   return (
     <section className="mb-24" aria-labelledby="modalita-erogazione">
-      <h2 id="modalita-erogazione" className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-        Durata, scadenze e modalità di ogni corso
-      </h2>
-      <p className="text-gray-600 mb-8 max-w-3xl">
-        Per ogni percorso: quante ore dura, ogni quanto va rifatto l’aggiornamento e come si può seguire — aula,
-        videoconferenza sincrona o e-learning — con il numero massimo di partecipanti, il rapporto tra docente e
-        allievi nella parte pratica e il tipo di verifica finale.
-      </p>
+      {!senzaTitolo && (
+        <>
+          <h2 id="modalita-erogazione" className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            Durata, scadenze e modalità di ogni corso
+          </h2>
+          <p className="text-gray-600 mb-8 max-w-3xl">
+            Per ogni percorso: quante ore dura, ogni quanto va rifatto l’aggiornamento e come si può seguire — aula,
+            videoconferenza sincrona o e-learning — con il numero massimo di partecipanti, il rapporto tra docente e
+            allievi nella parte pratica e il tipo di verifica finale.
+          </p>
+        </>
+      )}
 
       {/* schermo largo: tabella */}
       <div className="hidden md:block overflow-x-auto border border-gray-200 rounded-xl">

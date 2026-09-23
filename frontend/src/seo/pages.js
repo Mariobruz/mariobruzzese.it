@@ -355,6 +355,21 @@ const pages = [
       <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione né tracciamento pubblicitario. Le statistiche di visita sono anonime e senza cookie (Cloudflare Web Analytics).</p>
     `,
   },
+  {
+    slug: 'durata-scadenza-corsi-sicurezza',
+    title: `Durata e Scadenza dei Corsi di Sicurezza sul Lavoro | Accordo Stato-Regioni 2025`,
+    description:
+      'Quanto dura ogni corso di sicurezza sul lavoro e ogni quanto va rifatto l\u2019aggiornamento: lavoratori, preposti, dirigenti, datore di lavoro, RSPP, RLS, antincendio, primo soccorso, HACCP.',
+    priority: '0.8',
+    changefreq: 'monthly',
+    schema: [breadcrumb('Durata e scadenza dei corsi', `${BASE}/durata-scadenza-corsi-sicurezza`)],
+    // il prospetto in HTML lo genera scripts/prerender.js dai dati del sito
+    noscript: `
+      <h1>Durata e scadenza dei corsi di sicurezza sul lavoro</h1>
+      <p>Quante ore dura ogni corso, quanto vale l\u2019attestato e ogni quanto va rifatto l\u2019aggiornamento. I dati provengono dal quadro sinottico dell\u2019Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR); per i percorsi che l\u2019Accordo non disciplina \u2014 antincendio, primo soccorso, ponteggi, funi, segnaletica stradale, lavori elettrici e HACCP \u2014 vale la norma indicata nella riga corrispondente.</p>
+      <p>La stessa tabella indica come si pu\u00f2 seguire ciascun corso: presenza fisica, videoconferenza sincrona o e-learning, con il numero massimo di partecipanti in aula, il rapporto tra docente e allievi nella parte pratica e il tipo di verifica finale.</p>
+    `,
+  },
 ];
 
 module.exports = { SITE, BASE, OG_IMG, pages };

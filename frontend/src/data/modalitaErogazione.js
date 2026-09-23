@@ -82,3 +82,38 @@ export const noteModalita = [
   'Test*: può essere erogato un test con un minimo di 5 domande.',
   'Durate e scadenze: quadro sinottico dell’Accordo Stato-Regioni del 17 aprile 2025. Per antincendio, primo soccorso, ponteggi, funi, segnaletica stradale, lavori elettrici e HACCP valgono le norme indicate nelle righe corrispondenti.',
 ];
+
+/**
+ * Durata e scadenza per i corsi che vendiamo, indicizzati per id di catalogo.
+ * Stessi riferimenti del prospetto qui sopra.
+ */
+export const scadenzeCorsi = {
+  'formazione-generale-lavoratori-4h': { durata: '4 ore', validita: 'Non scade: è un credito formativo permanente' },
+  'formazione-generale-lavoratori-4h-eng': { durata: '4 ore', validita: 'Non scade: è un credito formativo permanente' },
+  'formazione-specifica-rischio-basso-4h': { durata: '4 ore', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'formazione-generale-specifica-rischio-basso-8h': { durata: '8 ore (4 generale + 4 specifica)', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'aggiornamento-lavoratori-tutti-rischi-6h': { durata: '6 ore', validita: 'Vale 5 anni, poi va rifatto' },
+  'aggiornamento-lavoratori-rischio-medio-6h': { durata: '6 ore', validita: 'Vale 5 anni, poi va rifatto' },
+  'datore-di-lavoro-16h': { durata: '16 ore', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'rspp-datore-lavoro-8h': { durata: '8 ore (moduli I e II)', validita: 'Vale 5 anni, poi aggiornamento di 8 ore' },
+  'aggiornamento-rspp-datore-lavoro-8h': { durata: '8 ore', validita: 'Vale 5 anni, poi va rifatto' },
+  'modulo-cantieri-datore-6h': { durata: '6 ore', validita: 'Modulo aggiuntivo: segue la scadenza del corso base' },
+  'dirigenti-12h': { durata: '12 ore', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'aggiornamento-dirigenti-6h': { durata: '6 ore', validita: 'Vale 5 anni, poi va rifatto' },
+  'modulo-cantieri-dirigenti-6h': { durata: '6 ore', validita: 'Modulo aggiuntivo: segue la scadenza del corso base' },
+  'rspp-aspp-modulo-a-28h': { durata: '28 ore', validita: 'Credito permanente: chi ricopre il ruolo si aggiorna ogni 5 anni (40 ore RSPP, 20 ore ASPP)' },
+  'aggiornamento-rspp-40h': { durata: '40 ore', validita: 'Copre il quinquennio in corso' },
+  'aggiornamento-aspp-20h': { durata: '20 ore', validita: 'Copre il quinquennio in corso' },
+  'rls-32h': { durata: '32 ore', validita: 'Aggiornamento ogni anno: 4 ore fino a 50 lavoratori, 8 ore oltre' },
+  'aggiornamento-rls-fino-50-4h': { durata: '4 ore', validita: 'Da rifare ogni anno' },
+  'aggiornamento-rls-oltre-50-8h': { durata: '8 ore', validita: 'Da rifare ogni anno' },
+  'coordinatore-modulo-giuridico-8h': { durata: '8 ore', validita: 'Modulo del percorso per coordinatori: il ruolo si aggiorna con 40 ore ogni 5 anni' },
+  'aggiornamento-csp-cse-40h': { durata: '40 ore', validita: 'Copre il quinquennio in corso' },
+  'formatori-40h': { durata: '40 ore', validita: 'Aggiornamento di 24 ore ogni 3 anni (D.I. 6 marzo 2013)' },
+  'formatori-24h': { durata: '24 ore', validita: 'Aggiornamento di 24 ore ogni 3 anni (D.I. 6 marzo 2013)' },
+  'aggiornamento-formatori-24h': { durata: '24 ore', validita: 'Copre il triennio in corso' },
+  'responsabile-industria-alimentare': { durata: '12 ore', validita: 'Scadenza stabilita dalla Regione' },
+  'osa-rischio-elevato-8h': { durata: '8 ore', validita: 'Scadenza stabilita dalla Regione' },
+  'osa-rischio-medio-6h': { durata: '6 ore', validita: 'Scadenza stabilita dalla Regione' },
+  'aggiornamento-osa-4h': { durata: '4 ore', validita: 'Scadenza stabilita dalla Regione' },
+};

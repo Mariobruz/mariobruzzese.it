@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, BadgeCheck, Check, CheckCircle2, Link2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
-import ModalitaErogazione from '../components/ModalitaErogazione';
+import { scadenzeCorsi } from '../data/modalitaErogazione';
 import { WhatsAppFisso, WhatsAppLink } from '../components/WhatsApp';
 import { Button } from '../components/ui/button';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
@@ -236,6 +236,27 @@ export default function CorsiSicurezza() {
             </div>
           </div>
 
+          {scadenzeCorsi[dettaglio.id] && (
+            <div className="mb-12 bg-gray-50 rounded-xl p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-3">Durata e validità dell’attestato</h2>
+              <dl className="grid sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <dt className="text-gray-500 mb-1">Durata</dt>
+                  <dd className="text-gray-900 font-semibold">{scadenzeCorsi[dettaglio.id].durata}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500 mb-1">Validità e aggiornamento</dt>
+                  <dd className="text-gray-900 font-semibold">{scadenzeCorsi[dettaglio.id].validita}</dd>
+                </div>
+              </dl>
+              <p className="text-sm text-gray-500 mt-4">
+                <Link to="/durata-scadenza-corsi-sicurezza" className="underline hover:text-black">
+                  Durate e scadenze di tutti i corsi
+                </Link>
+              </p>
+            </div>
+          )}
+
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Programma del corso</h2>
           <p className="text-sm text-gray-500 mb-6">Programma didattico ufficiale dell’ente erogatore.</p>
           <div className="space-y-3 text-gray-700 leading-relaxed">
@@ -437,7 +458,21 @@ export default function CorsiSicurezza() {
             </div>
           </section>
 
-          <ModalitaErogazione />
+          <section className="mb-24 border-2 border-gray-100 rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Quanto dura e quando scade ogni corso</h2>
+              <p className="text-gray-600 max-w-2xl">
+                Ore di ciascun percorso, scadenza dell’attestato e modalità ammesse — aula, videoconferenza o
+                e-learning — secondo l’Accordo Stato-Regioni del 17 aprile 2025.
+              </p>
+            </div>
+            <Link
+              to="/durata-scadenza-corsi-sicurezza"
+              className="inline-flex items-center justify-center rounded-md border-2 border-black text-gray-900 font-semibold px-6 py-3 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
+            >
+              Vedi durate e scadenze
+            </Link>
+          </section>
 
           <div className="bg-gray-50 rounded-2xl p-8 text-sm text-gray-600 leading-relaxed">
             I corsi sono progettati, autorizzati ed erogati in modalità e-learning asincrona da <strong>EFEI — Organismo

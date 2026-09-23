@@ -98,6 +98,13 @@ async function caricaCorsi() {
   return modulo.corsiPubblicabili();
 }
 
+let SCADENZE = {};
+
+async function caricaModalita() {
+  const sorgente = fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'modalitaErogazione.js'), 'utf8');
+  return import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
+}
+
 function paginaCorso(c) {
   const url = `${BASE}/corsi-sicurezza/${c.id}`;
   const descr = c.seoDescrizione;
@@ -147,6 +154,7 @@ function paginaCorso(c) {
       <h1>${esc(c.seoTitolo)}</h1>
       <p><strong>Durata:</strong> ${c.ore} ore in e-learning asincrono. <strong>Destinatari:</strong> ${esc(c.destinatari)}. <strong>Riferimento:</strong> ${esc(c.normativa)}.</p>
       <p><strong>Prezzo:</strong> ${c.prezzo} € a partecipante, IVA compresa.</p>
+      ${SCADENZE[c.id] ? `<p><strong>Validità dell'attestato:</strong> ${esc(SCADENZE[c.id].validita)}. <a href="${BASE}/durata-scadenza-corsi-sicurezza">Durate e scadenze di tutti i corsi</a></p>` : ''}
       ${c.avviso ? `<p>${esc(c.avviso)}</p>` : ''}
       <p>Corso erogato da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unità Operativa 2403 e A.U.G.E. Università, promosso da MB Consulting. Superato il test finale, l'attestato si scarica dalla piattaforma.</p>
       ${programma ? `<h2>Programma del corso</h2>${programma}` : ''}
@@ -159,6 +167,8 @@ function paginaCorso(c) {
 
 async function main() {
 const corsi = await caricaCorsi();
+const { colonneModalita, righeModalita, noteModalita, scadenzeCorsi } = await caricaModalita();
+SCADENZE = scadenzeCorsi;
 const schede = corsi.map(paginaCorso);
 
 // Catalogo: elenco dei corsi generato dal catalogo vero (niente prezzi scritti a mano).
@@ -182,6 +192,18 @@ if (catalogo) {
     .map((c) => `<li><a href="${BASE}/corsi-sicurezza/${c.id}">${esc(c.seoTitolo)}</a> — ${c.prezzo} €</li>`)
     .join('')}</ul>`;
 }
+// Durate e scadenze: il prospetto va anche nell'HTML servito a Google, non solo nella pagina React
+const scadenze = pages.find((p) => p.slug === 'durata-scadenza-corsi-sicurezza');
+if (scadenze) {
+  const intestazioni = colonneModalita.map((c) => `<th>${esc(c.testo)}</th>`).join('');
+  const corpo = righeModalita
+    .map((r) => `<tr>${colonneModalita.map((c) => `<td>${esc(r[c.id])}</td>`).join('')}</tr>`)
+    .join('');
+  scadenze.noscript += `<table border="1" cellpadding="6" cellspacing="0"><thead><tr>${intestazioni}</tr></thead><tbody>${corpo}</tbody></table>`;
+  scadenze.noscript += `<ul>${noteModalita.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>`;
+  scadenze.noscript += `<p><a href="${BASE}/corsi-sicurezza">Vedi i corsi di sicurezza sul lavoro online</a></p>`;
+}
+
 const iscrizioni = schede.map((p) => ({
   ...p, slug: `${p.slug}/iscrizione`, canonical: `${BASE}/${p.slug}`, noindex: true,
   title: `Iscrizione — ${p.title}`,
