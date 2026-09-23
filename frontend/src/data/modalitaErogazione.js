@@ -30,7 +30,6 @@ const NO = 'Non consentita';
 const TEORICO = 'Solo modulo teorico';
 const NP = 'Non prevista';
 const PRATICHE = 'Test* intermedio e prove pratiche';
-const HACCP_AULA = 'Consentita solo nelle Regioni Lombardia, Lazio, Veneto, Basilicata e Provincia di Bolzano';
 const HACCP_DURATA = 'Stabilita dalla Regione';
 const HACCP_AGG = 'Stabilita dalla Regione';
 
@@ -74,8 +73,8 @@ export const righeModalita = [
   r('Aggiornamento addetti alla segnaletica stradale', TEORICO, NO, 30, '1/6', PRATICHE, '6 ore', 'Ogni 5 anni'),
   r('Lavori elettrici PAV, PES, PEI (artt. 82 e 83 D.Lgs. 81/08 — CEI 11-27, CEI 11-81, CEI EN 50110-1)', TEORICO, NO, 30, NP, 'Test*', 'Secondo la norma CEI 11-27 e il livello (PES, PAV, PEI)', 'Riaddestramento periodico previsto dalla CEI 11-27: di prassi ogni 5 anni'),
   r('Aggiornamento lavori elettrici PAV, PES, PEI', TEORICO, NO, 30, NP, 'Test*', 'Secondo la norma CEI 11-27', 'Di prassi ogni 5 anni'),
-  { ...r('Addetti al settore alimentare — HACCP', NO, SI, 30, NP, 'Test*', HACCP_DURATA, HACCP_AGG), presenza: HACCP_AULA },
-  { ...r('Aggiornamento addetti al settore alimentare — HACCP', NO, SI, 30, NP, 'Test*', HACCP_DURATA, HACCP_AGG), presenza: HACCP_AULA },
+  r('Addetti al settore alimentare — HACCP', NO, SI, 30, NP, 'Test*', HACCP_DURATA, HACCP_AGG),
+  r('Aggiornamento addetti al settore alimentare — HACCP', NO, SI, 30, NP, 'Test*', HACCP_DURATA, HACCP_AGG),
 ];
 
 export const noteModalita = [
