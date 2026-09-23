@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, BadgeCheck, Check, CheckCircle2, Link2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
+import ModalitaErogazione from '../components/ModalitaErogazione';
 import { WhatsAppFisso, WhatsAppLink } from '../components/WhatsApp';
 import { Button } from '../components/ui/button';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
@@ -435,6 +436,8 @@ export default function CorsiSicurezza() {
               ))}
             </div>
           </section>
+
+          <ModalitaErogazione />
 
           <div className="bg-gray-50 rounded-2xl p-8 text-sm text-gray-600 leading-relaxed">
             I corsi sono progettati, autorizzati ed erogati in modalità e-learning asincrona da <strong>EFEI — Organismo
