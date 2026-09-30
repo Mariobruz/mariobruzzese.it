@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Linkedin } from 'lucide-react';
 import { mockData } from '../mock';
+import { impostaConsenso } from '../googleAds';
 
 const Footer = () => {
   return (
@@ -117,6 +118,13 @@ const Footer = () => {
               <a href="/condizioni-vendita" className="text-gray-400 hover:text-white transition-colors">
                 Condizioni di vendita
               </a>
+              <button
+                type="button"
+                onClick={() => impostaConsenso(null)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Preferenze cookie
+              </button>
             </div>
           </div>
         </div>

@@ -27,9 +27,11 @@ function carica() {
   caricato = true;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() { window.dataLayer.push(arguments); };
+  // Consent Mode v2: si parte da "negato" e si aggiorna subito con la scelta del visitatore.
   window.gtag('consent', 'default', {
-    ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'denied', analytics_storage: 'denied',
+    ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied',
   });
+  window.gtag('consent', 'update', { ad_storage: 'granted', ad_user_data: 'granted' });
   window.gtag('js', new Date());
   window.gtag('config', ID_ADS);
   const s = document.createElement('script');

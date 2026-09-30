@@ -3,6 +3,7 @@ import { EVENTO_CONSENSO, impostaConsenso, leggiConsenso } from '../googleAds';
 
 /**
  * Banner cookie: compare finché il visitatore non sceglie.
+ * Rifiuta e Accetta hanno lo stesso stile (stessa evidenza, come richiesto dal Garante).
  * Accetta = carichiamo il tag di conversione Google Ads; Rifiuta = nessuno script né cookie di terze parti.
  */
 const BannerConsenso = () => {
@@ -34,7 +35,7 @@ const BannerConsenso = () => {
           <button
             type="button"
             onClick={() => impostaConsenso('no')}
-            className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 text-gray-800 hover:bg-gray-50"
+            className="px-4 py-2 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-gray-800"
           >
             Rifiuta
           </button>

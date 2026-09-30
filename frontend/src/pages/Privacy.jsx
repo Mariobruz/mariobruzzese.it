@@ -16,7 +16,7 @@ const Privacy = () => (
   <DocumentoLegale
     titolo="Informativa privacy"
     sommario="Informativa resa ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 sul trattamento dei dati personali raccolti tramite il sito mariobruzzese.it."
-    aggiornamento="22 settembre 2026"
+    aggiornamento="1 ottobre 2026"
     seo={{
       title: 'Informativa privacy',
       description:
@@ -99,6 +99,7 @@ const Privacy = () => (
           'Brevo (Sendinblue SAS), per l’invio delle email transazionali e delle comunicazioni commerciali, in qualità di responsabile del trattamento.',
           'Cloudflare, Inc., che ospita il servizio applicativo e il database in cui sono registrati gli ordini, in qualità di responsabile del trattamento.',
           'Formspree, Inc., che recapita i messaggi inviati tramite il modulo di contatto.',
+          'Cloudflare, Inc., per la verifica anti-bot (Cloudflare Turnstile) del modulo di iscrizione ai corsi: controlla dati tecnici del browser per distinguere le persone dai programmi automatici, senza cookie di profilazione.',
           'WhatsApp Ireland Ltd. (gruppo Meta), se scegli di scriverci su WhatsApp. WhatsApp tratta i dati della conversazione in qualità di titolare autonomo, secondo la propria informativa (whatsapp.com/legal).',
           'GitHub, Inc., che ospita le pagine del sito.',
           'Cloudflare, Inc., per le statistiche anonime di visita (Cloudflare Web Analytics), senza cookie.',
@@ -173,7 +174,8 @@ const Privacy = () => (
         Senza il tuo consenso il sito utilizza esclusivamente strumenti tecnici necessari al proprio funzionamento,
         per i quali non è richiesto il consenso ai sensi dell’art. 122 del D.Lgs. 196/2003. Non sono presenti cookie
         di profilazione.
-        Le statistiche di visita (Cloudflare Web Analytics) non usano cookie.
+        Le statistiche di visita (Cloudflare Web Analytics) non usano cookie. I caratteri tipografici sono ospitati
+        sul sito stesso: non vengono richiesti a servizi esterni come Google Fonts.
       </p>
       <p>
         <strong>Google Ads (solo con consenso).</strong> Se accetti dal banner, il sito carica il tag di conversione
