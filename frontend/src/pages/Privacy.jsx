@@ -1,5 +1,16 @@
 import React from 'react';
 import DocumentoLegale, { Sezione, Elenco } from '../components/DocumentoLegale';
+import { impostaConsenso } from '../googleAds';
+
+const PreferenzeCookie = () => (
+  <button
+    type="button"
+    onClick={() => impostaConsenso(null)}
+    className="underline font-medium"
+  >
+    Modifica preferenze cookie
+  </button>
+);
 
 const Privacy = () => (
   <DocumentoLegale
@@ -31,7 +42,8 @@ const Privacy = () => (
       <p>
         <strong>Dati di navigazione.</strong> Il sito è ospitato su GitHub Pages. I sistemi informatici registrano,
         per il solo funzionamento tecnico, dati come indirizzo IP, tipo di browser e pagine richieste. Il sito non
-        utilizza cookie di profilazione né strumenti di tracciamento pubblicitario. Per sapere quante persone visitano
+        utilizza cookie di profilazione. Solo se lo accetti dal banner, usa il tag di conversione di Google Ads per
+        sapere se una visita arrivata da un nostro annuncio si è conclusa con un acquisto. Per sapere quante persone visitano
         le pagine usiamo Cloudflare Web Analytics, che raccoglie statistiche aggregate e anonime (pagine viste,
         provenienza della visita, tipo di dispositivo) senza installare cookie e senza identificare il singolo visitatore.
       </p>
@@ -90,6 +102,7 @@ const Privacy = () => (
           'WhatsApp Ireland Ltd. (gruppo Meta), se scegli di scriverci su WhatsApp. WhatsApp tratta i dati della conversazione in qualità di titolare autonomo, secondo la propria informativa (whatsapp.com/legal).',
           'GitHub, Inc., che ospita le pagine del sito.',
           'Cloudflare, Inc., per le statistiche anonime di visita (Cloudflare Web Analytics), senza cookie.',
+          'Google Ireland Ltd., solo con il tuo consenso, per la misurazione delle conversioni dei nostri annunci Google Ads (titolare autonomo, informativa su policies.google.com/privacy).',
           'Il consulente fiscale del titolare e, se richiesto, le autorità competenti.',
         ]}
       />
@@ -157,11 +170,23 @@ const Privacy = () => (
 
     <Sezione numero="10" titolo="Cookie">
       <p>
-        Il sito utilizza esclusivamente cookie tecnici necessari al proprio funzionamento, per i quali non è
-        richiesto il consenso ai sensi dell’art. 122 del D.Lgs. 196/2003. Non sono presenti cookie di profilazione
-        né pixel pubblicitari di terze parti. Le statistiche di visita (Cloudflare Web Analytics) non usano cookie.
-        Il sito salva nel browser una sola impostazione tecnica, e solo se richiesta: chi cura il sito può escludersi
-        dalle statistiche, così i conteggi riguardano i visitatori reali.
+        Senza il tuo consenso il sito utilizza esclusivamente strumenti tecnici necessari al proprio funzionamento,
+        per i quali non è richiesto il consenso ai sensi dell’art. 122 del D.Lgs. 196/2003. Non sono presenti cookie
+        di profilazione.
+        Le statistiche di visita (Cloudflare Web Analytics) non usano cookie.
+      </p>
+      <p>
+        <strong>Google Ads (solo con consenso).</strong> Se accetti dal banner, il sito carica il tag di conversione
+        di Google Ads, che usa cookie di Google per registrare se una visita arrivata da un nostro annuncio si conclude
+        con un acquisto (importo e riferimento dell’ordine, senza dati dei partecipanti). Senza consenso questo tag non
+        viene caricato. Puoi cambiare scelta in qualsiasi momento con il pulsante qui sotto.
+      </p>
+      <p>
+        <PreferenzeCookie />
+      </p>
+      <p>
+        Il sito salva nel browser due impostazioni tecniche: la tua scelta sul banner e, solo se richiesta,
+        l’esclusione dalle statistiche per chi cura il sito, così i conteggi riguardano i visitatori reali.
       </p>
       <p>
         I servizi esterni richiamati durante il pagamento (Stripe) possono utilizzare cookie propri, necessari alla

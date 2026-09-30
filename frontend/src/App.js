@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Toaster } from "@/components/ui/toaster";
+import BannerConsenso from "@/components/BannerConsenso";
 import Home from "@/pages/Home";
 import HowItWorks from "@/pages/HowItWorks";
 import Services from "@/pages/Services";
@@ -39,6 +40,7 @@ function App() {
         </Routes>
         <Footer />
         <Toaster />
+        <BannerConsenso />
       </BrowserRouter>
     </div>
   );

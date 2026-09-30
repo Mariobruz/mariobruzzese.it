@@ -8,6 +8,7 @@ import { scadenzeCorsi } from '../data/modalitaErogazione';
 import { WhatsAppFisso, WhatsAppLink } from '../components/WhatsApp';
 import { Button } from '../components/ui/button';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
+import { concludiAcquistoInCorso } from '../googleAds';
 
 const ACCORDO = 'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR)';
 
@@ -58,6 +59,11 @@ export default function CorsiSicurezza() {
     if (esito !== 'ok' && esito !== 'annullata') return null;
     return { esito, riferimento: q.get('rif') || '' };
   });
+
+  // Rientro da Stripe con pagamento riuscito: registriamo la conversione Google Ads (se consentita)
+  useEffect(() => {
+    if (ritorno && ritorno.esito === 'ok') concludiAcquistoInCorso(ritorno.riferimento);
+  }, [ritorno]);
 
   const chiudiRitorno = () => {
     setRitorno(null);

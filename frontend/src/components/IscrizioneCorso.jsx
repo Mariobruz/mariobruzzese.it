@@ -15,6 +15,7 @@ import {
   datiDaCodiceFiscale,
 } from '../lib/validazione';
 import { province, regioneDiProvincia } from '../data/province';
+import { ricordaAcquistoInCorso, tracciaAcquisto } from '../googleAds';
 
 const ENDPOINT = process.env.REACT_APP_ISCRIZIONI_URL;
 // Chiave pubblica di Cloudflare Turnstile (anti-bot). Se non c'è, il controllo resta spento.
@@ -273,9 +274,11 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
       const dati = await risposta.json();
       if (metodoPagamento === 'carta') {
         if (!dati.checkoutUrl) throw new Error('risposta senza link di pagamento');
+        ricordaAcquistoInCorso({ valore: totale, riferimento: dati.riferimento || '' });
         window.location.href = dati.checkoutUrl;
         return;
       }
+      tracciaAcquisto({ valore: totale, riferimento: dati.riferimento || '' });
       setEsito({ riferimento: dati.riferimento || '', email: fatturazione.email });
     } catch (err) {
       // il token anti-bot vale una volta sola: se l'invio fallisce ne serve uno nuovo
