@@ -5,6 +5,7 @@ import "@/index.css";
 import App from "@/App";
 import { avviaStatistiche } from "@/statistiche";
 import { avviaGoogleAds } from "@/googleAds";
+import { registraProvenienza } from "@/provenienza";
 
 const rootElement = document.getElementById("root");
 
@@ -24,5 +25,6 @@ if (rootElement.hasChildNodes()) {
   createRoot(rootElement).render(app);
 }
 
+registraProvenienza();
 avviaStatistiche();
 avviaGoogleAds();

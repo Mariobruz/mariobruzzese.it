@@ -10,6 +10,7 @@ import { csvImportEfei, nomeFileCsv } from './csv';
 import { emailClienteCarta, inviaEmail } from './email';
 import { PAGINA, SCRIPT } from './admin-pagina';
 import { statisticheVisite } from './visite';
+import { SCRIPT_PROVENIENZA } from './admin-provenienza';
 
 const STATI_ATTIVI = ['in_attesa_bonifico', 'pagato', 'caricato', 'importo_da_verificare'];
 
@@ -103,6 +104,7 @@ function mappaOrdine(o) {
     partecipantiN: o.partecipanti_n, totale: o.totale,
     creatoIl: o.creato_il, pagatoIl: o.pagato_il, caricatoIl: o.caricato_il,
     fatturazione,
+    provenienza: o.provenienza || null,
   };
 }
 
@@ -190,7 +192,7 @@ export default {
       return risposta(PAGINA, 200, 'text/html; charset=utf-8');
     }
     if (metodo === 'GET' && pathname === '/app.js') {
-      return risposta(SCRIPT, 200, 'text/javascript; charset=utf-8');
+      return risposta(`${SCRIPT}\n${SCRIPT_PROVENIENZA}`, 200, 'text/javascript; charset=utf-8');
     }
 
     if (pathname.startsWith('/api/')) {

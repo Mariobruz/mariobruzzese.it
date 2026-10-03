@@ -21,7 +21,7 @@ export const catalogo = [
     "titolo": "Formazione generale dei lavoratori — in inglese",
     "titoloAttestato": "CORSO DI FORMAZIONE GENERALE PER I LAVORATORI - 4 ORE (ENG)",
     "ore": 4,
-    "prezzo": 45,
+    "prezzo": 40,
     "sku": "corade_120"
   },
   {
@@ -61,7 +61,7 @@ export const catalogo = [
     "titolo": "Formazione datore di lavoro",
     "titoloAttestato": "CORSO DI FORMAZIONE DATORE DI LAVORO - 16 ORE",
     "ore": 16,
-    "prezzo": 149,
+    "prezzo": 99,
     "sku": "cors-d_123"
   },
   {
@@ -85,7 +85,7 @@ export const catalogo = [
     "titolo": "Modulo aggiuntivo \"Cantieri\" — datore di lavoro",
     "titoloAttestato": "CORSO DI FORMAZIONE MODULO AGGIUNTIVO “CANTIERI” per DATORE DI LAVORO (6 ore)",
     "ore": 6,
-    "prezzo": 119,
+    "prezzo": 79,
     "sku": "cordiz_385"
   },
   {
@@ -109,7 +109,7 @@ export const catalogo = [
     "titolo": "Modulo aggiuntivo \"Cantieri\" — dirigenti",
     "titoloAttestato": "CORSO DI FORMAZIONE MODULO AGGIUNTIVO “CANTIERI” per DIRIGENTI (6 ore)",
     "ore": 6,
-    "prezzo": 119,
+    "prezzo": 79,
     "sku": "cortn__284"
   },
   {
@@ -117,7 +117,7 @@ export const catalogo = [
     "titolo": "RSPP e ASPP — Modulo A",
     "titoloAttestato": "CORSO DI FORMAZIONE PER RESPONSABILI E ADDETTI DEI SERVIZI DI PREVENZIONE E PROTEZIONE (RSPP E ASPP) MODULO A - 28 ORE",
     "ore": 28,
-    "prezzo": 169,
+    "prezzo": 49,
     "sku": "rspppo_867"
   },
   {
@@ -125,7 +125,7 @@ export const catalogo = [
     "titolo": "Aggiornamento RSPP",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER RESPONSABILI DEI SERVIZI DI PREVENZIONE E PROTEZIONE (RSPP) - 40 ORE",
     "ore": 40,
-    "prezzo": 149,
+    "prezzo": 99,
     "sku": "coroea_180"
   },
   {
@@ -149,7 +149,7 @@ export const catalogo = [
     "titolo": "Aggiornamento RLS — aziende fino a 50 lavoratori",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA PER IMPRESE CHE OCCUPANO FINO AI 50 LAVORATORI - 4 ORE",
     "ore": 4,
-    "prezzo": 59,
+    "prezzo": 20,
     "sku": "cor-rl_382"
   },
   {
@@ -157,7 +157,7 @@ export const catalogo = [
     "titolo": "Aggiornamento RLS — aziende oltre 50 lavoratori",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA PER IMPRESE CHE OCCUPANO PIÙ DI 50 LAVORATORI - 8 ORE",
     "ore": 8,
-    "prezzo": 89,
+    "prezzo": 29,
     "sku": "cora-i_223"
   },
   {
@@ -181,7 +181,7 @@ export const catalogo = [
     "titolo": "Formazione formatori — 40 ore",
     "titoloAttestato": "CORSO DI FORMAZIONE PER FORMATORI - 40 ORE",
     "ore": 40,
-    "prezzo": 269,
+    "prezzo": 99,
     "sku": "coraor_886"
   },
   {
@@ -189,7 +189,7 @@ export const catalogo = [
     "titolo": "Formazione formatori — 24 ore",
     "titoloAttestato": "CORSO DI FORMAZIONE PER FORMATORI - 24 ORE",
     "ore": 24,
-    "prezzo": 189,
+    "prezzo": 99,
     "sku": "cor4ia_615"
   },
   {
@@ -197,7 +197,7 @@ export const catalogo = [
     "titolo": "Aggiornamento formatori",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER FORMATORI - 24 ORE",
     "ore": 24,
-    "prezzo": 149,
+    "prezzo": 29,
     "sku": "corg-t_163"
   },
   {

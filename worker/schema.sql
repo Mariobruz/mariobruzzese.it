@@ -18,8 +18,13 @@ CREATE TABLE IF NOT EXISTS ordini (
   stripe_session_id TEXT,
   creato_il         TEXT NOT NULL,
   pagato_il         TEXT,
-  caricato_il       TEXT            -- quando il CSV è stato caricato in piattaforma
+  caricato_il       TEXT,           -- quando il CSV è stato caricato in piattaforma
+  provenienza       TEXT            -- etichetta della visita: google_ads, utm_source... (null = diretta/organica)
 );
+
+-- Database già esistente? Aggiungere la colonna una volta sola con:
+--   wrangler d1 execute iscrizioni-corsi --remote --command="ALTER TABLE ordini ADD COLUMN provenienza TEXT"
+
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_ordini_riferimento ON ordini (riferimento);
 CREATE INDEX IF NOT EXISTS idx_ordini_stato ON ordini (stato);

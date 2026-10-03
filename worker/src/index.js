@@ -167,24 +167,38 @@ function verificaIscrizione(corpo) {
 
   const metodo = corpo.metodoPagamento === 'bonifico' ? 'bonifico' : 'carta';
 
-  return { errori, corso, fatturazione: f, partecipanti, consensi, metodo };
+  // etichetta generica della provenienza della visita ("google_ads", utm_source...): mai bloccante
+  const provenienza = typeof corpo.provenienza === 'string' && /^[a-z0-9_.-]{1,40}$/.test(corpo.provenienza)
+    ? corpo.provenienza
+    : null;
+
+  return { errori, corso, fatturazione: f, partecipanti, consensi, metodo, provenienza };
 }
 
-async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, metodo, totale }) {
+async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza }) {
   const adesso = new Date().toISOString();
-  const risultato = await env.DB.prepare(
-    `INSERT INTO ordini (riferimento, corso_id, corso_titolo, corso_sku, corso_ore,
+  const valori = [
+    null, corso.id, corso.titolo, corso.sku, corso.ore,
+    corso.prezzo, partecipanti.length, totale, metodo,
+    metodo === 'carta' ? 'in_attesa_pagamento' : 'in_attesa_bonifico',
+    JSON.stringify(fatturazione), JSON.stringify(consensi), adesso,
+  ];
+  const colonne = `riferimento, corso_id, corso_titolo, corso_sku, corso_ore,
        prezzo_unitario, partecipanti_n, totale, metodo_pagamento, stato,
-       fatturazione, consensi, creato_il)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  )
-    .bind(
-      null, corso.id, corso.titolo, corso.sku, corso.ore,
-      corso.prezzo, partecipanti.length, totale, metodo,
-      metodo === 'carta' ? 'in_attesa_pagamento' : 'in_attesa_bonifico',
-      JSON.stringify(fatturazione), JSON.stringify(consensi), adesso
-    )
-    .run();
+       fatturazione, consensi, creato_il`;
+  let risultato;
+  try {
+    risultato = await env.DB.prepare(
+      `INSERT INTO ordini (${colonne}, provenienza) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(...valori, provenienza || null).run();
+  } catch (e) {
+    // database non ancora aggiornato (manca la colonna provenienza): l'ordine si salva lo stesso
+    if (!/provenienza/i.test(String(e && e.message))) throw e;
+    console.error('colonna provenienza mancante: eseguire la migrazione del database');
+    risultato = await env.DB.prepare(
+      `INSERT INTO ordini (${colonne}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(...valori).run();
+  }
 
   const id = risultato.meta.last_row_id;
   const riferimento = `MB-${new Date().getFullYear()}-${String(id).padStart(4, '0')}`;
@@ -273,12 +287,12 @@ async function gestisciIscrizione(env, richiesta) {
     return json({ errore: 'Dati non validi', dettagli: controllo.errori }, 422);
   }
 
-  const { corso, fatturazione, partecipanti, consensi, metodo } = controllo;
+  const { corso, fatturazione, partecipanti, consensi, metodo, provenienza } = controllo;
   const totale = corso.prezzo * partecipanti.length;
   const ordine = { corso, fatturazione };
 
   const { id, riferimento } = await salvaOrdine(env, {
-    corso, fatturazione, partecipanti, consensi, metodo, totale,
+    corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza,
   });
 
   if (metodo === 'bonifico') {

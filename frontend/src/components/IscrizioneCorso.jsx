@@ -16,6 +16,7 @@ import {
 } from '../lib/validazione';
 import { province, regioneDiProvincia } from '../data/province';
 import { ricordaAcquistoInCorso, tracciaAcquisto } from '../googleAds';
+import { leggiProvenienza } from '../provenienza';
 
 const ENDPOINT = process.env.REACT_APP_ISCRIZIONI_URL;
 // Chiave pubblica di Cloudflare Turnstile (anti-bot). Se non c'è, il controllo resta spento.
@@ -264,6 +265,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
           metodoPagamento,
           totale,
           turnstile: tokenAntibot || undefined,
+          provenienza: leggiProvenienza() || undefined,
         }),
       });
       if (!risposta.ok) {

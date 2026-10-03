@@ -46,6 +46,8 @@ const Privacy = () => (
         sapere se una visita arrivata da un nostro annuncio si è conclusa con un acquisto. Per sapere quante persone visitano
         le pagine usiamo Cloudflare Web Analytics, che raccoglie statistiche aggregate e anonime (pagine viste,
         provenienza della visita, tipo di dispositivo) senza installare cookie e senza identificare il singolo visitatore.
+        Se invii un’iscrizione, all’ordine associamo anche un’etichetta generica sulla provenienza della visita
+        (ad esempio «Google Ads»), senza identificativi del clic, per sapere quali canali portano gli ordini.
       </p>
       <p>
         <strong>Dati del modulo di contatto.</strong> Nome, indirizzo email, eventuale azienda e testo del messaggio.
@@ -189,6 +191,8 @@ const Privacy = () => (
       <p>
         Il sito salva nel browser due impostazioni tecniche: la tua scelta sul banner e, solo se richiesta,
         l’esclusione dalle statistiche per chi cura il sito, così i conteggi riguardano i visitatori reali.
+        Per la durata della visita (fino alla chiusura della scheda) ricorda inoltre l’etichetta generica della
+        provenienza, ad esempio «Google Ads», da indicare nell’eventuale ordine.
       </p>
       <p>
         I servizi esterni richiamati durante il pagamento (Stripe) possono utilizzare cookie propri, necessari alla

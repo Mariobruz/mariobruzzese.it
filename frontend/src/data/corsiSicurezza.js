@@ -52,7 +52,7 @@ export const corsi = [
     sku: 'corade_120',
     idEnte: 87,
     immagine: '/img/corsi/formazione-generale-lavoratori-4h-eng.webp',
-    prezzo: 45,
+    prezzo: 40,
   },
   {
     id: 'formazione-specifica-rischio-basso-4h',
@@ -125,7 +125,7 @@ export const corsi = [
     sku: 'cors-d_123',
     idEnte: 70,
     immagine: '/img/corsi/datore-di-lavoro-16h.webp',
-    prezzo: 149,
+    prezzo: 99,
   },
   {
     id: 'rspp-datore-lavoro-8h',
@@ -168,7 +168,7 @@ export const corsi = [
     sku: 'cordiz_385',
     idEnte: 76,
     immagine: '/img/corsi/modulo-cantieri-datore-6h.webp',
-    prezzo: 119,
+    prezzo: 79,
   },
 
   // ------------------------------------------------------------------ DIRIGENTI
@@ -212,7 +212,7 @@ export const corsi = [
     sku: 'cortn__284',
     idEnte: 77,
     immagine: '/img/corsi/modulo-cantieri-dirigenti-6h.webp',
-    prezzo: 119,
+    prezzo: 79,
   },
 
   // ---------------------------------------------------------------- RSPP / ASPP
@@ -228,7 +228,7 @@ export const corsi = [
     sku: 'rspppo_867',
     idEnte: 45,
     immagine: '/img/corsi/rspp-aspp-modulo-a-28h.webp',
-    prezzo: 169,
+    prezzo: 49,
   },
   {
     id: 'aggiornamento-rspp-40h',
@@ -242,7 +242,7 @@ export const corsi = [
     sku: 'coroea_180',
     idEnte: 58,
     immagine: '/img/corsi/aggiornamento-rspp-40h.webp',
-    prezzo: 149,
+    prezzo: 99,
   },
   {
     id: 'aggiornamento-aspp-20h',
@@ -290,7 +290,7 @@ export const corsi = [
     sku: 'cor-rl_382',
     idEnte: 46,
     immagine: '/img/corsi/aggiornamento-rls-fino-50-4h.webp',
-    prezzo: 59,
+    prezzo: 20,
   },
   {
     id: 'aggiornamento-rls-oltre-50-8h',
@@ -306,7 +306,7 @@ export const corsi = [
     sku: 'cora-i_223',
     idEnte: 54,
     immagine: '/img/corsi/aggiornamento-rls-oltre-50-8h.webp',
-    prezzo: 89,
+    prezzo: 29,
   },
 
   // ------------------------------------------------------------------- CANTIERI
@@ -353,7 +353,7 @@ export const corsi = [
     sku: 'coraor_886',
     idEnte: 63,
     immagine: '/img/corsi/formatori-40h.webp',
-    prezzo: 269,
+    prezzo: 99,
   },
   {
     id: 'formatori-24h',
@@ -367,7 +367,7 @@ export const corsi = [
     sku: 'cor4ia_615',
     idEnte: 95,
     immagine: '/img/corsi/formatori-24h.webp',
-    prezzo: 189,
+    prezzo: 99,
   },
   {
     id: 'aggiornamento-formatori-24h',
@@ -381,7 +381,7 @@ export const corsi = [
     sku: 'corg-t_163',
     idEnte: 59,
     immagine: '/img/corsi/aggiornamento-formatori-24h.webp',
-    prezzo: 149,
+    prezzo: 29,
   },
 
   // ---------------------------------------------------------------------- HACCP

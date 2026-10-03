@@ -8,7 +8,8 @@
     "db:crea": "wrangler d1 create iscrizioni-corsi",
     "db:struttura": "wrangler d1 execute iscrizioni-corsi --file=schema.sql --remote",
     "ordini": "wrangler d1 execute iscrizioni-corsi --remote --command=\"SELECT riferimento, corso_titolo, partecipanti_n, totale, stato, creato_il FROM ordini ORDER BY id DESC LIMIT 20\"",
-    "deploy:admin": "wrangler deploy -c admin.toml"
+    "deploy:admin": "wrangler deploy -c admin.toml",
+    "db:provenienza": "wrangler d1 execute iscrizioni-corsi --remote --command=\"ALTER TABLE ordini ADD COLUMN provenienza TEXT\""
   },
   "devDependencies": {
     "wrangler": "^3.90.0"
