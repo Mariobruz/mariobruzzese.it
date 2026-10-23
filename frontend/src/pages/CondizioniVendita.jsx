@@ -97,16 +97,9 @@ const CondizioniVendita = () => (
     </Sezione>
 
     <Sezione numero="7" titolo="Pagamento">
-      <p>Sono disponibili due modalità.</p>
-      <Elenco
-        voci={[
-          'Carta di credito o debito, tramite il circuito di pagamento sicuro Stripe. MB Consulting non entra in possesso dei dati della carta, che sono trattati direttamente dal gestore del pagamento.',
-          'Bonifico bancario. Gli estremi e il riferimento da indicare in causale vengono inviati via email al termine dell’ordine. Il bonifico va disposto entro 7 giorni: decorso tale termine senza accredito, l’ordine si intende decaduto.',
-        ]}
-      />
       <p>
-        In caso di bonifico, l’iscrizione viene registrata immediatamente, ma i Partecipanti sono inseriti sulla
-        piattaforma soltanto dopo l’accredito effettivo delle somme.
+        Il pagamento avviene con carta di credito o debito, tramite il circuito di pagamento sicuro Stripe.
+        MB Consulting non entra in possesso dei dati della carta, che sono trattati direttamente dal gestore del pagamento.
       </p>
       <p>
         Il documento fiscale viene emesso da MB Consulting e trasmesso tramite il Sistema di Interscambio ai dati di
@@ -118,7 +111,7 @@ const CondizioniVendita = () => (
       <p>La procedura di attivazione si articola in tre passaggi.</p>
       <Elenco
         voci={[
-          'Entro 24 ore lavorative dal pagamento (o dall’accredito del bonifico) MB Consulting inserisce i dati dei Partecipanti sulla piattaforma dell’ente erogatore.',
+          'Entro 24 ore lavorative dal pagamento MB Consulting inserisce i dati dei Partecipanti sulla piattaforma dell’ente erogatore.',
           'Ogni Partecipante riceve dalla piattaforma un’email di conferma dell’account all’indirizzo indicato in fase di iscrizione. L’indirizzo email del Partecipante costituisce anche il suo nome utente.',
           'Soltanto dopo che il Partecipante ha confermato il proprio account, il corso acquistato può essergli abbinato e reso disponibile.',
         ]}

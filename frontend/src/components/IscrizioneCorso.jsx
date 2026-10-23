@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, CreditCard, Landmark, Loader2, Lock, Minus, Plus, Send, User } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, CreditCard, Loader2, Lock, Minus, Plus, Send, User } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   validaAteco,
@@ -528,11 +528,10 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
               </div>
 
               <div>
-                <h3 className="font-bold text-gray-900 mb-3">Come preferisci pagare?</h3>
+                <h3 className="font-bold text-gray-900 mb-3">Pagamento</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {[
-                    { id: 'carta', icona: CreditCard, titolo: 'Carta di credito', nota: 'Paghi adesso, l’iscrizione parte subito' },
-                    { id: 'bonifico', icona: Landmark, titolo: 'Bonifico bancario', nota: 'Ti inviamo gli estremi via email' },
+                    { id: 'carta', icona: CreditCard, titolo: 'Carta di credito o debito', nota: 'Paghi adesso in modo sicuro con Stripe, l’iscrizione parte subito' },
                   ].map((m) => (
                     <button
                       key={m.id}
@@ -547,12 +546,6 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                     </button>
                   ))}
                 </div>
-                {metodoPagamento === 'bonifico' && (
-                  <p className="text-sm text-gray-500 mt-3">
-                    L’iscrizione viene registrata subito, ma i partecipanti vengono inseriti sulla piattaforma solo dopo
-                    l’accredito del bonifico. Per accelerare, invia la contabile a corsi@mariobruzzese.it.
-                  </p>
-                )}
               </div>
 
               <div className="space-y-3 text-sm">

@@ -320,7 +320,7 @@ const pages = [
       <p>Venditore: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), partita IVA 03504290796, REA RC-199357.</p>
       <p>I corsi sono progettati, autorizzati ed erogati da EFEI \u2014 Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unit\u00e0 Operativa codice 2403. MB Consulting cura promozione, iscrizione, incasso e assistenza.</p>
       <p>I prezzi indicati sono finali, per partecipante. MB Consulting opera in regime forfettario: operazioni non soggette a IVA ai sensi dell'art. 1, commi 54-89, della Legge 190/2014.</p>
-      <p>Pagamento con carta tramite Stripe oppure con bonifico bancario. Entro 24 ore lavorative dal pagamento i dati vengono inseriti sulla piattaforma dell'ente; il partecipante riceve un'email di conferma dell'account e solo dopo la conferma il corso pu\u00f2 essergli abbinato.</p>
+      <p>Pagamento con carta di credito o debito tramite Stripe. Entro 24 ore lavorative dal pagamento i dati vengono inseriti sulla piattaforma dell'ente; il partecipante riceve un'email di conferma dell'account e solo dopo la conferma il corso pu\u00f2 essergli abbinato.</p>
       <p>L'attestato \u00e8 rilasciato da EFEI al superamento del test finale, riporta anche l'Ateneo delle Professioni \u2013 Universit\u00e0 AUGE, Dipartimento Salute e Sicurezza sul Lavoro, ed \u00e8 scaricabile direttamente dalla piattaforma.</p>
       <p>Il consumatore ha diritto di recesso entro 14 giorni, che si estingue se chiede l'attivazione immediata del corso accettando la perdita del diritto, ai sensi dell'art. 59, comma 1, lett. o) del Codice del Consumo.</p>
     `,

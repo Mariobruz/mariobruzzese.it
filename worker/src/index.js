@@ -165,7 +165,8 @@ function verificaIscrizione(corpo) {
     aggiungi('Per i corsi RLS serve la dichiarazione sul CCNL che ammette la formazione in e-learning');
   }
 
-  const metodo = corpo.metodoPagamento === 'bonifico' ? 'bonifico' : 'carta';
+  // dal 23/10/2026 si accetta solo la carta: il bonifico non è più offerto
+  const metodo = 'carta';
 
   // etichetta generica della provenienza della visita ("google_ads", utm_source...): mai bloccante
   const provenienza = typeof corpo.provenienza === 'string' && /^[a-z0-9_.-]{1,40}$/.test(corpo.provenienza)
