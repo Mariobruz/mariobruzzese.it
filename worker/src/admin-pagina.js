@@ -114,7 +114,7 @@ export const PAGINA = `<!doctype html>
     <table>
       <thead><tr>
         <th>Riferimento</th><th>Cliente</th><th class="solo-largo">Corso</th>
-        <th class="num">Totale</th><th>Stato</th><th class="solo-largo">Data</th>
+        <th class="num">Totale</th><th>Stato</th><th class="solo-largo">Data</th><th></th>
       </tr></thead>
       <tbody id="righe"></tbody>
     </table>
@@ -238,7 +238,26 @@ function disegna() {
     el('td', { class: 'num' }, euro(o.totale)),
     el('td', null, badge(o.stato), o.stato === 'caricato' ? el('div', { class: 'secondario', text: o.confermati + '/' + o.partecipantiN + ' confermati' }) : null),
     el('td', { class: 'solo-largo secondario', text: data(o.creatoIl) }),
+    el('td', null, el('button', { class: 'pericolo', title: 'Elimina questo nominativo',
+      onclick: (e) => { e.stopPropagation(); elimina(o); },
+      onkeydown: (e) => e.stopPropagation() }, 'Elimina')),
   )));
+}
+
+// --- eliminazione definitiva di un ordine e dei suoi partecipanti
+async function elimina(o) {
+  const nome = (o.riferimento || 'ordine n. ' + o.id) + ' — ' + cliente(o);
+  const pagato = ['pagato', 'caricato', 'completato', 'importo_da_verificare'].includes(o.stato);
+  let domanda = 'Eliminare definitivamente ' + nome + '?' + String.fromCharCode(10, 10) + 'Vengono cancellati l’ordine e tutti i dati dei partecipanti. Non si può annullare.';
+  if (pagato) domanda = 'ATTENZIONE: questo ordine risulta PAGATO (' + euro(o.totale) + ').' + String.fromCharCode(10) + 'Conserva prima i dati per la fattura.' + String.fromCharCode(10, 10) + domanda;
+  if (!window.confirm(domanda)) return;
+  if (pagato && !window.confirm('Confermi di nuovo l’eliminazione di un ordine pagato?')) return;
+  try {
+    await api('/api/ordini/' + o.id, { method: 'DELETE' });
+    toast('Eliminato: ' + nome);
+    chiudi();
+    await carica();
+  } catch (e) { toast(e.message); }
 }
 
 // --- dettaglio
@@ -313,6 +332,7 @@ function mostra(o) {
     azioni.append(el('div', { class: 'secondario', text: 'Nessuna azione da fare.' }));
   }
   if (o.stato !== 'pagato') azioni.append(el('a', { class: 'link', href: '/api/ordini/' + o.id + '/csv', text: 'Scarica CSV' }));
+  azioni.append(el('button', { class: 'pericolo', onclick: () => elimina(o) }, 'Elimina definitivamente'));
 
   const partecipanti = o.partecipanti.map((p) => {
     const spunta = el('input', { type: 'checkbox', checked: p.confermato, onchange: async (e) => {
@@ -459,6 +479,6 @@ document.getElementById('cerca').addEventListener('input', (e) => { ricerca = e.
 document.getElementById('tab-ordini').addEventListener('click', () => mostraVista('ordini'));
 document.getElementById('tab-visite').addEventListener('click', () => mostraVista('visite'));
 if (location.hash === '#visite') mostraVista('visite');
-carica().catch((e) => { document.getElementById('righe').replaceChildren(el('tr', null, el('td', { colspan: '6', text: 'Errore: ' + e.message }))); });
+carica().catch((e) => { document.getElementById('righe').replaceChildren(el('tr', null, el('td', { colspan: '7', text: 'Errore: ' + e.message }))); });
 setInterval(() => { if (!document.hidden) carica().catch(() => {}); }, 120000);
 `;

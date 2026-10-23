@@ -211,6 +211,18 @@ export default {
         return ordine ? risposta(ordine) : risposta({ errore: 'Ordine non trovato' }, 404);
       }
 
+      if (m && metodo === 'DELETE') {
+        const id = Number(m[1]);
+        const ordine = await env.DB.prepare('SELECT id, riferimento FROM ordini WHERE id = ?').bind(id).first();
+        if (!ordine) return risposta({ errore: 'Ordine non trovato' }, 404);
+        await env.DB.batch([
+          env.DB.prepare('DELETE FROM partecipanti WHERE ordine_id = ?').bind(id),
+          env.DB.prepare('DELETE FROM ordini WHERE id = ?').bind(id),
+        ]);
+        console.log('ordine eliminato dal pannello', id, ordine.riferimento, email);
+        return risposta({ ok: true });
+      }
+
       m = pathname.match(/^\/api\/ordini\/(\d+)\/csv$/);
       if (m && metodo === 'GET') {
         const ordine = await ordineCompleto(env, Number(m[1]));
