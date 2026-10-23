@@ -28,6 +28,8 @@ ORIGINI_AMMESSE = "https://www.mariobruzzese.it,https://mariobruzzese.it"
 EMAIL_MITTENTE = "corsi@mariobruzzese.it"
 NOME_MITTENTE = "MB Consulting"
 EMAIL_AMMINISTRATORE = "corsi@mariobruzzese.it"
+# chi riceve la conferma di ogni acquisto, con tutti i dati e il CSV (separati da virgola)
+EMAIL_NOTIFICHE = "corsi@mariobruzzese.it,mariobruzzese@hotmail.com"
 INTESTATARIO_CONTO = "Mario Bruzzese"
 
 # I segreti NON vanno qui. Si impostano con:

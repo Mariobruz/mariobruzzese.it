@@ -209,8 +209,12 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
     )
     .join('');
 
+  // destinatari della notifica d'ordine: EMAIL_NOTIFICHE (separati da virgola), altrimenti l'amministratore
+  const destinatari = String(env.EMAIL_NOTIFICHE || env.EMAIL_AMMINISTRATORE || '')
+    .split(',').map((e) => e.trim()).filter(Boolean);
+
   return {
-    a: env.EMAIL_AMMINISTRATORE,
+    a: destinatari,
     oggetto: `[${etichetta}] ${riferimento} — ${n} partecipant${n > 1 ? 'i' : 'e'} — ${ordine.corso.titolo}`,
     html: `<div style="${stile}">
       <h2 style="margin-bottom:4px">${etichetta} · ${riferimento}</h2>
