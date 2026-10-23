@@ -5,6 +5,7 @@ import { ArrowLeft, BadgeCheck, Check, CheckCircle2, Link2, Clock, Laptop, Refre
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
 import { scadenzeCorsi } from '../data/modalitaErogazione';
+import { faqCorso } from '../data/faqCorsi';
 import { WhatsAppFisso, WhatsAppLink } from '../components/WhatsApp';
 import { Button } from '../components/ui/button';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
@@ -281,6 +282,21 @@ export default function CorsiSicurezza() {
             </Button>
           </div>
 
+          <section className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Domande frequenti</h2>
+            <div className="divide-y divide-gray-200 border-y border-gray-200">
+              {faqCorso(dettaglio, scadenzeCorsi[dettaglio.id]).map((x) => (
+                <details key={x.d} className="group py-4">
+                  <summary className="cursor-pointer list-none flex items-start justify-between gap-4 font-semibold text-gray-900">
+                    <h3 className="text-base font-semibold">{x.d}</h3>
+                    <span className="text-gray-400 group-open:rotate-45 transition-transform text-xl leading-none" aria-hidden="true">+</span>
+                  </summary>
+                  <p className="mt-3 text-gray-700 leading-relaxed">{x.r}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+
           {dettaglio.correlati.length > 0 && (
             <section className="mt-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Altri corsi della stessa area</h2>
@@ -331,7 +347,7 @@ export default function CorsiSicurezza() {
       <WhatsAppFisso testo="Ciao, vorrei informazioni sui corsi di sicurezza sul lavoro." />
       <SEOHead
         title="Corsi Sicurezza sul Lavoro Online – Accordo Stato-Regioni 2025"
-        description="Corsi di sicurezza sul lavoro online, Accordo Stato-Regioni 2025: lavoratori, datore di lavoro, RSPP, RLS, formatori, HACCP. Attestato con QR code, da 25 €."
+        description="Corsi di sicurezza sul lavoro online, Accordo Stato-Regioni 2025: lavoratori, datore di lavoro, RSPP, RLS, formatori, HACCP. Attestato con QR code, da 20 €."
         canonical="https://www.mariobruzzese.it/corsi-sicurezza"
         schema={schema}
       />

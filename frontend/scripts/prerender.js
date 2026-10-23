@@ -105,6 +105,12 @@ async function caricaAteco() {
   return import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
 }
 
+async function caricaFaq() {
+  const sorgente = fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'faqCorsi.js'), 'utf8');
+  return import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
+}
+let FAQ = null;
+
 async function caricaModalita() {
   const sorgente = fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'modalitaErogazione.js'), 'utf8');
   return import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
@@ -118,6 +124,8 @@ function paginaCorso(c) {
     .map((r) => (r.startsWith('- ') ? `<li>${esc(r.slice(2))}</li>` : `<p>${esc(r)}</p>`))
     .join('')
     .replace(/((?:<li>.*?<\/li>)+)/g, '<ul>$1</ul>');
+  const faq = FAQ ? FAQ.faqCorso(c, SCADENZE[c.id]) : [];
+  const faqHtml = faq.map((x) => `<h3>${esc(x.d)}</h3><p>${esc(x.r)}</p>`).join('');
   const correlati = (c.correlati || [])
     .map((x) => `<li><a href="${BASE}/corsi-sicurezza/${x.id}">${esc(x.titolo)} — ${x.ore} ore, ${x.prezzo} €</a></li>`)
     .join('');
@@ -154,6 +162,7 @@ function paginaCorso(c) {
           { '@type': 'ListItem', position: 3, name: c.titolo, item: url },
         ],
       },
+      ...(faq.length ? [FAQ.schemaFaq(faq)] : []),
     ],
     noscript: `
       <h1>${esc(c.seoTitolo)}</h1>
@@ -163,6 +172,7 @@ function paginaCorso(c) {
       ${c.avviso ? `<p>${esc(c.avviso)}</p>` : ''}
       <p>Corso erogato da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unità Operativa 2403 e A.U.G.E. Università, promosso da MB Consulting. Superato il test finale, l'attestato si scarica dalla piattaforma.</p>
       ${programma ? `<h2>Programma del corso</h2>${programma}` : ''}
+      ${faqHtml ? `<h2>Domande frequenti</h2>${faqHtml}` : ''}
       <p><a href="${url}/iscrizione">Iscriviti al corso</a></p>
       ${correlati ? `<h2>Altri corsi della stessa area</h2><ul>${correlati}</ul>` : ''}
       <p><a href="${BASE}/corsi-sicurezza">Tutti i corsi di sicurezza sul lavoro online</a></p>
@@ -174,6 +184,7 @@ async function main() {
 const corsi = await caricaCorsi();
 const { colonneModalita, righeModalita, noteModalita, scadenzeCorsi } = await caricaModalita();
 SCADENZE = scadenzeCorsi;
+FAQ = await caricaFaq();
 const schede = corsi.map(paginaCorso);
 
 // Catalogo: elenco dei corsi generato dal catalogo vero (niente prezzi scritti a mano).

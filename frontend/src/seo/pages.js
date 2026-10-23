@@ -84,7 +84,7 @@ const pages = [
     slug: 'corsi-sicurezza',
     title: `Corsi Sicurezza sul Lavoro Online – Accordo Stato-Regioni 2025 | ${SITE}`,
     description:
-      "Corsi di sicurezza sul lavoro online, Accordo Stato-Regioni 2025: lavoratori, datore di lavoro, RSPP, RLS, formatori, HACCP. Attestato con QR code, da 25 €.",
+      "Corsi di sicurezza sul lavoro online, Accordo Stato-Regioni 2025: lavoratori, datore di lavoro, RSPP, RLS, formatori, HACCP. Attestato con QR code, da 20 €.",
     priority: '0.9',
     changefreq: 'weekly',
     // l'elenco dei corsi (ItemList) lo genera scripts/prerender.js dal catalogo
