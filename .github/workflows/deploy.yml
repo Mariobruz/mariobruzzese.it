@@ -50,3 +50,9 @@ jobs:
       - name: Pubblica su GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Avvisa Bing con IndexNow
+        if: success()
+        continue-on-error: true
+        run: sleep 60 && node scripts/indexnow.js
+        working-directory: frontend
