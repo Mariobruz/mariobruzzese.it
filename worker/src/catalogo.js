@@ -231,6 +231,62 @@ export const catalogo = [
     "ore": 4,
     "prezzo": 25,
     "sku": "corn_o_533"
+  },
+  {
+    "id": "formazione-specifica-rischio-basso-turismo-4h",
+    "titolo": "Formazione specifica — rischio basso: turismo e ristorazione",
+    "titoloAttestato": "CORSO DI FORMAZIONE SPECIFICA PER LAVORATORI RISCHIO BASSO (SETTORE ALLOGGIO, TURISMO E RISTORAZIONE)",
+    "ore": 4,
+    "prezzo": 50,
+    "sku": "opn-373"
+  },
+  {
+    "id": "formazione-specifica-rischio-basso-uffici-4h",
+    "titolo": "Formazione specifica — rischio basso: uffici e servizi",
+    "titoloAttestato": "CORSO DI FORMAZIONE SPECIFICA PER LAVORATORI RISCHIO BASSO (SETTORE ATTIVITA' DI UFFICIO, AMMINISTRATIVE E DI SERVIZI DI SUPPORTO ALLE IMPRESE)",
+    "ore": 4,
+    "prezzo": 50,
+    "sku": "opn-377"
+  },
+  {
+    "id": "formazione-specifica-rischio-basso-4h-eng",
+    "titolo": "Formazione specifica — rischio basso — in inglese",
+    "titoloAttestato": "SPECIFIC SAFETY TRAINING COURSE FOR WORKERS (LOW-RISK SECTOR)",
+    "ore": 4,
+    "prezzo": 50,
+    "sku": "opn-363"
+  },
+  {
+    "id": "formazione-generale-specifica-rischio-basso-8h-eng",
+    "titolo": "Formazione generale + specifica — rischio basso — in inglese",
+    "titoloAttestato": "GENERAL AND SPECIFIC TRAINING COURSE — LOW RISK",
+    "ore": 8,
+    "prezzo": 50,
+    "sku": "opn-365"
+  },
+  {
+    "id": "aggiornamento-lavoratori-6h-eng",
+    "titolo": "Aggiornamento lavoratori — in inglese",
+    "titoloAttestato": "WORKERS’ REFRESHER TRAINING COURSE",
+    "ore": 6,
+    "prezzo": 50,
+    "sku": "opn-369"
+  },
+  {
+    "id": "aggiornamento-datore-lavoro-6h",
+    "titolo": "Aggiornamento datore di lavoro",
+    "titoloAttestato": "CORSO DI AGGIORNAMENTO PER DATORE DI LAVORO",
+    "ore": 6,
+    "prezzo": 50,
+    "sku": "opn-379"
+  },
+  {
+    "id": "datore-di-lavoro-16h-eng",
+    "titolo": "Formazione datore di lavoro — in inglese",
+    "titoloAttestato": "TRAINING COURSE FOR EMPLOYERS",
+    "ore": 16,
+    "prezzo": 50,
+    "sku": "opn-378"
   }
 ];
 

@@ -264,13 +264,17 @@ export default function CorsiSicurezza() {
             </div>
           )}
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Programma del corso</h2>
-          <p className="text-sm text-gray-500 mb-6">Programma didattico ufficiale dell’ente erogatore.</p>
-          <div className="space-y-3 text-gray-700 leading-relaxed">
-            {dettaglio.programma.map((riga, i) => (
-              <p key={i}>{riga}</p>
-            ))}
-          </div>
+          {dettaglio.programma.length > 0 && (
+            <>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Programma del corso</h2>
+              <p className="text-sm text-gray-500 mb-6">Contenuti minimi previsti dalla normativa.</p>
+              <div className="space-y-3 text-gray-700 leading-relaxed">
+                {dettaglio.programma.map((riga, i) => (
+                  <p key={i}>{riga}</p>
+                ))}
+              </div>
+            </>
+          )}
 
           <div className="mt-10 border-2 border-black rounded-xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>

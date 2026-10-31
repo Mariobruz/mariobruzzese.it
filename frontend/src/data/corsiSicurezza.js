@@ -70,6 +70,48 @@ export const corsi = [
     prezzo: 39,
   },
   {
+    id: 'formazione-specifica-rischio-basso-turismo-4h',
+    categoria: 'lavoratori',
+    titolo: 'Formazione specifica — rischio basso: turismo e ristorazione',
+    titoloAttestato: 'CORSO DI FORMAZIONE SPECIFICA PER LAVORATORI RISCHIO BASSO (SETTORE ALLOGGIO, TURISMO E RISTORAZIONE)',
+    ore: 4,
+    aggiornamento: false,
+    destinatari: 'Lavoratori di alberghi, strutture ricettive, bar e ristoranti a rischio basso',
+    normativa: 'D.Lgs. 81/2008, art. 37',
+    sku: 'opn-373',
+    programmaDa: 'formazione-specifica-rischio-basso-4h',
+    immagine: '/img/corsi/formazione-specifica-rischio-basso-turismo-4h.webp',
+    prezzo: 50,
+  },
+  {
+    id: 'formazione-specifica-rischio-basso-uffici-4h',
+    categoria: 'lavoratori',
+    titolo: 'Formazione specifica — rischio basso: uffici e servizi',
+    titoloAttestato: 'CORSO DI FORMAZIONE SPECIFICA PER LAVORATORI RISCHIO BASSO (SETTORE ATTIVITA\' DI UFFICIO, AMMINISTRATIVE E DI SERVIZI DI SUPPORTO ALLE IMPRESE)',
+    ore: 4,
+    aggiornamento: false,
+    destinatari: 'Impiegati di uffici, attività amministrative e servizi di supporto alle imprese',
+    normativa: 'D.Lgs. 81/2008, art. 37',
+    sku: 'opn-377',
+    programmaDa: 'formazione-specifica-rischio-basso-4h',
+    immagine: '/img/corsi/formazione-specifica-rischio-basso-uffici-4h.webp',
+    prezzo: 50,
+  },
+  {
+    id: 'formazione-specifica-rischio-basso-4h-eng',
+    categoria: 'lavoratori',
+    titolo: 'Formazione specifica — rischio basso — in inglese',
+    titoloAttestato: 'SPECIFIC SAFETY TRAINING COURSE FOR WORKERS (LOW-RISK SECTOR)',
+    ore: 4,
+    aggiornamento: false,
+    destinatari: 'Lavoratori di lingua inglese di settori a rischio basso',
+    normativa: 'D.Lgs. 81/2008, art. 37',
+    sku: 'opn-363',
+    programmaDa: 'formazione-specifica-rischio-basso-4h',
+    immagine: '/img/corsi/formazione-specifica-rischio-basso-4h-eng.webp',
+    prezzo: 50,
+  },
+  {
     id: 'formazione-generale-specifica-rischio-basso-8h',
     categoria: 'lavoratori',
     titolo: 'Formazione generale + specifica — rischio basso',
@@ -84,6 +126,20 @@ export const corsi = [
     prezzo: 59,
   },
   {
+    id: 'formazione-generale-specifica-rischio-basso-8h-eng',
+    categoria: 'lavoratori',
+    titolo: 'Formazione generale + specifica — rischio basso — in inglese',
+    titoloAttestato: 'GENERAL AND SPECIFIC TRAINING COURSE — LOW RISK',
+    ore: 8,
+    aggiornamento: false,
+    destinatari: 'Neoassunti di lingua inglese in settori a rischio basso: assolve l’intero obbligo formativo',
+    normativa: 'D.Lgs. 81/2008, art. 37',
+    sku: 'opn-365',
+    programmaDa: 'formazione-generale-specifica-rischio-basso-8h',
+    immagine: '/img/corsi/formazione-generale-specifica-rischio-basso-8h-eng.webp',
+    prezzo: 50,
+  },
+  {
     id: 'aggiornamento-lavoratori-tutti-rischi-6h',
     categoria: 'lavoratori',
     titolo: 'Aggiornamento lavoratori — tutti i livelli di rischio',
@@ -96,6 +152,20 @@ export const corsi = [
     idEnte: 43,
     immagine: '/img/corsi/aggiornamento-lavoratori-tutti-rischi-6h.webp',
     prezzo: 49,
+  },
+  {
+    id: 'aggiornamento-lavoratori-6h-eng',
+    categoria: 'lavoratori',
+    titolo: 'Aggiornamento lavoratori — in inglese',
+    titoloAttestato: 'WORKERS’ REFRESHER TRAINING COURSE',
+    ore: 6,
+    aggiornamento: true,
+    destinatari: 'Lavoratori di lingua inglese già formati, in scadenza quinquennale',
+    normativa: 'D.Lgs. 81/2008, art. 37',
+    sku: 'opn-369',
+    programmaDa: 'aggiornamento-lavoratori-tutti-rischi-6h',
+    immagine: '/img/corsi/aggiornamento-lavoratori-6h-eng.webp',
+    prezzo: 50,
   },
   {
     id: 'aggiornamento-lavoratori-rischio-medio-6h',
@@ -127,6 +197,33 @@ export const corsi = [
     idEnte: 70,
     immagine: '/img/corsi/datore-di-lavoro-16h.webp',
     prezzo: 99,
+  },
+  {
+    id: 'aggiornamento-datore-lavoro-6h',
+    categoria: 'datore',
+    titolo: 'Aggiornamento datore di lavoro',
+    titoloAttestato: 'CORSO DI AGGIORNAMENTO PER DATORE DI LAVORO',
+    ore: 6,
+    aggiornamento: true,
+    destinatari: 'Datori di lavoro già formati, aggiornamento quinquennale',
+    normativa: 'D.Lgs. 81/2008',
+    sku: 'opn-379',
+    immagine: '/img/corsi/aggiornamento-datore-lavoro-6h.webp',
+    prezzo: 50,
+  },
+  {
+    id: 'datore-di-lavoro-16h-eng',
+    categoria: 'datore',
+    titolo: 'Formazione datore di lavoro — in inglese',
+    titoloAttestato: 'TRAINING COURSE FOR EMPLOYERS',
+    ore: 16,
+    aggiornamento: false,
+    destinatari: 'Datori di lavoro di lingua inglese',
+    normativa: 'D.Lgs. 81/2008',
+    sku: 'opn-378',
+    programmaDa: 'datore-di-lavoro-16h',
+    immagine: '/img/corsi/datore-di-lavoro-16h-eng.webp',
+    prezzo: 50,
   },
   {
     id: 'rspp-datore-lavoro-8h',
@@ -451,7 +548,8 @@ export const corsi = [
 export const scontiQuantita = [];
 
 // Ogni corso porta con sé il programma didattico ufficiale dell'ente.
-corsi.forEach((c) => { c.programma = programmi[c.id] || []; });
+// i corsi in inglese o per settore usano i contenuti minimi del corso equivalente (sono fissati dalla normativa)
+corsi.forEach((c) => { c.programma = programmi[c.id] || programmi[c.programmaDa] || []; });
 
 
 // ---------------------------------------------------------------- PREZZO DI LANCIO
@@ -493,6 +591,13 @@ const TITOLI_SEO = {
   'osa-rischio-elevato-8h': 'Corso HACCP Online Rischio Elevato (Cat. A) 8 ore',
   'osa-rischio-medio-6h': 'Corso HACCP Online Rischio Medio (Cat. B) 6 ore',
   'aggiornamento-osa-4h': 'Aggiornamento HACCP Online 4 ore – Cat. A e B',
+  'formazione-specifica-rischio-basso-turismo-4h': 'Corso Sicurezza Rischio Basso Turismo e Ristorazione Online 4 ore',
+  'formazione-specifica-rischio-basso-uffici-4h': 'Corso Sicurezza Rischio Basso Uffici Online 4 ore – Formazione Specifica',
+  'formazione-specifica-rischio-basso-4h-eng': 'Corso Sicurezza Rischio Basso in Inglese Online – Specifica 4 ore',
+  'formazione-generale-specifica-rischio-basso-8h-eng': 'Corso Sicurezza Lavoratori in Inglese Rischio Basso Online 8 ore',
+  'aggiornamento-lavoratori-6h-eng': 'Aggiornamento Sicurezza Lavoratori in Inglese Online 6 ore',
+  'aggiornamento-datore-lavoro-6h': 'Aggiornamento Datore di Lavoro Sicurezza Online 6 ore – Accordo 2025',
+  'datore-di-lavoro-16h-eng': 'Corso Datore di Lavoro Sicurezza in Inglese Online 16 ore',
 };
 
 /** Titolo e descrizione per Google: descrizione entro ~160 caratteri. */

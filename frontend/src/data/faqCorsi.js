@@ -29,7 +29,7 @@ function rispostaOnline(c) {
     return 'Il corso è erogato in e-learning asincrono, con test finale e attestato di O.P.N. Italia Lavoro – CNL – EBAFoS. Per i requisiti per qualificarsi come formatore vale il Decreto interministeriale 6 marzo 2013.';
   }
   if (id.endsWith('-eng')) {
-    return 'Sì: la formazione generale dei lavoratori può essere svolta in e-learning. La formazione deve essere comprensibile per chi la segue: la versione in inglese serve proprio ai lavoratori che non conoscono bene l’italiano.';
+    return 'Sì: l’Accordo Stato-Regioni del 17 aprile 2025 consente l’e-learning per questo corso. La formazione deve essere comprensibile per chi la segue: la versione in inglese serve proprio ai lavoratori che non conoscono bene l’italiano.';
   }
   return 'Sì: l’Accordo Stato-Regioni del 17 aprile 2025 consente l’e-learning per questo corso. Il corso si chiude con un test finale e l’attestato ha lo stesso valore di quello in aula.';
 }

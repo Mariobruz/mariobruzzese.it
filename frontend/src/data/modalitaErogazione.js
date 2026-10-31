@@ -115,4 +115,11 @@ export const scadenzeCorsi = {
   'osa-rischio-elevato-8h': { durata: '8 ore', validita: 'Scadenza stabilita dalla Regione' },
   'osa-rischio-medio-6h': { durata: '6 ore', validita: 'Scadenza stabilita dalla Regione' },
   'aggiornamento-osa-4h': { durata: '4 ore', validita: 'Scadenza stabilita dalla Regione' },
+  'formazione-specifica-rischio-basso-turismo-4h': { durata: '4 ore', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'formazione-specifica-rischio-basso-uffici-4h': { durata: '4 ore', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'formazione-specifica-rischio-basso-4h-eng': { durata: '4 ore', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'formazione-generale-specifica-rischio-basso-8h-eng': { durata: '8 ore (4 generale + 4 specifica)', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
+  'aggiornamento-lavoratori-6h-eng': { durata: '6 ore', validita: 'Vale 5 anni, poi va rifatto' },
+  'aggiornamento-datore-lavoro-6h': { durata: '6 ore', validita: 'Vale 5 anni, poi va rifatto' },
+  'datore-di-lavoro-16h-eng': { durata: '16 ore', validita: 'Vale 5 anni, poi aggiornamento di 6 ore' },
 };
