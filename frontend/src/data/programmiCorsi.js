@@ -720,5 +720,15 @@ export const programmi = {
     "- Check list di verifica di cantiere",
     "Test di Verifica Finale del Corso",
     "SCHEDA DI VALUTAZIONE PER CORSI DI FORMAZIONE IN MATERIA DI SICUREZZA SUL LAVORO - MODALITÀ FAD A-SINCRONA"
+  ],
+  "aggiornamento-datore-lavoro-6h": [
+    "- Novità legislative e circolari applicative recenti, con particolare riferimento all’Accordo Stato-Regioni 2025",
+    "- Evoluzione degli obblighi e delle responsabilità del datore di lavoro",
+    "- Nozioni giuridiche e tecnico-organizzative aggiornate",
+    "- Gestione della prevenzione in azienda e aggiornamento delle procedure interne",
+    "- Principali adempimenti documentali",
+    "- Strumenti digitali e metodologie utili per la prevenzione",
+    "- Comunicazione interna e rapporto con lavoratori, RLS, medico competente e consulenti",
+    "Test di verifica finale"
   ]
 };
