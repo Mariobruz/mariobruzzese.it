@@ -50,6 +50,14 @@ const Privacy = () => (
         (ad esempio «Google Ads»), senza identificativi del clic, per sapere quali canali portano gli ordini.
       </p>
       <p>
+        <strong>Registro di sicurezza.</strong> Il servizio che riceve le iscrizioni e i pagamenti (ospitato su
+        Cloudflare) registra soltanto le richieste anomale o sospette — ad esempio invii automatici non partiti dal
+        sito, verifiche anti-bot non superate, dati manomessi, troppe richieste ravvicinate, tentativi di accesso
+        non autorizzati — con indirizzo IP, data e ora, paese e rete di provenienza indicati da Cloudflare, tipo di
+        browser e pagina richiesta. Le visite normali e le iscrizioni regolari non finiscono in questo registro.
+        Un indirizzo IP che accumula molte richieste sospette può essere bloccato automaticamente per 24 ore.
+      </p>
+      <p>
         <strong>Dati del modulo di contatto.</strong> Nome, indirizzo email, eventuale azienda e testo del messaggio.
       </p>
       <p>
@@ -82,7 +90,7 @@ const Privacy = () => (
           'Emettere il documento fiscale e conservare le scritture contabili — base giuridica: obbligo di legge, art. 6.1.c.',
           'Documentare l’assolvimento degli obblighi formativi previsti dal D.Lgs. 81/2008 — base giuridica: obbligo di legge, art. 6.1.c.',
           'Inviare comunicazioni su scadenze formative e nuovi corsi — base giuridica: consenso, art. 6.1.a, revocabile in qualsiasi momento.',
-          'Difendere un diritto in sede giudiziaria e garantire la sicurezza dei sistemi — base giuridica: legittimo interesse, art. 6.1.f.',
+          'Difendere un diritto in sede giudiziaria e garantire la sicurezza dei sistemi, anche tenendo il registro di sicurezza delle richieste sospette ed eventualmente trasmettendolo all’autorità giudiziaria o alla Polizia Postale in caso di attacco — base giuridica: legittimo interesse, art. 6.1.f.',
         ]}
       />
       <p>
@@ -130,6 +138,7 @@ const Privacy = () => (
           'Dati relativi all’assolvimento dell’obbligo formativo: per il periodo in cui l’attestato conserva validità e comunque per la durata degli obblighi di conservazione del datore di lavoro.',
           'Messaggi ricevuti dal modulo di contatto o su WhatsApp: 24 mesi dall’ultimo scambio, salvo che diano origine a un rapporto contrattuale.',
           'Dati trattati per finalità di comunicazione commerciale: fino alla revoca del consenso e comunque non oltre 24 mesi dall’ultimo contatto.',
+          'Registro di sicurezza delle richieste sospette: 90 giorni, salvo che servano più a lungo per accertare o difendere un diritto in sede giudiziaria (ad esempio se allegati a una denuncia).',
         ]}
       />
     </Sezione>

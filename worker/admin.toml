@@ -8,6 +8,11 @@ main = "src/admin.js"
 compatibility_date = "2026-09-01"
 workers_dev = true
 
+# Registro degli eventi di sicurezza (stesso dataset del Worker pubblico)
+[[analytics_engine_datasets]]
+binding = "EVENTI_SICUREZZA"
+dataset = "eventi_sicurezza"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "iscrizioni-corsi"

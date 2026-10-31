@@ -57,3 +57,13 @@ CREATE TABLE IF NOT EXISTS partecipanti (
 --   wrangler d1 execute iscrizioni-corsi --remote --command="ALTER TABLE partecipanti ADD COLUMN prezzo INTEGER"
 
 CREATE INDEX IF NOT EXISTS idx_partecipanti_ordine ON partecipanti (ordine_id);
+
+-- IP bloccati temporaneamente dopo troppi eventi sospetti (vedi src/sicurezza.js).
+-- Database già esistente? Crearla una volta sola con:
+--   npx wrangler d1 execute iscrizioni-corsi --remote --command="CREATE TABLE IF NOT EXISTS ip_bloccati (ip TEXT PRIMARY KEY, fino_a TEXT NOT NULL, motivo TEXT, creato_il TEXT)"
+CREATE TABLE IF NOT EXISTS ip_bloccati (
+  ip        TEXT PRIMARY KEY,
+  fino_a    TEXT NOT NULL,
+  motivo    TEXT,
+  creato_il TEXT
+);

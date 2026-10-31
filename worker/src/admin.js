@@ -11,6 +11,8 @@ import { emailClienteCarta, inviaEmail } from './email';
 import { PAGINA, SCRIPT } from './admin-pagina';
 import { statisticheVisite } from './visite';
 import { SCRIPT_PROVENIENZA } from './admin-provenienza';
+import { SCRIPT_SICUREZZA } from './admin-sicurezza';
+import { csvEventi, elencoBloccati, elencoEventi, registraEvento, sbloccaIp } from './sicurezza';
 
 const STATI_ATTIVI = ['in_attesa_bonifico', 'pagato', 'caricato', 'importo_da_verificare'];
 
@@ -180,6 +182,9 @@ export default {
     if (url.pathname === '/favicon.ico') return new Response(null, { status: 204 });
     const email = await verificaAccesso(richiesta, env);
     if (!email) {
+      // arrivare qui senza un token valido significa aggirare Cloudflare Access
+      await registraEvento(env, richiesta, 'accesso_admin_negato',
+        richiesta.headers.get('Cf-Access-Jwt-Assertion') ? 'token Access non valido' : 'nessun token Access');
       return risposta(
         'Accesso non autorizzato. Il pannello si apre solo passando dal login di Cloudflare Access.',
         403, 'text/plain; charset=utf-8'
@@ -193,7 +198,7 @@ export default {
       return risposta(PAGINA, 200, 'text/html; charset=utf-8');
     }
     if (metodo === 'GET' && pathname === '/app.js') {
-      return risposta(`${SCRIPT}\n${SCRIPT_PROVENIENZA}`, 200, 'text/javascript; charset=utf-8');
+      return risposta(`${SCRIPT}\n${SCRIPT_PROVENIENZA}\n${SCRIPT_SICUREZZA}`, 200, 'text/javascript; charset=utf-8');
     }
 
     if (pathname.startsWith('/api/')) {
@@ -241,6 +246,33 @@ export default {
           console.error('statistiche visite', e.message);
           return risposta({ configurato: true, errore: 'Cloudflare non ha risposto: ' + e.message });
         }
+      }
+
+      if (metodo === 'GET' && pathname === '/api/sicurezza') {
+        try {
+          return risposta(await elencoEventi(env, url.searchParams.get('giorni')));
+        } catch (e) {
+          console.error('registro sicurezza', e.message);
+          return risposta({ errore: 'Registro non leggibile: ' + e.message }, 502);
+        }
+      }
+      if (metodo === 'GET' && pathname === '/api/sicurezza.csv') {
+        const { eventi } = await elencoEventi(env, url.searchParams.get('giorni') || 90, 5000);
+        const oggi = new Date().toISOString().slice(0, 10);
+        console.log('esportazione registro sicurezza', email);
+        return risposta(csvEventi(eventi), 200, 'text/csv; charset=utf-8', {
+          'Content-Disposition': `attachment; filename="eventi-sicurezza-${oggi}.csv"`,
+        });
+      }
+      if (metodo === 'GET' && pathname === '/api/sicurezza/bloccati') {
+        return risposta({ bloccati: await elencoBloccati(env) });
+      }
+      if (metodo === 'POST' && pathname === '/api/sicurezza/sblocca') {
+        let corpo = {};
+        try { corpo = await richiesta.json(); } catch (e) { /* vuoto */ }
+        const ok = await sbloccaIp(env, corpo.ip);
+        console.log('IP sbloccato dal pannello', corpo.ip, email);
+        return ok ? risposta({ ok: true }) : risposta({ errore: 'IP non trovato' }, 404);
       }
 
       m = pathname.match(/^\/api\/ordini\/(\d+)\/azione$/);

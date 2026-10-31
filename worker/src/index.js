@@ -24,6 +24,7 @@ import {
   validaTelefono,
 } from './validazione';
 import { province } from './province';
+import { ipBloccato, registraEvento } from './sicurezza';
 
 const MAX_PARTECIPANTI = 50;
 const MAX_CORPO = 100000; // caratteri: 50 partecipanti stanno ampiamente sotto
@@ -290,33 +291,63 @@ async function gestisciIscrizione(env, richiesta) {
   // freno ai bot: poche iscrizioni al minuto dallo stesso indirizzo
   if (env.LIMITE_ISCRIZIONI) {
     const { success } = await env.LIMITE_ISCRIZIONI.limit({ key: ip || 'sconosciuto' });
-    if (!success) return json({ errore: 'Troppe richieste: riprova fra un minuto' }, 429);
+    if (!success) {
+      await registraEvento(env, richiesta, 'troppe_richieste', 'oltre 5 iscrizioni al minuto');
+      return json({ errore: 'Troppe richieste: riprova fra un minuto' }, 429);
+    }
+  }
+
+  // il modulo parte solo dal sito: un invio senza Origin o da un altro dominio è un bot o uno script
+  const origine = richiesta.headers.get('Origin') || '';
+  const ammesse = (env.ORIGINI_AMMESSE || '').split(',').map((o) => o.trim()).filter(Boolean);
+  if (ammesse.length && !ammesse.includes(origine)) {
+    await registraEvento(env, richiesta, 'origine_non_ammessa', origine || 'nessuna Origin');
+    return json({ errore: 'Richiesta non ammessa' }, 403);
   }
 
   const dichiarata = Number(richiesta.headers.get('Content-Length') || 0);
-  if (dichiarata > MAX_CORPO) return json({ errore: 'Richiesta troppo grande' }, 413);
+  if (dichiarata > MAX_CORPO) {
+    await registraEvento(env, richiesta, 'corpo_troppo_grande', `${dichiarata} byte dichiarati`);
+    return json({ errore: 'Richiesta troppo grande' }, 413);
+  }
 
   let corpo;
   try {
     const testo = await richiesta.text();
-    if (testo.length > MAX_CORPO) return json({ errore: 'Richiesta troppo grande' }, 413);
+    if (testo.length > MAX_CORPO) {
+      await registraEvento(env, richiesta, 'corpo_troppo_grande', `${testo.length} caratteri`);
+      return json({ errore: 'Richiesta troppo grande' }, 413);
+    }
     corpo = JSON.parse(testo);
   } catch (e) {
+    await registraEvento(env, richiesta, 'richiesta_illeggibile', 'JSON non valido');
     return json({ errore: 'Richiesta non leggibile' }, 400);
   }
-  if (!corpo || typeof corpo !== 'object') return json({ errore: 'Richiesta non leggibile' }, 400);
+  if (!corpo || typeof corpo !== 'object') {
+    await registraEvento(env, richiesta, 'richiesta_illeggibile', 'corpo non è un oggetto');
+    return json({ errore: 'Richiesta non leggibile' }, 400);
+  }
 
   if (!(await verificaTurnstile(env, corpo.turnstile, ip))) {
+    await registraEvento(env, richiesta, 'antibot_fallito', corpo.turnstile ? 'token Turnstile non valido' : 'token Turnstile assente');
     return json({ errore: 'Verifica anti-bot non superata: ricarica la pagina e riprova' }, 403);
   }
 
   const controllo = verificaIscrizione(corpo);
   if (controllo.errori.length) {
+    // errori che dal modulo del sito non possono uscire: richiesta costruita o modificata a mano
+    const manomessi = controllo.errori.filter((e) => /non riconosciuto|Massimo \d+ partecipanti|link/i.test(e));
+    if (manomessi.length) await registraEvento(env, richiesta, 'dati_manomessi', manomessi.join(' | '));
     return json({ errore: 'Dati non validi', dettagli: controllo.errori }, 422);
   }
 
   const { corso, fatturazione, partecipanti, consensi, metodo, provenienza } = controllo;
   const totale = partecipanti.reduce((somma, p) => somma + p.corso.prezzo, 0);
+  // si incassa sempre il prezzo del catalogo; un totale diverso dal browser si annota soltanto
+  // (può essere una pagina vecchia rimasta in cache dopo un cambio di prezzo, oppure una manomissione)
+  if (corpo.totale !== undefined && Number(corpo.totale) !== totale) {
+    await registraEvento(env, richiesta, 'totale_diverso', `inviato ${corpo.totale} €, catalogo ${totale} €`);
+  }
   const ordine = { corso: corsoOrdine(corso, partecipanti), fatturazione };
 
   const { id, riferimento } = await salvaOrdine(env, {
@@ -343,7 +374,10 @@ async function gestisciIscrizione(env, richiesta) {
 async function gestisciWebhook(env, richiesta) {
   const corpoGrezzo = await richiesta.text();
   const valido = await verificaWebhook(env, corpoGrezzo, richiesta.headers.get('Stripe-Signature'));
-  if (!valido) return json({ errore: 'Firma non valida' }, 400);
+  if (!valido) {
+    await registraEvento(env, richiesta, 'firma_stripe_non_valida', 'webhook senza firma Stripe valida');
+    return json({ errore: 'Firma non valida' }, 400);
+  }
 
   let evento;
   try {
@@ -421,6 +455,11 @@ export default {
 
     if (richiesta.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
 
+    // IP bloccati per 24 ore dopo troppi eventi sospetti (Stripe escluso: i pagamenti devono arrivare)
+    if (url.pathname !== '/stripe/webhook' && (await ipBloccato(env, richiesta))) {
+      return json({ errore: 'Accesso temporaneamente bloccato' }, 403, cors);
+    }
+
     if (url.pathname === '/iscrizioni' && richiesta.method === 'POST') {
       const risposta = await gestisciIscrizione(env, richiesta);
       Object.entries(cors).forEach(([k, v]) => risposta.headers.set(k, v));
@@ -433,6 +472,8 @@ export default {
 
     if (url.pathname === '/') return json({ servizio: 'iscrizioni corsi sicurezza', stato: 'attivo' });
 
+    // chi cerca /wp-admin, /.env, /phpmyadmin... sta scansionando il servizio
+    await registraEvento(env, richiesta, 'percorso_inesistente', '');
     return json({ errore: 'Non trovato' }, 404);
   },
 

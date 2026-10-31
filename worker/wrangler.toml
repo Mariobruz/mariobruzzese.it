@@ -16,6 +16,18 @@ type = "ratelimit"
 namespace_id = "2403"
 simple = { limit = 5, period = 60 }
 
+# Contatore degli eventi sospetti: oltre 10 al minuto dallo stesso IP → blocco di 24 ore
+[[unsafe.bindings]]
+name = "LIMITE_SOSPETTI"
+type = "ratelimit"
+namespace_id = "2404"
+simple = { limit = 10, period = 60 }
+
+# Registro degli eventi di sicurezza (Workers Analytics Engine, conservazione ~3 mesi)
+[[analytics_engine_datasets]]
+binding = "EVENTI_SICUREZZA"
+dataset = "eventi_sicurezza"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "iscrizioni-corsi"
