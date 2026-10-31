@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, CreditCard, Loader2, Lock, Minus, Plus, Send, User } from 'lucide-react';
 import { Button } from './ui/button';
@@ -6,7 +6,6 @@ import {
   validaAteco,
   validaCap,
   validaCodiceFiscale,
-  validaDataNascita,
   validaEmail,
   validaFatturazioneElettronica,
   validaObbligatorio,
@@ -17,6 +16,7 @@ import {
 import { province, regioneDiProvincia } from '../data/province';
 import { ricordaAcquistoInCorso, tracciaAcquisto } from '../googleAds';
 import { leggiProvenienza } from '../provenienza';
+import { corsiPubblicabili } from '../data/corsiSicurezza';
 
 const ENDPOINT = process.env.REACT_APP_ISCRIZIONI_URL;
 // Chiave pubblica di Cloudflare Turnstile (anti-bot). Se non c'è, il controllo resta spento.
@@ -62,10 +62,20 @@ function Turnstile({ onToken }) {
 
 const PASSI = ['Partecipanti', 'Intestazione', 'Anagrafiche', 'Riepilogo'];
 
-const partecipanteVuoto = () => ({
-  nome: '', cognome: '', codiceFiscale: '', dataNascita: '',
-  comuneNascita: '', provinciaNascita: '', email: '', telefono: '', qualifica: '',
-});
+// Per l'iscrizione alla piattaforma bastano nome, cognome, codice fiscale ed email:
+// il resto dell'anagrafica lo completa il partecipante al primo accesso.
+const partecipanteVuoto = (corsoId = '') => ({ nome: '', cognome: '', codiceFiscale: '', email: '', corsoId });
+
+// Catalogo per la scelta del corso di ciascun partecipante (ordini aziendali).
+const CATALOGO = corsiPubblicabili();
+const OPZIONI_CORSI = CATALOGO.map((c) => ({ valore: c.id, testo: `${c.titolo} · ${c.ore} ore · ${c.prezzo} €` }));
+
+/** Data di nascita (AAAA-MM-GG) ricavata dal codice fiscale, per l'archivio ordini. */
+function dataNascitaDaCf(cf) {
+  const d = datiDaCodiceFiscale(cf);
+  if (!d) return '';
+  return `${d.annoNascita}-${String(d.mese).padStart(2, '0')}-${String(d.giorno).padStart(2, '0')}`;
+}
 
 const fatturazioneVuota = {
   tipo: 'azienda',
@@ -115,9 +125,10 @@ function Selezione({ label, value, onChange, errore, opzioni, vuoto = '— selez
 
 const OPZIONI_PROVINCE = province.map((p) => ({ valore: p.sigla, testo: `${p.nome} (${p.sigla})` }));
 
+
 export default function IscrizioneCorso({ corso, onIndietro }) {
   const [passo, setPasso] = useState(0);
-  const [partecipanti, setPartecipanti] = useState([partecipanteVuoto()]);
+  const [partecipanti, setPartecipanti] = useState([partecipanteVuoto(corso.id)]);
   const [fatturazione, setFatturazione] = useState(fatturazioneVuota);
   const [consensi, setConsensi] = useState({ privacy: false, condizioni: false, attivazione: false, ccnl: false, marketing: false });
   const [errori, setErrori] = useState({});
@@ -127,7 +138,11 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   const [metodoPagamento, setMetodoPagamento] = useState('carta');
   const [esito, setEsito] = useState(null);
 
-  const totale = useMemo(() => corso.prezzo * partecipanti.length, [corso.prezzo, partecipanti.length]);
+  // Un'azienda può scegliere un corso diverso per ogni partecipante; un privato acquista il corso della pagina.
+  const multiCorso = fatturazione.tipo === 'azienda';
+  const corsoDi = (p) => (multiCorso && CATALOGO.find((c) => c.id === p.corsoId)) || corso;
+  const totale = partecipanti.reduce((somma, p) => somma + corsoDi(p).prezzo, 0);
+  const richiedeCcnl = partecipanti.some((p) => corsoDi(p).richiedeCcnl);
 
   const aggiornaPartecipante = (indice, campo, valore) => {
     setPartecipanti((prec) => prec.map((p, i) => (i === indice ? { ...p, [campo]: valore } : p)));
@@ -142,7 +157,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   const cambiaNumero = (delta) => {
     setPartecipanti((prec) => {
       const nuovo = Math.min(50, Math.max(1, prec.length + delta));
-      if (nuovo > prec.length) return [...prec, ...Array.from({ length: nuovo - prec.length }, partecipanteVuoto)];
+      if (nuovo > prec.length) return [...prec, ...Array.from({ length: nuovo - prec.length }, () => partecipanteVuoto(corso.id))];
       return prec.slice(0, nuovo);
     });
   };
@@ -177,10 +192,6 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
       e[`p${i}_nome`] = validaObbligatorio(p.nome, 'Il nome');
       e[`p${i}_cognome`] = validaObbligatorio(p.cognome, 'Il cognome');
       e[`p${i}_codiceFiscale`] = validaCodiceFiscale(p.codiceFiscale);
-      e[`p${i}_dataNascita`] = validaDataNascita(p.dataNascita);
-      e[`p${i}_comuneNascita`] = validaObbligatorio(p.comuneNascita, 'Il comune di nascita');
-      e[`p${i}_provinciaNascita`] = validaObbligatorio(p.provinciaNascita, 'La provincia di nascita');
-      e[`p${i}_qualifica`] = validaObbligatorio(p.qualifica, 'La qualifica');
       e[`p${i}_email`] = validaEmail(p.email);
 
       const cf = (p.codiceFiscale || '').toUpperCase();
@@ -188,17 +199,6 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
         e[`p${i}_codiceFiscale`] = 'Questo codice fiscale è già stato inserito per un altro partecipante';
       }
       visti.add(cf);
-
-      // Riscontro fra codice fiscale e data digitata: intercetta i refusi.
-      const dedotti = datiDaCodiceFiscale(p.codiceFiscale);
-      if (dedotti && p.dataNascita && !e[`p${i}_dataNascita`]) {
-        const d = new Date(p.dataNascita);
-        const stessoGiorno = d.getDate() === dedotti.giorno && d.getMonth() + 1 === dedotti.mese;
-        const stessoAnno = d.getFullYear() % 100 === dedotti.annoNascita % 100;
-        if (!stessoGiorno || !stessoAnno) {
-          e[`p${i}_dataNascita`] = 'La data non corrisponde al codice fiscale inserito';
-        }
-      }
     });
     return e;
   };
@@ -225,7 +225,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   };
 
   const inviaEPaga = async () => {
-    if (corso.richiedeCcnl && !consensi.ccnl) {
+    if (richiedeCcnl && !consensi.ccnl) {
       setErroreInvio('Per i corsi RLS devi confermare che il CCNL applicato ammette la formazione in e-learning.');
       return;
     }
@@ -256,10 +256,10 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
           },
           partecipanti: partecipanti.map((p) => ({
             ...p,
-            // sesso e regione non li chiediamo: stanno nel codice fiscale e nella provincia
+            corsoId: corsoDi(p).id,
+            // sesso e data di nascita non li chiediamo: stanno nel codice fiscale
             sesso: (datiDaCodiceFiscale(p.codiceFiscale) || {}).sesso || '',
-            nazioneNascita: 'Italia',
-            regioneNascita: regioneDiProvincia(p.provinciaNascita),
+            dataNascita: dataNascitaDaCf(p.codiceFiscale),
           })),
           consensi,
           metodoPagamento,
@@ -316,8 +316,8 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
           così acceleriamo la pratica di iscrizione.
         </p>
         <p className="text-gray-600 leading-relaxed mb-10">
-          Ricevuto il bonifico registriamo i partecipanti sulla piattaforma entro 24 ore. A ciascuno arriverà un’email
-          per confermare il proprio account: va confermata, altrimenti il corso non può essergli abbinato.
+          Ricevuto il bonifico iscriviamo i partecipanti sulla piattaforma entro 24 ore. A ciascuno arriverà un’email
+          con il link di accesso, nome utente e password: se non la trova, controlli la cartella spam.
         </p>
         <Button onClick={onIndietro} size="lg" className="bg-black text-white hover:bg-gray-800 px-8">
           Torna al catalogo
@@ -398,7 +398,12 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
 
               <div className="bg-gray-50 rounded-xl p-6 flex items-center justify-between">
                 <span className="text-gray-600">
-                  {partecipanti.length} × {corso.prezzo}&nbsp;€
+                  {partecipanti.length} partecipant{partecipanti.length > 1 ? 'i' : 'e'}
+                  {multiCorso && (
+                    <span className="block text-xs text-gray-500 mt-1">
+                      Nel passo «Anagrafiche» puoi scegliere un corso diverso per ciascun partecipante.
+                    </span>
+                  )}
                 </span>
                 <span className="text-right">
                   <span className="block text-2xl font-bold leading-none">{totale}&nbsp;€</span>
@@ -456,7 +461,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
               <div>
                 <h2 className="text-xl font-bold text-gray-900 mb-1">Dati dei partecipanti</h2>
                 <p className="text-gray-600 text-sm">
-                  Servono all’ente per creare l’accesso alla piattaforma e intestare l’attestato: controlla che siano esatti. L’email di ciascuno diventerà il suo nome utente e riceverà lì la richiesta di conferma dell’account: dev’essere una casella a cui il partecipante accede davvero.
+                  Per l’iscrizione alla piattaforma bastano nome, cognome, codice fiscale ed email di ciascun partecipante: controlla che siano esatti. A quell’indirizzo arriverà l’email della piattaforma O.P.N. Italia Lavoro (non del nostro sito) con il link di accesso, nome utente e password, quindi dev’essere una casella che il partecipante legge davvero. Al primo accesso il partecipante completerà i suoi dati e inizierà il corso.
                 </p>
               </div>
 
@@ -480,14 +485,26 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                         </p>
                       )}
                     </div>
-                    <Campo label="Data di nascita" tipo="date" value={p.dataNascita} onChange={(v) => aggiornaPartecipante(i, 'dataNascita', v)} errore={errori[`p${i}_dataNascita`]} />
-                    <Campo label="Comune di nascita" value={p.comuneNascita} onChange={(v) => aggiornaPartecipante(i, 'comuneNascita', v)} errore={errori[`p${i}_comuneNascita`]} />
-                    <Selezione label="Provincia di nascita" value={p.provinciaNascita} onChange={(v) => aggiornaPartecipante(i, 'provinciaNascita', v)} errore={errori[`p${i}_provinciaNascita`]} opzioni={OPZIONI_PROVINCE} />
-                    <Campo label="Qualifica" value={p.qualifica} onChange={(v) => aggiornaPartecipante(i, 'qualifica', v)} errore={errori[`p${i}_qualifica`]} placeholder="Es. operaio, impiegato, responsabile" />
-                    <Campo label="Email del partecipante" tipo="email" value={p.email} onChange={(v) => aggiornaPartecipante(i, 'email', v)} errore={errori[`p${i}_email`]} placeholder="Sarà anche il suo nome utente sulla piattaforma" larghezza="sm:col-span-2" />
+                    <Campo label="Email del partecipante" tipo="email" value={p.email} onChange={(v) => aggiornaPartecipante(i, 'email', v)} errore={errori[`p${i}_email`]} placeholder="Riceverà qui le credenziali di accesso" larghezza="sm:col-span-2" />
+                    {multiCorso ? (
+                      <Selezione label="Corso" value={corsoDi(p).id} onChange={(v) => aggiornaPartecipante(i, 'corsoId', v)} opzioni={OPZIONI_CORSI} larghezza="sm:col-span-2" />
+                    ) : (
+                      <p className="sm:col-span-2 text-sm text-gray-600">Corso: <strong>{corso.titolo}</strong> · {corso.ore} ore</p>
+                    )}
+                  </div>
+                  <div className="mt-4 flex justify-end text-sm text-gray-600">
+                    Costo: <strong className="ml-1 text-gray-900">{corsoDi(p).prezzo}&nbsp;€</strong>
                   </div>
                 </div>
               ))}
+
+              <div className="bg-gray-50 rounded-xl p-6 flex items-center justify-between">
+                <span className="text-gray-600">Totale · {partecipanti.length} partecipant{partecipanti.length > 1 ? 'i' : 'e'}</span>
+                <span className="text-right">
+                  <span className="block text-2xl font-bold leading-none">{totale}&nbsp;€</span>
+                  <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
+                </span>
+              </div>
             </section>
           )}
 
@@ -496,10 +513,6 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
               <h2 className="text-xl font-bold text-gray-900">Controlla e conferma</h2>
 
               <div className="border-2 border-gray-200 rounded-xl divide-y divide-gray-100">
-                <div className="p-5 flex justify-between gap-4">
-                  <span className="text-gray-600">Corso</span>
-                  <span className="font-medium text-right">{corso.titolo} · {corso.ore} ore</span>
-                </div>
                 <div className="p-5 flex justify-between gap-4">
                   <span className="text-gray-600">Intestatario</span>
                   <span className="font-medium text-right">
@@ -511,10 +524,17 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                   <span className="font-medium text-right">{fatturazione.ateco}</span>
                 </div>
                 <div className="p-5">
-                  <span className="text-gray-600 block mb-2">Partecipanti</span>
-                  <ul className="space-y-1">
+                  <span className="text-gray-600 block mb-2">Partecipanti e corsi</span>
+                  <ul className="space-y-3">
                     {partecipanti.map((p, i) => (
-                      <li key={i} className="font-medium">{p.nome} {p.cognome} <span className="text-gray-400 font-normal">· {p.codiceFiscale}</span></li>
+                      <li key={i} className="flex justify-between gap-4">
+                        <span>
+                          <span className="font-medium">{p.nome} {p.cognome}</span>{' '}
+                          <span className="text-gray-400">· {p.codiceFiscale}</span>
+                          <span className="block text-sm text-gray-600">{corsoDi(p).titolo} · {corsoDi(p).ore} ore</span>
+                        </span>
+                        <span className="font-medium whitespace-nowrap">{corsoDi(p).prezzo}&nbsp;€</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -588,7 +608,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                       </>
                     ),
                   },
-                  ...(corso.richiedeCcnl
+                  ...(richiedeCcnl
                     ? [{
                         id: 'ccnl',
                         obbligatorio: true,
@@ -622,18 +642,17 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
 
               <div className="bg-gray-50 rounded-xl p-5 text-sm text-gray-600">
                 <p className="mb-2">
-                  Il corso è erogato da <strong>EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro</strong>
-                  tramite l’Unità Operativa codice 2403. Dopo il pagamento l’iscrizione viene trasmessa per l’autorizzazione;
-                  a conferma, ogni partecipante riceve le credenziali all’indirizzo indicato:
-                  <strong>l’email del partecipante è anche il suo nome utente</strong>.
+                  Soggetto formatore: <strong>O.P.N. Italia Lavoro – CNL – EBAFoS</strong>; soggetto attuatore
+                  MB Consulting, in convenzione con O.P.N. Italia Lavoro. Entro 24 ore lavorative dal pagamento ogni
+                  partecipante riceve all’indirizzo indicato un’email dalla piattaforma O.P.N. Italia Lavoro (non dal nostro sito) con il link di accesso, nome
+                  utente e password; al primo accesso completa i suoi dati e inizia il corso.
                 </p>
                 <p className="mb-2">
-                  <strong>Attenzione al passaggio successivo:</strong> ogni partecipante riceverà dalla piattaforma
-                  un’email per confermare il proprio account. Finché non la conferma, il corso non può essergli
-                  abbinato. Se non arriva, va controllata anche la posta indesiderata.
+                  <strong>Attenzione:</strong> l’email della piattaforma O.P.N. Italia Lavoro può finire nello spam o nella posta indesiderata:
+                  avvisa i partecipanti di controllare anche lì.
                 </p>
                 <p>
-                  Al superamento del test finale l’attestato — rilasciato da EFEI, con l’indicazione dell’Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro — è scaricabile direttamente dalla piattaforma, in qualsiasi momento.
+                  Al superamento del test finale si riceve l’attestato, verificabile tramite QR code sul sito opnitalialavoro.it.
                 </p>
               </div>
 

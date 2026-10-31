@@ -1,9 +1,8 @@
 /**
  * modalitaErogazione.js — prospetto dei corsi: modalità ammesse, durata e scadenze.
  *
- * Modalità: "Vademecum operativo per la richiesta e la gestione dei corsi" di
- * EFEI Aula Magna (senza la colonna dei tempi di richiesta per Regioni, che
- * riguarda la rendicontazione dell'ente).
+ * Modalità: prospetto importato il 18/09/2026, da verificare con la
+ * piattaforma e-learning attuale (O.P.N. Italia Lavoro).
  * Durate e aggiornamenti: quadro sinottico dell'Accordo Stato-Regioni del
  * 17 aprile 2025. Per i corsi che l'Accordo non disciplina (antincendio,
  * primo soccorso, ponteggi, funi, segnaletica stradale, lavori elettrici,

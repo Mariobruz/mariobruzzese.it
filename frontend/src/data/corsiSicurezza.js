@@ -1,8 +1,8 @@
 /**
- * corsiSicurezza.js — catalogo dei corsi e-learning erogati da EFEI Aula Magna
- * e promossi/venduti da MB Consulting.
+ * corsiSicurezza.js — catalogo dei corsi e-learning venduti da MB Consulting,
+ * soggetto attuatore in convenzione con O.P.N. Italia Lavoro.
  *
- * Estratto dalla piattaforma dell'ente (efeiaulamagna.it/corsi) il 18/09/2026.
+ * Catalogo importato il 18/09/2026, da verificare con la piattaforma attuale.
  * `ore` e `titoloAttestato` sono i dati ufficiali della piattaforma.
  * `prezzo` è in euro, IVA compresa (regime forfettario: operazione senza IVA).
  * null = prezzo da definire, la pagina non mostra
@@ -129,7 +129,7 @@ export const corsi = [
   },
   {
     id: 'rspp-datore-lavoro-8h',
-    sospeso: "Vademecum EFEI: formazione DL-RSPP non consentita in e-learning (solo presenza o videoconferenza sincrona)",
+    sospeso: "Formazione DL-RSPP non consentita in e-learning (solo presenza o videoconferenza sincrona)",
     categoria: 'datore',
     titolo: 'Datore di lavoro RSPP — moduli I e II',
     titoloAttestato: 'CORSO DI FORMAZIONE PER LO SVOLGIMENTO DIRETTO DA PARTE DEL DATORE DI LAVORO DEI COMPITI DI RESPONSABILE AL SERVIZIO DI PREVENZIONE E PROTEZIONE - MODULI I E II - 8 ORE',
@@ -326,7 +326,7 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-csp-cse-40h',
-    sospeso: "Vademecum EFEI: per l'aggiornamento coordinatori l'e-learning e consentito solo per il modulo giuridico",
+    sospeso: "Per l'aggiornamento coordinatori l'e-learning e consentito solo per il modulo giuridico",
     categoria: 'cantieri',
     titolo: 'Aggiornamento coordinatori CSP/CSE',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO COORDINATORE PER LA PROGETTAZIONE E PER L’ESECUZIONE DEI LAVORI - 40 ORE',

@@ -1,9 +1,8 @@
 /**
  * programmiCorsi.js — programma didattico ufficiale di ogni corso.
  *
- * Testi dell'ente EFEI Aula Magna, importati dalla piattaforma il 18/09/2026
- * in forza della convenzione. File generato: non modificarlo a mano,
- * si rigenera reimportandolo dalla piattaforma dell'ente.
+ * Contenuti minimi stabiliti dalla normativa (D.Lgs. 81/2008, Accordo
+ * Stato-Regioni 2025): sono gli stessi per ogni ente. Importati il 18/09/2026.
  */
 
 export const programmi = {

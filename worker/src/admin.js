@@ -6,7 +6,7 @@
  * In più il codice verifica da sé il token di Access: se Access venisse
  * spento per errore, il pannello resta chiuso invece di aprirsi a tutti.
  */
-import { csvImportEfei, nomeFileCsv } from './csv';
+import { csvPartecipanti, nomeFileCsv } from './csv';
 import { emailClienteCarta, inviaEmail } from './email';
 import { PAGINA, SCRIPT } from './admin-pagina';
 import { statisticheVisite } from './visite';
@@ -92,6 +92,7 @@ const mappaPartecipante = (p) => ({
   id: p.id, nome: p.nome, cognome: p.cognome, email: p.email, codiceFiscale: p.codice_fiscale,
   dataNascita: p.data_nascita, comuneNascita: p.comune_nascita, provinciaNascita: p.provincia_nascita,
   regioneNascita: p.regione_nascita, sesso: p.sesso, telefono: p.telefono, qualifica: p.qualifica,
+  corsoTitolo: p.corso_titolo || null, prezzo: p.prezzo ?? null,
   confermato: Boolean(p.account_confermato),
 });
 
@@ -227,7 +228,7 @@ export default {
       if (m && metodo === 'GET') {
         const ordine = await ordineCompleto(env, Number(m[1]));
         if (!ordine) return risposta({ errore: 'Ordine non trovato' }, 404);
-        const csv = csvImportEfei(ordine, ordine.partecipanti);
+        const csv = csvPartecipanti(ordine, ordine.partecipanti);
         return risposta(csv, 200, 'text/csv; charset=utf-8', {
           'Content-Disposition': `attachment; filename="${nomeFileCsv(ordine.riferimento)}"`,
         });

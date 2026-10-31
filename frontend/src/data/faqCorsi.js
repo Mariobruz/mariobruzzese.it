@@ -7,7 +7,7 @@
  * Il file non importa nulla, così lo usano sia la pagina React sia prerender.js.
  */
 
-// Validità dell'e-learning, dal prospetto "Modalità di erogazione" (Vademecum EFEI + ASR 2025)
+// Validità dell'e-learning, dal prospetto "Modalità di erogazione" (Accordo Stato-Regioni 2025)
 function rispostaOnline(c) {
   const id = c.id;
   if (c.categoria === 'rls' || id.includes('rls')) {
@@ -26,7 +26,7 @@ function rispostaOnline(c) {
     return 'Sì, la formazione per gli addetti del settore alimentare può essere svolta in e-learning. Durata e rinnovo sono stabiliti dalla Regione in cui lavori: verifica le regole della tua Regione.';
   }
   if (c.categoria === 'formatori') {
-    return 'Il corso è erogato in e-learning asincrono dall’ente EFEI, con test finale e attestato. Per i requisiti per qualificarsi come formatore vale il Decreto interministeriale 6 marzo 2013.';
+    return 'Il corso è erogato in e-learning asincrono, con test finale e attestato di O.P.N. Italia Lavoro – CNL – EBAFoS. Per i requisiti per qualificarsi come formatore vale il Decreto interministeriale 6 marzo 2013.';
   }
   if (id.endsWith('-eng')) {
     return 'Sì: la formazione generale dei lavoratori può essere svolta in e-learning. La formazione deve essere comprensibile per chi la segue: la versione in inglese serve proprio ai lavoratori che non conoscono bene l’italiano.';
@@ -64,7 +64,7 @@ export function faqCorso(c, scadenza) {
   lista.push(
     {
       d: 'Chi rilascia l’attestato?',
-      r: 'Il corso è erogato da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro, tramite l’Unità Operativa 2403, e promosso da MB Consulting. L’attestato ha un QR code che permette di verificarne l’autenticità.',
+      r: 'Il soggetto formatore indicato sull’attestato è O.P.N. Italia Lavoro – CNL – EBAFoS; MB Consulting è soggetto attuatore in convenzione con O.P.N. Italia Lavoro (Convenzione n. CFAL.1866). L’attestato ha un QR code che permette di verificarne l’autenticità sul sito opnitalialavoro.it.',
     },
     {
       d: 'Quanto costa e come si paga?',
@@ -72,7 +72,7 @@ export function faqCorso(c, scadenza) {
     },
     {
       d: 'Quando posso iniziare il corso?',
-      r: 'Entro 24 ore lavorative dal pagamento inseriamo i partecipanti sulla piattaforma dell’ente. Ciascuno riceve un’email per confermare il proprio account e, dopo la conferma, trova il corso pronto da seguire.',
+      r: 'Entro 24 ore lavorative dal pagamento iscriviamo i partecipanti sulla piattaforma e-learning: ciascuno riceve dalla piattaforma O.P.N. Italia Lavoro un’email con link di accesso, nome utente e password (può finire nello spam), completa i suoi dati e inizia il corso.',
     },
   );
   return lista;

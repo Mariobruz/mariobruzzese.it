@@ -10,14 +10,13 @@
  * dal catalogo qui dentro.
  */
 import { corsoPerId } from './catalogo';
-import { csvImportEfei, nomeFileCsv } from './csv';
+import { csvPartecipanti, nomeFileCsv } from './csv';
 import { creaSessionePagamento, verificaWebhook } from './stripe';
 import { emailAmministratore, emailClienteBonifico, emailClienteCarta, inviaEmail } from './email';
 import {
   validaAteco,
   validaCap,
   validaCodiceFiscale,
-  validaDataNascita,
   validaEmail,
   validaFatturazioneElettronica,
   validaObbligatorio,
@@ -40,7 +39,7 @@ const LIMITI_FATTURAZIONE = {
 const LIMITI_PARTECIPANTE = {
   nome: 60, cognome: 60, codiceFiscale: 20, dataNascita: 10, sesso: 1,
   comuneNascita: 80, provinciaNascita: 4, regioneNascita: 40, nazioneNascita: 30,
-  email: 120, telefono: 25, qualifica: 80,
+  email: 120, telefono: 25, qualifica: 80, corsoId: 60,
 };
 
 // caratteri di markup e di controllo: in un'anagrafica non servono mai
@@ -133,10 +132,7 @@ function verificaIscrizione(corpo) {
     e(validaObbligatorio(p.nome, 'il nome'));
     e(validaObbligatorio(p.cognome, 'il cognome'));
     e(validaCodiceFiscale(p.codiceFiscale));
-    e(validaDataNascita(p.dataNascita));
-    e(validaObbligatorio(p.comuneNascita, 'il comune di nascita'));
-    e(validaObbligatorio(p.provinciaNascita, 'la provincia di nascita'));
-    e(validaObbligatorio(p.qualifica, 'la qualifica'));
+    // per la piattaforma bastano nome, cognome, codice fiscale ed email
     e(validaEmail(p.email));
     if (p.provinciaNascita && !provinciaValida(p.provinciaNascita)) e('provincia di nascita non valida');
     if (p.dataNascita && !/^\d{4}-\d{2}-\d{2}$/.test(p.dataNascita)) e('data di nascita non valida');
@@ -161,7 +157,15 @@ function verificaIscrizione(corpo) {
     );
   }
 
-  if (/(^|-)rls-/.test(corso.id) && !consensi.ccnl) {
+  // Ordini aziendali: ogni partecipante può avere un corso diverso. Il prezzo viene sempre dal catalogo.
+  partecipanti.forEach((p, i) => {
+    const scelto = f.tipo === 'azienda' && p.corsoId ? corsoPerId(p.corsoId) : corso;
+    if (!scelto) aggiungi(`Partecipante ${i + 1}: corso non riconosciuto`);
+    p.corso = scelto || corso;
+    delete p.corsoId;
+  });
+
+  if (partecipanti.some((p) => /(^|-)rls-/.test(p.corso.id)) && !consensi.ccnl) {
     aggiungi('Per i corsi RLS serve la dichiarazione sul CCNL che ammette la formazione in e-learning');
   }
 
@@ -174,6 +178,13 @@ function verificaIscrizione(corpo) {
     : null;
 
   return { errori, corso, fatturazione: f, partecipanti, consensi, metodo, provenienza };
+}
+
+/** Corso "di testata" dell'ordine: quello della pagina, o "Più corsi" se i partecipanti ne hanno di diversi. */
+function corsoOrdine(corso, partecipanti) {
+  const diversi = [...new Set(partecipanti.map((p) => p.corso.id))];
+  if (diversi.length <= 1) return partecipanti.length ? partecipanti[0].corso : corso;
+  return { ...corso, titolo: `Più corsi (${diversi.length})`, ore: null, prezzo: 0 };
 }
 
 async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza }) {
@@ -205,24 +216,38 @@ async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, m
   const riferimento = `MB-${new Date().getFullYear()}-${String(id).padStart(4, '0')}`;
   await env.DB.prepare('UPDATE ordini SET riferimento = ? WHERE id = ?').bind(riferimento, id).run();
 
-  const inserimenti = partecipanti.map((p) =>
-    env.DB.prepare(
-      `INSERT INTO partecipanti (ordine_id, nome, cognome, email, codice_fiscale, data_nascita,
-         comune_nascita, provincia_nascita, regione_nascita, sesso, telefono, qualifica)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    ).bind(
-      id, p.nome, p.cognome, p.email, (p.codiceFiscale || '').toUpperCase(), p.dataNascita,
-      p.comuneNascita, p.provinciaNascita, p.regioneNascita || '', p.sesso || '',
-      p.telefono || '', p.qualifica
-    )
-  );
-  if (inserimenti.length) await env.DB.batch(inserimenti);
+  const base = (p) => [
+    id, p.nome, p.cognome, p.email, (p.codiceFiscale || '').toUpperCase(), p.dataNascita || '',
+    p.comuneNascita || '', p.provinciaNascita || '', p.regioneNascita || '', p.sesso || '',
+    p.telefono || '', p.qualifica || '',
+  ];
+  const colonneP = `ordine_id, nome, cognome, email, codice_fiscale, data_nascita,
+         comune_nascita, provincia_nascita, regione_nascita, sesso, telefono, qualifica`;
+  if (partecipanti.length) {
+    try {
+      await env.DB.batch(partecipanti.map((p) =>
+        env.DB.prepare(
+          `INSERT INTO partecipanti (${colonneP}, corso_id, corso_titolo, corso_ore, prezzo)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(...base(p), p.corso.id, p.corso.titolo, p.corso.ore, p.corso.prezzo)
+      ));
+    } catch (e) {
+      // database non ancora aggiornato (mancano le colonne del corso per partecipante)
+      if (!/corso_|prezzo/i.test(String(e && e.message))) throw e;
+      console.error('colonne corso dei partecipanti mancanti: eseguire la migrazione del database');
+      await env.DB.batch(partecipanti.map((p) =>
+        env.DB.prepare(
+          `INSERT INTO partecipanti (${colonneP}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(...base(p))
+      ));
+    }
+  }
 
   return { id, riferimento };
 }
 
 async function inviaNotifiche(env, { ordine, partecipanti, riferimento, totale, stato }) {
-  const csv = csvImportEfei(ordine, partecipanti);
+  const csv = csvPartecipanti(ordine, partecipanti);
   const messaggi = [
     emailAmministratore(env, {
       ordine, partecipanti, riferimento, totale, stato,
@@ -289,11 +314,11 @@ async function gestisciIscrizione(env, richiesta) {
   }
 
   const { corso, fatturazione, partecipanti, consensi, metodo, provenienza } = controllo;
-  const totale = corso.prezzo * partecipanti.length;
-  const ordine = { corso, fatturazione };
+  const totale = partecipanti.reduce((somma, p) => somma + p.corso.prezzo, 0);
+  const ordine = { corso: corsoOrdine(corso, partecipanti), fatturazione };
 
   const { id, riferimento } = await salvaOrdine(env, {
-    corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza,
+    corso: ordine.corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza,
   });
 
   if (metodo === 'bonifico') {
@@ -359,19 +384,23 @@ async function gestisciWebhook(env, richiesta) {
 
   const righe = await env.DB.prepare('SELECT * FROM partecipanti WHERE ordine_id = ?')
     .bind(ordine.id).all();
+  const corsoTestata = {
+    id: ordine.corso_id, titolo: ordine.corso_titolo,
+    sku: ordine.corso_sku, ore: ordine.corso_ore, prezzo: ordine.prezzo_unitario,
+  };
   const partecipanti = (righe.results || []).map((p) => ({
     nome: p.nome, cognome: p.cognome, email: p.email, codiceFiscale: p.codice_fiscale,
     dataNascita: p.data_nascita, comuneNascita: p.comune_nascita,
     provinciaNascita: p.provincia_nascita, regioneNascita: p.regione_nascita,
     telefono: p.telefono, qualifica: p.qualifica, sesso: p.sesso,
+    corso: p.corso_id
+      ? { id: p.corso_id, titolo: p.corso_titolo, ore: p.corso_ore, prezzo: p.prezzo }
+      : corsoTestata,
   }));
 
   await inviaNotifiche(env, {
     ordine: {
-      corso: {
-        id: ordine.corso_id, titolo: ordine.corso_titolo,
-        sku: ordine.corso_sku, ore: ordine.corso_ore, prezzo: ordine.prezzo_unitario,
-      },
+      corso: corsoTestata,
       fatturazione: JSON.parse(ordine.fatturazione),
     },
     partecipanti,

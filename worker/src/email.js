@@ -1,4 +1,3 @@
-import { province } from './province';
 /**
  * email.js — invio tramite Brevo (api.brevo.com, dati in UE).
  *
@@ -63,16 +62,21 @@ async function invia(env, { a, oggetto, html, allegati }) {
   return risposta.json();
 }
 
-const elencoPartecipanti = (partecipanti) =>
+/** Corso del singolo partecipante (ordini con più corsi); se manca, quello dell'ordine. */
+const corsoDi = (p, ordine) => p.corso
+  || (p.corsoTitolo ? { titolo: p.corsoTitolo, prezzo: p.prezzo } : ordine.corso);
+const corsoLeggibile = (c) => `${c.titolo}${c.ore ? ` (${c.ore} ore)` : ''}`;
+
+const elencoPartecipanti = (partecipanti, ordine) =>
   partecipanti
-    .map((p) => `<li>${esc(p.nome)} ${esc(p.cognome)} — <strong>${esc(p.email)}</strong></li>`)
+    .map((p) => `<li>${esc(p.nome)} ${esc(p.cognome)} — <strong>${esc(p.email)}</strong> — ${esc(corsoLeggibile(corsoDi(p, ordine)))}</li>`)
     .join('');
 
 const avvisoConferma = `
   <p style="background:#f5f5f5;padding:14px;border-radius:8px">
-    <strong>Passaggio necessario:</strong> ogni partecipante riceverà dalla piattaforma un’email
-    per confermare il proprio account. Finché non la conferma, il corso non può essergli abbinato.
-    Se non arriva entro poche ore, va controllata anche la posta indesiderata.
+    Ogni partecipante riceverà dalla piattaforma O.P.N. Italia Lavoro (non da questo indirizzo) un’email con il link di accesso, nome utente e password.
+    Al primo accesso completerà i suoi dati e potrà iniziare il corso.
+    <strong>L’email può finire nello spam o nella posta indesiderata: controllate anche lì.</strong>
   </p>`;
 
 export function emailClienteCarta(env, { ordine, partecipanti, riferimento }) {
@@ -81,15 +85,15 @@ export function emailClienteCarta(env, { ordine, partecipanti, riferimento }) {
     oggetto: `Iscrizione confermata — ${ordine.corso.titolo} (${riferimento})`,
     html: `<div style="${stile}">
       <h2>Iscrizione confermata</h2>
-      <p>Abbiamo ricevuto il pagamento per <strong>${ordine.corso.titolo}</strong>
-      (${ordine.corso.ore} ore) — riferimento <strong>${riferimento}</strong>.</p>
+      <p>Abbiamo ricevuto il pagamento per <strong>${esc(corsoLeggibile(ordine.corso))}</strong>
+      — riferimento <strong>${riferimento}</strong>.</p>
       <p>Partecipanti iscritti:</p>
-      <ul>${elencoPartecipanti(partecipanti)}</ul>
-      <p>Entro 24 ore registriamo i partecipanti sulla piattaforma.</p>
+      <ul>${elencoPartecipanti(partecipanti, ordine)}</ul>
+      <p>Entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma e-learning.</p>
       ${avvisoConferma}
-      <p>Superato il test finale, l’attestato — rilasciato da EFEI, con l’indicazione dell’Ateneo delle Professioni – Università AUGE, Dipartimento Salute e Sicurezza sul Lavoro — si scarica direttamente dalla piattaforma.</p>
-      <p style="color:#666;font-size:13px">MB Consulting di Mario Bruzzese — mandataria per la promozione
-      e la vendita dei prodotti formativi EFEI, Unità Operativa codice 2403.</p>
+      <p>Superato il test finale si riceve l’attestato (soggetto formatore: O.P.N. Italia Lavoro – CNL – EBAFoS), verificabile tramite QR code sul sito opnitalialavoro.it.</p>
+      <p style="color:#666;font-size:13px">MB Consulting di Mario Bruzzese — soggetto attuatore in convenzione
+      con O.P.N. Italia Lavoro (Convenzione n. CFAL.1866).</p>
     </div>`,
   };
 }
@@ -115,21 +119,15 @@ export function emailClienteBonifico(env, { ordine, partecipanti, riferimento, t
         <a href="mailto:${env.EMAIL_AMMINISTRATORE}?subject=Contabile%20${riferimento}">${env.EMAIL_AMMINISTRATORE}</a>
         indicando il riferimento <strong>${riferimento}</strong>: così acceleriamo la pratica di iscrizione.
       </div>
-      <p>Corso: <strong>${ordine.corso.titolo}</strong> (${ordine.corso.ore} ore), per:</p>
-      <ul>${elencoPartecipanti(partecipanti)}</ul>
-      <p>Ricevuto il bonifico, entro 24 ore registriamo i partecipanti sulla piattaforma.</p>
+      <p>Corso: <strong>${esc(corsoLeggibile(ordine.corso))}</strong>, per:</p>
+      <ul>${elencoPartecipanti(partecipanti, ordine)}</ul>
+      <p>Ricevuto il bonifico, entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma e-learning.</p>
       ${avvisoConferma}
-      <p style="color:#666;font-size:13px">MB Consulting di Mario Bruzzese — mandataria per la promozione
-      e la vendita dei prodotti formativi EFEI, Unità Operativa codice 2403.</p>
+      <p style="color:#666;font-size:13px">MB Consulting di Mario Bruzzese — soggetto attuatore in convenzione
+      con O.P.N. Italia Lavoro (Convenzione n. CFAL.1866).</p>
     </div>`,
   };
 }
-
-const nomeProvincia = (sigla) => (province.find((p) => p.sigla === (sigla || '').toUpperCase()) || {}).nome || sigla || '';
-const dataIt = (iso) => {
-  const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
-  return m ? `${m[3]}/${m[2]}/${m[1]}` : iso || '';
-};
 
 /** Tabella a due colonne: etichetta | valore, pronta da copiare campo per campo. */
 function tabella(titolo, righe, nota) {
@@ -142,6 +140,18 @@ function tabella(titolo, righe, nota) {
         .map(([k, v]) => `<tr><td style="${td};color:#666;white-space:nowrap">${k}</td><td style="${td}"><strong>${esc(v) || '—'}</strong></td></tr>`)
         .join('')}
     </table>`;
+}
+
+/** "2 × Corso A (99 €) + 1 × Corso B (29 €)": righe per la fattura. */
+function righeFattura(partecipanti, ordine) {
+  const perCorso = new Map();
+  partecipanti.forEach((p) => {
+    const c = corsoDi(p, ordine);
+    const voce = perCorso.get(c.titolo) || { c, n: 0 };
+    voce.n += 1;
+    perCorso.set(c.titolo, voce);
+  });
+  return [...perCorso.values()].map(({ c, n }) => `${n} × ${c.titolo} (${c.prezzo} €)`).join(' + ');
 }
 
 export function emailAmministratore(env, { ordine, partecipanti, riferimento, totale, stato, csv, nomeFile }) {
@@ -159,52 +169,21 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
     ['Codice SDI', azienda ? f.sdi : undefined],
     ['PEC', azienda ? f.pec : undefined],
     ['Email', f.email],
-    ['Descrizione', `${ordine.corso.titolo} — corso e-learning ${ordine.corso.ore} ore — rif. ${riferimento}`],
-    ['Quantità × prezzo', `${n} × ${ordine.corso.prezzo} €`],
+    ['Descrizione', `${corsoLeggibile(ordine.corso)} — corsi e-learning — rif. ${riferimento}`],
+    ['Righe', righeFattura(partecipanti, ordine)],
     ['Totale', `${totale} € — operazione in regime forfettario, non soggetta a IVA (art. 1, cc. 54-89, L. 190/2014)`],
     ['Pagamento', stato === 'pagato' ? 'Carta (Stripe) — incassato' : 'Bonifico — in attesa'],
   ], azienda ? '' : 'Cliente privato: fattura elettronica al codice fiscale, codice destinatario 0000000.');
 
-  const piattaforma = !azienda
-    ? `<h3 style="margin:28px 0 8px">2 · Piattaforma EFEI</h3>
-      <p><strong>Cliente privato: nessuna azienda da creare.</strong> Importa direttamente il CSV allegato:
-      l’utente viene creato senza azienda (la colonna AZIENDA è vuota).</p>`
-    : tabella('2 · Piattaforma EFEI → Anagrafiche → Crea azienda', [
-    ['Tipologia', azienda ? 'Azienda' : 'Privato'],
-    ['Codice', '(progressivo della piattaforma)'],
-    ['Ragione sociale', intestatario],
-    ['Email', f.email],
-    ['Email PEC', f.pec || ''],
-    ['Telefono', f.telefono],
-    ['Indirizzo', f.indirizzo],
-    ['Nazione', 'Italia'],
-    ['Regione', f.regione || (province.find((x) => x.sigla === (f.provincia || '').toUpperCase()) || {}).regione],
-    ['Provincia', nomeProvincia(f.provincia)],
-    ['Comune', f.citta],
-    ['CAP', f.cap],
-    ['Partita IVA', azienda ? f.partitaIva : '— (privato)'],
-    ['Codice fiscale', azienda ? '' : f.codiceFiscale],
-    ['SDI', f.sdi || ''],
-    ['Codici ATECO', f.ateco],
-    ['Referente', azienda ? f.referente : undefined],
-  ], 'Crea l’azienda prima di importare il CSV: il CSV la collega ai partecipanti tramite la partita IVA.');
-
   const partecipantiHtml = partecipanti
     .map((p, i) =>
-      tabella(`3 · Partecipante ${i + 1} di ${n}`, [
+      tabella(`2 · Partecipante ${i + 1} di ${n}`, [
         ['Nome', p.nome],
         ['Cognome', p.cognome],
-        ['Email (username)', p.email],
         ['Codice fiscale', (p.codiceFiscale || '').toUpperCase()],
-        ['Sesso', p.sesso],
-        ['Data di nascita', dataIt(p.dataNascita)],
-        ['Comune di nascita', p.comuneNascita],
-        ['Provincia di nascita', nomeProvincia(p.provinciaNascita)],
-        ['Regione di nascita', p.regioneNascita],
-        ['Nazione di nascita', 'Italia'],
-        ['Telefono', p.telefono],
-        ['Qualifica', p.qualifica],
-        ['Corso (SKU)', ordine.corso.sku],
+        ['Email', p.email],
+        ['Corso', corsoLeggibile(corsoDi(p, ordine))],
+        ['Prezzo', `${corsoDi(p, ordine).prezzo} €`],
       ])
     )
     .join('');
@@ -218,19 +197,18 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
     oggetto: `[${etichetta}] ${riferimento} — ${n} partecipant${n > 1 ? 'i' : 'e'} — ${ordine.corso.titolo}`,
     html: `<div style="${stile}">
       <h2 style="margin-bottom:4px">${etichetta} · ${riferimento}</h2>
-      <p style="margin-top:0"><strong>${esc(ordine.corso.titolo)}</strong> (${ordine.corso.ore} ore) — SKU <code>${esc(ordine.corso.sku)}</code>
-      — ${n} × ${ordine.corso.prezzo}&nbsp;€ = <strong>${totale}&nbsp;€</strong></p>
+      <p style="margin-top:0"><strong>${esc(corsoLeggibile(ordine.corso))}</strong>
+      — ${esc(righeFattura(partecipanti, ordine))} = <strong>${totale}&nbsp;€</strong></p>
       <p style="background:#f5f5f5;padding:12px;border-radius:8px">
         ${stato === 'pagato'
           ? (azienda
-            ? '<strong>Pagato.</strong> Entro 24 ore: crea l’azienda (sezione 2), importa il CSV allegato con «Importa utenti», abbina il corso dopo la conferma dell’account.'
-            : '<strong>Pagato.</strong> Entro 24 ore: importa il CSV allegato con «Importa utenti» (privato, nessuna azienda da creare), abbina il corso dopo la conferma dell’account.')
+            ? '<strong>Pagato.</strong> Entro 24 ore: iscrivi i partecipanti sulla piattaforma (nome, cognome, codice fiscale, email — sezione 2 o CSV allegato).'
+            : '<strong>Pagato.</strong> Entro 24 ore: iscrivi i partecipanti sulla piattaforma (nome, cognome, codice fiscale, email — sezione 2 o CSV allegato).')
           : '<strong>In attesa del bonifico</strong> con causale ' + riferimento + '. Non caricare nulla in piattaforma prima dell’accredito.'}
       </p>
       ${fattura}
-      ${piattaforma}
       ${partecipantiHtml}
-      <p style="margin-top:28px"><strong>Allegato:</strong> ${esc(nomeFile)} — CSV pronto per «Importa utenti».</p>
+      <p style="margin-top:28px"><strong>Allegato:</strong> ${esc(nomeFile)} — elenco partecipanti (nome, cognome, codice fiscale, email, corso).</p>
     </div>`,
     allegati: csv ? [{ name: nomeFile, content: base64(csv) }] : undefined,
   };

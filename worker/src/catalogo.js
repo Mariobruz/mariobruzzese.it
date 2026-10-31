@@ -234,7 +234,7 @@ export const catalogo = [
   }
 ];
 
-// Corsi non vendibili in e-learning secondo il Vademecum EFEI: il server li rifiuta.
+// Corsi non vendibili in e-learning: il server li rifiuta.
 const SOSPESI = new Set(['rspp-datore-lavoro-8h', 'aggiornamento-csp-cse-40h']);
 
 // ---------------------------------------------------------------- PREZZO DI LANCIO

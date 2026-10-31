@@ -16,6 +16,32 @@ function formEncode(oggetto, prefisso = '', accumulatore = []) {
   return accumulatore;
 }
 
+/** Una riga di pagamento per ogni corso, con la quantità di partecipanti iscritti a quel corso. */
+function righePagamento(ordine, partecipanti) {
+  const perCorso = new Map();
+  partecipanti.forEach((p) => {
+    const c = p.corso || ordine.corso;
+    const voce = perCorso.get(c.id) || { corso: c, quantita: 0 };
+    voce.quantita += 1;
+    perCorso.set(c.id, voce);
+  });
+  const righe = {};
+  [...perCorso.values()].forEach(({ corso, quantita }, i) => {
+    righe[i] = {
+      quantity: quantita,
+      price_data: {
+        currency: 'eur',
+        unit_amount: Math.round(corso.prezzo * 100),
+        product_data: {
+          name: `${corso.titolo} — ${corso.ore} ore`,
+          description: 'Corso e-learning asincrono · IVA compresa',
+        },
+      },
+    };
+  });
+  return righe;
+}
+
 export async function creaSessionePagamento(env, { ordine, partecipanti, riferimento }) {
   const corpo = formEncode({
     mode: 'payment',
@@ -25,19 +51,7 @@ export async function creaSessionePagamento(env, { ordine, partecipanti, riferim
     success_url: `${env.SITO_URL}/corsi-sicurezza?iscrizione=ok&rif=${riferimento}`,
     cancel_url: `${env.SITO_URL}/corsi-sicurezza?iscrizione=annullata`,
     metadata: { riferimento, corso: ordine.corso.id, partecipanti: String(partecipanti.length) },
-    line_items: {
-      0: {
-        quantity: partecipanti.length,
-        price_data: {
-          currency: 'eur',
-          unit_amount: Math.round(ordine.corso.prezzo * 100),
-          product_data: {
-            name: `${ordine.corso.titolo} — ${ordine.corso.ore} ore`,
-            description: 'Corso e-learning asincrono · IVA compresa',
-          },
-        },
-      },
-    },
+    line_items: righePagamento(ordine, partecipanti),
   }).join('&');
 
   const risposta = await fetch('https://api.stripe.com/v1/checkout/sessions', {

@@ -43,7 +43,17 @@ CREATE TABLE IF NOT EXISTS partecipanti (
   sesso             TEXT,
   telefono          TEXT,
   qualifica         TEXT NOT NULL,
-  account_confermato INTEGER DEFAULT 0   -- da aggiornare a mano: la piattaforma non ce lo dice
+  account_confermato INTEGER DEFAULT 0,  -- da aggiornare a mano: la piattaforma non ce lo dice
+  corso_id          TEXT,               -- ordini aziendali: ogni partecipante può avere un corso diverso
+  corso_titolo      TEXT,
+  corso_ore         INTEGER,
+  prezzo            INTEGER
 );
+
+-- Database già esistente? Aggiungere le colonne del corso per partecipante una volta sola con:
+--   wrangler d1 execute iscrizioni-corsi --remote --command="ALTER TABLE partecipanti ADD COLUMN corso_id TEXT"
+--   wrangler d1 execute iscrizioni-corsi --remote --command="ALTER TABLE partecipanti ADD COLUMN corso_titolo TEXT"
+--   wrangler d1 execute iscrizioni-corsi --remote --command="ALTER TABLE partecipanti ADD COLUMN corso_ore INTEGER"
+--   wrangler d1 execute iscrizioni-corsi --remote --command="ALTER TABLE partecipanti ADD COLUMN prezzo INTEGER"
 
 CREATE INDEX IF NOT EXISTS idx_partecipanti_ordine ON partecipanti (ordine_id);

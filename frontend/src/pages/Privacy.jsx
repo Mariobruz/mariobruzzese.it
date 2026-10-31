@@ -64,7 +64,7 @@ const Privacy = () => (
       <Elenco
         voci={[
           'dati di intestazione: ragione sociale o nome e cognome, partita IVA o codice fiscale, sede, provincia, codice destinatario o PEC per la fatturazione elettronica, email e telefono di riferimento;',
-          'dati di ciascun partecipante: nome, cognome, codice fiscale, data e luogo di nascita, indirizzo email, telefono, qualifica ricoperta;',
+          'dati di ciascun partecipante: nome, cognome, codice fiscale e indirizzo email (gli altri dati anagrafici il partecipante li inserisce direttamente sulla piattaforma e-learning);',
           'dati relativi all’ordine: corsi selezionati, importo, metodo di pagamento, riferimento della pratica.',
         ]}
       />
@@ -96,7 +96,7 @@ const Privacy = () => (
       <p>I dati sono accessibili al titolare e possono essere comunicati ai seguenti soggetti.</p>
       <Elenco
         voci={[
-          'EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro, Unità Operativa 2403, che eroga il corso e rilascia l’attestato. Opera in qualità di titolare autonomo del trattamento per le finalità didattiche e certificative.',
+          'O.P.N. Italia Lavoro – Organismo Paritetico Nazionale (C.F. 96044960795), per il rilascio e la validazione degli attestati, designato responsabile del trattamento ai sensi dell’art. 28 del Regolamento (UE) 2016/679; si avvale di CNL Informatica s.r.l.s. come sub-responsabile per la gestione della piattaforma e-learning.',
           'Stripe Payments Europe Ltd., per l’esecuzione dei pagamenti con carta. I dati della carta sono trattati direttamente da Stripe e non transitano dai sistemi del titolare.',
           'Brevo (Sendinblue SAS), per l’invio delle email transazionali e delle comunicazioni commerciali, in qualità di responsabile del trattamento.',
           'Cloudflare, Inc., che ospita il servizio applicativo e il database in cui sono registrati gli ordini, in qualità di responsabile del trattamento.',

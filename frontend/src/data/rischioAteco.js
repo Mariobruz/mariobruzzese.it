@@ -153,3 +153,59 @@ export const noteAteco = [
   'Nella sezione Q l’Allegato IV indica a rischio medio la sola assistenza sociale non residenziale (88): il resto della sanità e dell’assistenza sociale resta a rischio alto.',
   'Il codice ATECO dà il livello di partenza. La durata definitiva dipende dalla valutazione dei rischi dell’azienda e le ore dell’Accordo sono minime: se i rischi effettivi sono maggiori, le ore aumentano.',
 ];
+
+// ---------------------------------------------------------------- ATECO 2025 completo
+// L'elenco completo dei codici (ISTAT, ATECO 2025) sta in /data/ateco-2025.json e si
+// carica solo su questa pagina. Il livello di rischio si ricava dalla divisione
+// (prime due cifre): le divisioni ATECO 2025 hanno lo stesso numero di quelle 2007
+// usate dall'Allegato IV (la 45 non esiste più: il commercio di autoveicoli è in 46/47).
+
+/** "561011" o "56.10.11" → "56.10.11"; "5611" → "56.11"; "561" → "56.1" */
+export function normalizzaCodice(testo) {
+  const d = String(testo || '').replace(/[^\d]/g, '').slice(0, 6);
+  if (d.length < 2) return '';
+  let c = d.slice(0, 2);
+  if (d.length > 2) c += '.' + d.slice(2, 4);
+  if (d.length > 4) c += '.' + d.slice(4, 6);
+  return c;
+}
+
+export const divisionePerCodice = (codice) => divisioni.find((d) => d[0] === String(codice).slice(0, 2)) || null;
+
+/**
+ * Ricerca nell'elenco completo. Restituisce { codice, figli, vicino, testo }:
+ * - codice: la voce esatta (o la più vicina esistente, segnalata da vicino=true);
+ * - figli: le sottocategorie a 6 cifre che iniziano con il codice cercato;
+ * - testo: risultati della ricerca per parole.
+ */
+export function cercaAtecoCompleto(dati, testo) {
+  const q = String(testo || '').trim();
+  if (!dati || !q) return null;
+  const codici = dati.codici;
+  const cifre = q.replace(/[^\d]/g, '');
+  if (cifre.length >= 2 && cifre.length >= q.replace(/[\s.,-]/g, '').length * 0.6) {
+    const cercato = normalizzaCodice(q);
+    let prefisso = cercato;
+    let voce = codici.find((c) => c[0] === prefisso);
+    while (!voce && prefisso.length > 2) {
+      prefisso = prefisso.slice(0, -1).replace(/\.$/, '');
+      voce = codici.find((c) => c[0] === prefisso);
+    }
+    const figli = voce ? codici.filter((c) => c[0].length === 8 && c[0] !== voce[0] && c[0].startsWith(voce[0])) : [];
+    return { codice: voce || null, vicino: Boolean(voce && voce[0] !== cercato), cercato, figli };
+  }
+  // "ristorante" deve trovare "ristoranti": si confronta la parola senza l'ultima lettera
+  const parole = q.toLowerCase().split(/\s+/).filter((p) => p.length > 2).map((p) => (p.length > 4 ? p.slice(0, -1) : p));
+  if (!parole.length) return { testo: [] };
+  // parole corte ("bar") solo a inizio parola, per non trovare "imbarcazioni" o "barre"
+  const corte = parole.map((p) => (p.length <= 4 ? new RegExp('(^|[^a-zàèéìòù])' + p + '([^a-zàèéìòù]|$)') : null));
+  const trovati = codici.filter((c) => {
+    const t = c[1].toLowerCase();
+    return parole.every((p, i) => (corte[i] ? corte[i].test(t) : t.includes(p)));
+  });
+  // prima le sottocategorie complete (6 cifre), che sono i codici della visura
+  // poi quelle in cui la parola compare prima nel titolo ("Attività di ristoranti" prima di "Commercio di macchine per ristoranti")
+  const pos = (c) => c[1].toLowerCase().indexOf(parole[0]);
+  trovati.sort((a, b) => (b[0].length === 8) - (a[0].length === 8) || pos(a) - pos(b) || a[0].localeCompare(b[0]));
+  return { testo: trovati.slice(0, 20), totale: trovati.length };
+}

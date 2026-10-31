@@ -15,15 +15,15 @@ const ACCORDO = 'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR)'
 
 const VANTAGGI = [
   { icona: Laptop, titolo: 'Quando vuoi tu', testo: 'Corsi asincroni: si seguono da computer, tablet o telefono, negli orari che decidi tu. Nessuna aula, nessuna trasferta.' },
-  { icona: BadgeCheck, titolo: 'Attestato valido', testo: "Percorsi progettati ed erogati da EFEI, Organismo Paritetico nazionale, secondo il D.Lgs. 81/2008 e il nuovo Accordo Stato-Regioni del 17 aprile 2025. L'attestato, firmato da EFEI e da A.U.G.E. Università – Dipartimento Salute e Sicurezza sul Lavoro, è valido per il riconoscimento dei CFU secondo i regolamenti AUGE ed è verificabile tramite QR code." },
+  { icona: BadgeCheck, titolo: 'Attestato valido', testo: "Corsi in convenzione con O.P.N. Italia Lavoro, conformi al D.Lgs. 81/2008 e al nuovo Accordo Stato-Regioni del 17 aprile 2025. L'attestato indica come soggetto formatore O.P.N. Italia Lavoro – CNL – EBAFoS ed è verificabile tramite QR code sul sito opnitalialavoro.it." },
   { icona: Users, titolo: 'Anche per più dipendenti', testo: 'Iscrivi in una volta sola tutti i lavoratori da formare: i dati di ciascuno restano separati e tracciati.' },
 ];
 
 const PASSI = [
   { n: '01', titolo: 'Scegli il corso', testo: 'Individua il corso che copre il tuo obbligo formativo e indica quante persone devi iscrivere.' },
-  { n: '02', titolo: 'Inserisci i dati e paghi', testo: 'Compili anagrafica dei partecipanti e dati di fatturazione, poi paghi online in modo sicuro.' },
-  { n: '03', titolo: 'Confermi l’account', testo: 'Entro 24 ore registriamo i partecipanti sulla piattaforma. A ciascuno arriva un’email per confermare il proprio account: va confermata, è il passaggio senza il quale il corso non può essere abbinato.' },
-  { n: '04', titolo: 'Inizi il corso', testo: 'Confermato l’account, abbiniamo il corso acquistato e si può partire. Superato il test finale, l’attestato si scarica dalla piattaforma.' },
+  { n: '02', titolo: 'Inserisci i dati e paghi', testo: 'Indichi i dati per la fattura (privato o azienda) e, per ogni partecipante, nome, cognome, codice fiscale ed email. Poi paghi online in modo sicuro.' },
+  { n: '03', titolo: 'Ricevi le credenziali', testo: 'Entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma: a ciascuno arriva dalla piattaforma O.P.N. Italia Lavoro (non dal nostro sito) un’email con link di accesso, nome utente e password. Può finire nello spam: controlla anche lì.' },
+  { n: '04', titolo: 'Inizi il corso', testo: 'Al primo accesso il partecipante completa i suoi dati e inizia il corso. Superato il test finale, riceve l’attestato verificabile tramite QR code.' },
 ];
 
 /** Copia negli appunti l'indirizzo della scheda: comodo per campagne e messaggi. */
@@ -150,15 +150,15 @@ export default function CorsiSicurezza() {
               )}
               <div className="bg-gray-50 rounded-xl p-5 text-sm text-gray-600 text-left mb-8">
                 <p className="mb-2">
-                  Entro 24 ore lavorative registriamo i partecipanti sulla piattaforma dell’ente.
+                  Entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma e-learning.
                 </p>
                 <p className="mb-2">
-                  <strong>Passaggio necessario:</strong> ogni partecipante riceverà un’email per confermare
-                  il proprio account. Finché non la conferma, il corso non può essergli abbinato — se non
-                  arriva, va controllata anche la posta indesiderata.
+                  Ogni partecipante riceverà dalla piattaforma O.P.N. Italia Lavoro (non dal nostro sito) un’email con il link di accesso, nome utente e password; al primo
+                  accesso completerà i suoi dati e inizierà il corso. <strong>L’email può finire nello spam o nella
+                  posta indesiderata: controllate anche lì.</strong>
                 </p>
                 <p>
-                  Superato il test finale, l’attestato si scarica direttamente dalla piattaforma.
+                  Superato il test finale si riceve l’attestato, verificabile tramite QR code.
                 </p>
               </div>
             </>
@@ -317,13 +317,11 @@ export default function CorsiSicurezza() {
           )}
 
           <div className="mt-12 bg-gray-50 rounded-xl p-6 text-sm text-gray-600">
-            Corso erogato da <strong>EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro</strong>
-            tramite l’Unità Operativa codice 2403, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
-            all’<strong>{ACCORDO}</strong>. MB Consulting cura la promozione, l’iscrizione e l’assistenza;
-            l’erogazione è di EFEI e di <strong>A.U.G.E. Università – Ateneo delle Professioni, Dipartimento Salute e
-            Sicurezza sul Lavoro</strong>, indicati entrambi sull’attestato come soggetti formatori. Superato il test
-            finale, l’attestato si scarica dalla piattaforma: è verificabile tramite QR code ed è valido per il
-            riconoscimento dei CFU secondo i regolamenti AUGE.
+            Soggetto formatore: <strong>O.P.N. Italia Lavoro – CNL – EBAFoS</strong>. Soggetto attuatore:
+            <strong>MB Consulting di Mario Bruzzese</strong>, in convenzione con O.P.N. Italia Lavoro (Convenzione
+            n. CFAL.1866). Corso in e-learning conforme al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
+            all’<strong>{ACCORDO}</strong>. Superato il test finale si riceve l’attestato, verificabile tramite
+            QR code sul sito opnitalialavoro.it.
           </div>
         </div>
         {!ctaVisibile && (
@@ -370,12 +368,12 @@ export default function CorsiSicurezza() {
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
               Metti in regola la tua azienda senza fermare il lavoro: {corsi.length} corsi in e-learning asincrono,
-              erogati tramite l’Unità Operativa 2403 di EFEI, con attestato scaricabile dalla piattaforma a fine percorso.
+              in convenzione con O.P.N. Italia Lavoro, con attestato verificabile tramite QR code a fine percorso.
             </p>
 
             <div className="mt-8 border-l-2 border-gray-900 pl-5 text-[15px] text-gray-600 leading-relaxed">
               <p>
-                I percorsi sono progettati ed erogati da EFEI in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong>
+                I percorsi sono realizzati in convenzione con O.P.N. Italia Lavoro, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong>
                 {' '}e all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025.
               </p>
               <p className="mt-2">
@@ -505,17 +503,15 @@ export default function CorsiSicurezza() {
           </section>
 
           <div className="bg-gray-50 rounded-2xl p-8 text-sm text-gray-600 leading-relaxed">
-            I corsi sono progettati, autorizzati ed erogati in modalità e-learning asincrona da <strong>EFEI — Organismo
-            Paritetico Salute e Sicurezza nei Luoghi di Lavoro</strong> (iscritto al n. 5 del Repertorio degli Organismi
-            Paritetici del Ministero del Lavoro e delle Politiche Sociali), tramite la <strong>Unità Operativa codice 2403</strong>
-            e la piattaforma autorizzata EFEI, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
-            all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025 ed
-            efficace senza più regime transitorio dal 24 maggio 2026. MB Consulting di Mario Bruzzese opera come
-            mandatario per la promozione e la vendita, in nome proprio e per finalità proprie, e non è un Organismo
-            Paritetico: la conformità dei percorsi, l’erogazione e il rilascio dell’attestato competono a EFEI.
-            L’attestato è rilasciato al superamento del test finale e indica come soggetti formatori EFEI e
-            <strong>A.U.G.E. Università – Ateneo delle Professioni, Dipartimento Salute e Sicurezza sul Lavoro</strong>;
-            è verificabile tramite QR code e valido per il riconoscimento dei CFU secondo i regolamenti AUGE.
+            I corsi sono erogati in modalità e-learning asincrona in collaborazione tra <strong>O.P.N. Italia Lavoro</strong>
+            (Organismo Paritetico Nazionale), <strong>CNL – Confederazione Nazionale del Lavoro</strong> ed
+            <strong>EBAFoS</strong> (Organismo Paritetico Intersettoriale – Ente Bilaterale Nazionale), in conformità al
+            <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta
+            Ufficiale n. 119 del 24 maggio 2025 ed efficace senza più regime transitorio dal 24 maggio 2026.
+            <strong>MB Consulting di Mario Bruzzese</strong> è soggetto attuatore in convenzione con O.P.N. Italia
+            Lavoro (Convenzione n. CFAL.1866) e cura iscrizione, tutoraggio e assistenza; non è un Organismo
+            Paritetico. L’attestato è rilasciato al superamento del test finale, indica come soggetto formatore
+            O.P.N. Italia Lavoro – CNL – EBAFoS ed è verificabile tramite QR code sul sito opnitalialavoro.it.
           </div>
         </div>
       </div>

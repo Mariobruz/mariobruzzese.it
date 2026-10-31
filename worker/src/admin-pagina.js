@@ -345,6 +345,7 @@ function mostra(o) {
     return el('div', { class: 'partecipante' },
       el('label', null, spunta, (p.nome + ' ' + p.cognome), el('span', { class: 'secondario', text: ' — account confermato' })),
       el('dl', null,
+        ...riga('Corso', p.corsoTitolo ? p.corsoTitolo + (p.prezzo != null ? ' · ' + p.prezzo + ' €' : '') : (o.corso && o.corso.titolo)),
         ...riga('Email', p.email), ...riga('Codice fiscale', p.codiceFiscale), ...riga('Nascita', dataBreve(p.dataNascita) + ', ' + (p.comuneNascita || '') + ' (' + (p.provinciaNascita || '') + ')'),
         ...riga('Telefono', p.telefono), ...riga('Qualifica', p.qualifica)));
   });

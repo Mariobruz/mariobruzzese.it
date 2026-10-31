@@ -146,7 +146,7 @@ function paginaCorso(c) {
         inLanguage: c.id.endsWith('-eng') ? 'en' : 'it',
         educationalCredentialAwarded: 'Attestato di frequenza con verifica finale',
         image: `${BASE}${c.immagine}`,
-        provider: { '@type': 'Organization', name: 'EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro', sameAs: 'https://www.efeiaulamagna.it' },
+        provider: { '@type': 'Organization', name: 'O.P.N. Italia Lavoro – CNL – EBAFoS', sameAs: 'https://www.opnitalialavoro.it' },
         hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online', courseWorkload: `PT${c.ore}H` },
         offers: {
           '@type': 'Offer', price: c.prezzo, priceCurrency: 'EUR', availability: 'https://schema.org/InStock',
@@ -170,7 +170,7 @@ function paginaCorso(c) {
       <p><strong>Prezzo:</strong> ${c.prezzo} € a partecipante, IVA compresa.</p>
       ${SCADENZE[c.id] ? `<p><strong>Validità dell'attestato:</strong> ${esc(SCADENZE[c.id].validita)}. <a href="${BASE}/durata-scadenza-corsi-sicurezza">Durate e scadenze di tutti i corsi</a></p>` : ''}
       ${c.avviso ? `<p>${esc(c.avviso)}</p>` : ''}
-      <p>Corso erogato da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unità Operativa 2403 e A.U.G.E. Università, promosso da MB Consulting. Superato il test finale, l'attestato si scarica dalla piattaforma.</p>
+      <p>Soggetto formatore: O.P.N. Italia Lavoro – CNL – EBAFoS. Soggetto attuatore: MB Consulting di Mario Bruzzese, in convenzione con O.P.N. Italia Lavoro (Convenzione n. CFAL.1866). Superato il test finale si riceve l'attestato, verificabile tramite QR code sul sito opnitalialavoro.it.</p>
       ${programma ? `<h2>Programma del corso</h2>${programma}` : ''}
       ${faqHtml ? `<h2>Domande frequenti</h2>${faqHtml}` : ''}
       <p><a href="${url}/iscrizione">Iscriviti al corso</a></p>

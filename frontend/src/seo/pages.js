@@ -91,7 +91,7 @@ const pages = [
     schema: [breadcrumb('Corsi sicurezza', `${BASE}/corsi-sicurezza`)],
     noscript: `
       <h1>Corsi di sicurezza sul lavoro online — e-learning D.Lgs 81/08</h1>
-      <p>MB Consulting promuove e vende 26 corsi di sicurezza sul lavoro in modalità e-learning asincrona, progettati, autorizzati ed erogati da EFEI — Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro, tramite l'Unità Operativa codice 2403. Si seguono da computer, tablet o telefono negli orari che preferisci; superato il test finale, l'attestato \u2014 che riporta anche l'Ateneo delle Professioni \u2013 Universit\u00e0 AUGE, Dipartimento Salute e Sicurezza sul Lavoro \u2014 si scarica direttamente dalla piattaforma.</p>
+      <p>MB Consulting promuove e vende 26 corsi di sicurezza sul lavoro in modalità e-learning asincrona, in convenzione con O.P.N. Italia Lavoro (soggetto formatore: O.P.N. Italia Lavoro – CNL – EBAFoS). Si seguono da computer, tablet o telefono negli orari che preferisci; superato il test finale si riceve l'attestato, verificabile tramite QR code sul sito opnitalialavoro.it.</p>
       <p>I percorsi sono conformi al D.Lgs. 9 aprile 2008 n. 81 e all'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR), pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025. Dal 24 maggio 2026, concluso il periodo transitorio di dodici mesi, l'Accordo disciplina in via esclusiva durata e contenuti minimi della formazione in materia di salute e sicurezza sul lavoro.</p>
       <h2>Lavoratori</h2>
       <p>Formazione obbligatoria per tutti i dipendenti</p>
@@ -152,7 +152,7 @@ const pages = [
         <li><strong>Aggiornamento alimentaristi (cat. A e B)</strong> — 4 ore, 25 € a partecipante, IVA compresa. Alimentaristi già formati, in scadenza. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
       </ul>
       <h2>Come funziona l'iscrizione</h2>
-      <p>Scegli il corso e il numero di partecipanti, inserisci anagrafica e dati di fatturazione, paghi online. Entro 24 ore registriamo i partecipanti sulla piattaforma: ciascuno riceve un'email per confermare il proprio account, e l'indirizzo indicato diventa il suo nome utente. Confermato l'account, abbiniamo il corso e si può iniziare. Superato il test finale, l'attestato si scarica direttamente dalla piattaforma.</p>
+      <p>Scegli il corso e il numero di partecipanti, inserisci i dati di fatturazione (privato o azienda) e, per ogni partecipante, nome, cognome, codice fiscale ed email; paghi online. Entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma: ciascuno riceve dalla piattaforma O.P.N. Italia Lavoro un'email con link di accesso, nome utente e password (pu\u00f2 finire nello spam). Al primo accesso completa i suoi dati e inizia il corso. Superato il test finale riceve l'attestato, verificabile tramite QR code.</p>
     `,
   },
   {
@@ -318,10 +318,10 @@ const pages = [
     noscript: `
       <h1>Condizioni generali di vendita</h1>
       <p>Venditore: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), partita IVA 03504290796, REA RC-199357.</p>
-      <p>I corsi sono progettati, autorizzati ed erogati da EFEI \u2014 Organismo Paritetico Salute e Sicurezza nei Luoghi di Lavoro tramite l'Unit\u00e0 Operativa codice 2403. MB Consulting cura promozione, iscrizione, incasso e assistenza.</p>
+      <p>Soggetto formatore: O.P.N. Italia Lavoro \u2013 CNL \u2013 EBAFoS. MB Consulting \u00e8 soggetto attuatore in convenzione con O.P.N. Italia Lavoro (Convenzione n. CFAL.1866) e cura iscrizione, incasso, tutoraggio e assistenza.</p>
       <p>I prezzi indicati sono finali, per partecipante. MB Consulting opera in regime forfettario: operazioni non soggette a IVA ai sensi dell'art. 1, commi 54-89, della Legge 190/2014.</p>
-      <p>Pagamento con carta di credito o debito tramite Stripe. Entro 24 ore lavorative dal pagamento i dati vengono inseriti sulla piattaforma dell'ente; il partecipante riceve un'email di conferma dell'account e solo dopo la conferma il corso pu\u00f2 essergli abbinato.</p>
-      <p>L'attestato \u00e8 rilasciato da EFEI al superamento del test finale, riporta anche l'Ateneo delle Professioni \u2013 Universit\u00e0 AUGE, Dipartimento Salute e Sicurezza sul Lavoro, ed \u00e8 scaricabile direttamente dalla piattaforma.</p>
+      <p>Pagamento con carta di credito o debito tramite Stripe. Entro 24 ore lavorative dal pagamento i partecipanti vengono iscritti sulla piattaforma e-learning e ricevono per email le istruzioni di accesso.</p>
+      <p>L'attestato \u00e8 rilasciato al superamento del test finale, indica come soggetto formatore O.P.N. Italia Lavoro \u2013 CNL \u2013 EBAFoS ed \u00e8 verificabile tramite QR code sul sito opnitalialavoro.it.</p>
       <p>Il consumatore ha diritto di recesso entro 14 giorni, che si estingue se chiede l'attivazione immediata del corso accettando la perdita del diritto, ai sensi dell'art. 59, comma 1, lett. o) del Codice del Consumo.</p>
     `,
   },
@@ -347,9 +347,9 @@ const pages = [
     noscript: `
       <h1>Informativa privacy</h1>
       <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), privacy@mariobruzzese.it.</p>
-      <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati anagrafici dei partecipanti (nome, cognome, codice fiscale, data e luogo di nascita, email, telefono, qualifica).</p>
+      <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati dei partecipanti (nome, cognome, codice fiscale, email).</p>
       <p>Finalit\u00e0: esecuzione del contratto, obblighi fiscali e documentazione dell'obbligo formativo, invio di comunicazioni commerciali previo consenso.</p>
-      <p>Destinatari: EFEI (titolare autonomo per l'erogazione del corso), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), consulente fiscale.</p>
+      <p>Destinatari: O.P.N. Italia Lavoro (responsabile del trattamento per il rilascio e la validazione degli attestati) e CNL Informatica s.r.l.s. (sub-responsabile, piattaforma e-learning), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), consulente fiscale.</p>
       <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto e WhatsApp; fino a revoca per le comunicazioni commerciali.</p>
       <p>Diritti: accesso, rettifica, cancellazione, limitazione, portabilit\u00e0, opposizione e revoca del consenso, scrivendo a privacy@mariobruzzese.it; reclamo al Garante per la protezione dei dati personali.</p>
       <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione né tracciamento pubblicitario. Le statistiche di visita sono anonime e senza cookie (Cloudflare Web Analytics).</p>

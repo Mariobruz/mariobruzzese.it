@@ -1,25 +1,11 @@
 /**
- * csv.js — genera il file nel formato esatto del template "Importa utenti"
- * della piattaforma EFEI, così l'ordine si carica senza ritocchi.
+ * csv.js — elenco partecipanti dell'ordine, allegato alla notifica.
  *
- * Intestazione presa dal template scaricato dalla piattaforma il 19/09/2026:
- * una riga per partecipante crea l'utente, lo collega all'azienda tramite
- * partita IVA e gli abbina il corso tramite SKU.
+ * Per l'iscrizione alla piattaforma e-learning bastano nome, cognome,
+ * codice fiscale ed email; il corso è indicato in ultima colonna.
  */
 
-const INTESTAZIONE = [
-  'NOME*',
-  'COGNOME*',
-  'EMAIL*',
-  'DATA DI NASCITA (GG/MM/AAAA)*',
-  'LUOGO DI NASCITA*',
-  'AREA (come indicato su piattaforma)',
-  'CODICE FISCALE*',
-  'TELEFONO',
-  'QUALIFICA*',
-  'AZIENDA (inserire partita iva)',
-  'CORSO (SKU corso)',
-];
+const INTESTAZIONE = ['NOME', 'COGNOME', 'CODICE FISCALE', 'EMAIL', 'CORSO'];
 
 /** 2026-04-09 → 09/04/2026 */
 export function dataItaliana(iso) {
@@ -42,25 +28,18 @@ function cella(valore) {
  * @param {Array}  partecipanti
  * @returns {string} contenuto CSV
  */
-export function csvImportEfei(ordine, partecipanti) {
-  const partitaIva = (ordine.fatturazione && ordine.fatturazione.partitaIva) || '';
+export function csvPartecipanti(ordine, partecipanti) {
   const righe = partecipanti.map((p) =>
     [
       p.nome,
       p.cognome,
-      p.email,
-      dataItaliana(p.dataNascita),
-      p.comuneNascita,
-      p.regioneNascita,
       (p.codiceFiscale || '').toUpperCase(),
-      p.telefono || '',
-      p.qualifica,
-      partitaIva,
-      ordine.corso.sku,
+      p.email,
+      (p.corso && p.corso.titolo) || p.corsoTitolo || ordine.corso.titolo,
     ].map(cella).join(',')
   );
   // BOM: senza, Excel in italiano sbaglia gli accenti aprendo il file
-  return '﻿' + [INTESTAZIONE.join(','), ...righe].join('\r\n') + '\r\n';
+  return '\ufeff' + [INTESTAZIONE.join(','), ...righe].join('\r\n') + '\r\n';
 }
 
 export function nomeFileCsv(riferimento) {

@@ -30,16 +30,15 @@ const CondizioniVendita = () => (
 
     <Sezione numero="2" titolo="Chi eroga la formazione">
       <p>
-        I corsi sono progettati, autorizzati ed erogati da <strong>EFEI — Organismo Paritetico Salute e Sicurezza
-        nei Luoghi di Lavoro</strong>, iscritto al Repertorio Nazionale degli Organismi Paritetici del Ministero del
-        Lavoro e delle Politiche Sociali, tramite la propria <strong>Unità Operativa codice 2403</strong> e la
-        relativa piattaforma e-learning.
+        I corsi sono erogati in modalità e-learning in collaborazione tra <strong>O.P.N. Italia Lavoro</strong>
+        (Organismo Paritetico Nazionale), <strong>CNL – Confederazione Nazionale del Lavoro</strong> ed
+        <strong>EBAFoS</strong> (Organismo Paritetico Intersettoriale – Ente Bilaterale Nazionale), indicati
+        sull’attestato come soggetto formatore.
       </p>
       <p>
-        MB Consulting opera in forza di un mandato commerciale conferito dall’Unità Operativa 2403 e cura
-        esclusivamente la promozione, la raccolta delle iscrizioni, l’incasso e l’assistenza al Cliente. La
-        progettazione didattica, l’erogazione, la gestione della piattaforma, la valutazione finale e il rilascio
-        dell’attestato restano di competenza esclusiva di EFEI.
+        MB Consulting è soggetto attuatore in convenzione con O.P.N. Italia Lavoro (Convenzione n. CFAL.1866) e
+        cura la raccolta delle iscrizioni, l’incasso, il tutoraggio e l’assistenza al Cliente. Il progetto
+        formativo e il rilascio dell’attestato sono di O.P.N. Italia Lavoro.
       </p>
     </Sezione>
 
@@ -111,22 +110,22 @@ const CondizioniVendita = () => (
       <p>La procedura di attivazione si articola in tre passaggi.</p>
       <Elenco
         voci={[
-          'Entro 24 ore lavorative dal pagamento MB Consulting inserisce i dati dei Partecipanti sulla piattaforma dell’ente erogatore.',
-          'Ogni Partecipante riceve dalla piattaforma un’email di conferma dell’account all’indirizzo indicato in fase di iscrizione. L’indirizzo email del Partecipante costituisce anche il suo nome utente.',
-          'Soltanto dopo che il Partecipante ha confermato il proprio account, il corso acquistato può essergli abbinato e reso disponibile.',
+          'Entro 24 ore lavorative dal pagamento MB Consulting iscrive i Partecipanti sulla piattaforma e-learning con nome, cognome, codice fiscale ed email.',
+          'Ogni Partecipante riceve dalla piattaforma di O.P.N. Italia Lavoro, all’indirizzo indicato in fase di iscrizione, un’email con il link di accesso, nome utente e password.',
+          'Al primo accesso il Partecipante completa i propri dati anagrafici sulla piattaforma e può iniziare il corso acquistato.',
         ]}
       />
       <p>
-        Il secondo passaggio dipende dal Partecipante: finché l’account non viene confermato, il corso non può essere
-        attivato e il ritardo non è imputabile a MB Consulting. Si raccomanda di controllare anche la cartella della
-        posta indesiderata.
+        Il terzo passaggio dipende dal Partecipante: finché non accede e completa i propri dati, il corso non può
+        iniziare e il ritardo non è imputabile a MB Consulting. L’email con le credenziali può finire nella posta
+        indesiderata (spam): si raccomanda di controllare anche quella cartella.
       </p>
     </Sezione>
 
     <Sezione numero="9" titolo="Obblighi del Cliente">
       <Elenco
         voci={[
-          'Fornire dati anagrafici esatti, completi e riferiti a persone realmente esistenti. Il codice fiscale e la data di nascita dei Partecipanti compaiono sull’attestato: un dato errato comporta un attestato errato.',
+          'Fornire dati anagrafici esatti, completi e riferiti a persone realmente esistenti. Nome, cognome e codice fiscale dei Partecipanti, e i dati che ciascuno completa sulla piattaforma, compaiono sull’attestato: un dato errato comporta un attestato errato.',
           'Indicare per ogni Partecipante un indirizzo email individuale, effettivamente accessibile e non condiviso con altri Partecipanti.',
           'Custodire le credenziali di accesso, che sono personali e non cedibili.',
           'Astenersi dal registrare, riprodurre, diffondere o rendere accessibile a terzi il materiale didattico, protetto dal diritto d’autore e concesso in uso esclusivamente per la fruizione individuale del corso.',
@@ -140,10 +139,9 @@ const CondizioniVendita = () => (
 
     <Sezione numero="10" titolo="Attestato">
       <p>
-        L’attestato è rilasciato al superamento del test finale e indica come soggetti formatori EFEI e A.U.G.E.
-        Università – Ateneo delle Professioni, Dipartimento Salute e Sicurezza sul Lavoro. È verificabile tramite
-        QR code ed è valido per il riconoscimento dei CFU secondo i regolamenti AUGE. È scaricabile direttamente dalla
-        piattaforma, in qualsiasi momento successivo, nell’area riservata del Partecipante.
+        L’attestato è rilasciato al superamento del test finale, indica come soggetto formatore O.P.N. Italia
+        Lavoro – CNL – EBAFoS e MB Consulting come soggetto attuatore, ed è verificabile tramite QR code sul sito
+        opnitalialavoro.it.
       </p>
       <p>
         MB Consulting non rilascia attestati e non interviene sulla valutazione. Il mancato superamento del test non
