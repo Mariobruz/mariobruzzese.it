@@ -138,8 +138,10 @@ function verificaIscrizione(corpo) {
     if (p.dataNascita && !/^\d{4}-\d{2}-\d{2}$/.test(p.dataNascita)) e('data di nascita non valida');
     if (LINK.test(p.nome) || LINK.test(p.cognome)) e('nome e cognome non possono contenere link');
     const cf = (p.codiceFiscale || '').toUpperCase();
-    if (cf && visti.has(cf)) e('codice fiscale ripetuto');
-    visti.add(cf);
+    // la stessa persona può fare più corsi, ma non lo stesso corso due volte
+    const chiave = `${cf}|${f.tipo === 'azienda' && p.corsoId ? p.corsoId : corso.id}`;
+    if (cf && visti.has(chiave)) e('stessa persona iscritta due volte allo stesso corso');
+    visti.add(chiave);
   });
 
   // solo vero/falso: nel database finisce la prova di cosa è stato accettato, nient'altro

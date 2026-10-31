@@ -68,7 +68,10 @@ const partecipanteVuoto = (corsoId = '') => ({ nome: '', cognome: '', codiceFisc
 
 // Catalogo per la scelta del corso di ciascun partecipante (ordini aziendali).
 const CATALOGO = corsiPubblicabili();
-const OPZIONI_CORSI = CATALOGO.map((c) => ({ valore: c.id, testo: `${c.titolo} · ${c.ore} ore · ${c.prezzo} €` }));
+const OPZIONI_CORSI = CATALOGO.map((c) => ({
+  valore: c.id,
+  testo: `${c.titolo}${/\bore\b/.test(c.titolo) ? '' : ` · ${c.ore} ore`} · ${c.prezzo} €`,
+}));
 
 /** Data di nascita (AAAA-MM-GG) ricavata dal codice fiscale, per l'archivio ordini. */
 function dataNascitaDaCf(cf) {
@@ -195,10 +198,12 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
       e[`p${i}_email`] = validaEmail(p.email);
 
       const cf = (p.codiceFiscale || '').toUpperCase();
-      if (!e[`p${i}_codiceFiscale`] && visti.has(cf)) {
-        e[`p${i}_codiceFiscale`] = 'Questo codice fiscale è già stato inserito per un altro partecipante';
+      // la stessa persona può fare più corsi, ma non lo stesso corso due volte
+      const chiave = `${cf}|${corsoDi(p).id}`;
+      if (!e[`p${i}_codiceFiscale`] && visti.has(chiave)) {
+        e[`p${i}_codiceFiscale`] = 'Questa persona è già iscritta allo stesso corso: scegli un corso diverso o togli la riga';
       }
-      visti.add(cf);
+      visti.add(chiave);
     });
     return e;
   };
@@ -362,8 +367,14 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
           {passo === 0 && (
             <section className="space-y-8">
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Quante persone devi iscrivere?</h2>
-                <p className="text-gray-600 mb-5 text-sm">I dati di ciascun partecipante servono all’ente per intestare l’attestato.</p>
+                <h2 className="text-xl font-bold text-gray-900 mb-1">
+                  {multiCorso ? 'Quante iscrizioni vuoi fare?' : 'Quante persone devi iscrivere?'}
+                </h2>
+                <p className="text-gray-600 mb-5 text-sm">
+                  {multiCorso
+                    ? 'Un’iscrizione è una persona su un corso: per far fare due corsi allo stesso dipendente indica 2.'
+                    : 'I dati di ciascun partecipante servono all’ente per intestare l’attestato.'}
+                </p>
                 <div className="flex items-center gap-5">
                   <button onClick={() => cambiaNumero(-1)} className="w-11 h-11 rounded-full border-2 border-gray-200 hover:border-black flex items-center justify-center transition-colors" aria-label="Togli un partecipante">
                     <Minus className="w-4 h-4" />
@@ -396,20 +407,27 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-6 flex items-center justify-between">
-                <span className="text-gray-600">
-                  {partecipanti.length} partecipant{partecipanti.length > 1 ? 'i' : 'e'}
-                  {multiCorso && (
-                    <span className="block text-xs text-gray-500 mt-1">
-                      Nel passo «Anagrafiche» puoi scegliere un corso diverso per ciascun partecipante.
-                    </span>
-                  )}
-                </span>
-                <span className="text-right">
-                  <span className="block text-2xl font-bold leading-none">{totale}&nbsp;€</span>
-                  <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
-                </span>
-              </div>
+              {multiCorso ? (
+                <div className="bg-gray-50 rounded-xl p-6 text-gray-600">
+                  <span className="block">
+                    {partecipanti.length} iscrizion{partecipanti.length > 1 ? 'i' : 'e'}
+                  </span>
+                  <span className="block text-sm text-gray-500 mt-1">
+                    Nel passo «Anagrafiche» scegli il corso di ogni iscrizione: puoi iscrivere persone diverse a
+                    corsi diversi, o la stessa persona a più corsi. Lì vedi il costo di ciascuna iscrizione e il totale.
+                  </span>
+                </div>
+              ) : (
+                <div className="bg-gray-50 rounded-xl p-6 flex items-center justify-between">
+                  <span className="text-gray-600">
+                    {partecipanti.length} × {corso.prezzo}&nbsp;€
+                  </span>
+                  <span className="text-right">
+                    <span className="block text-2xl font-bold leading-none">{totale}&nbsp;€</span>
+                    <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
+                  </span>
+                </div>
+              )}
             </section>
           )}
 
