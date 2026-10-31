@@ -91,66 +91,8 @@ const pages = [
     schema: [breadcrumb('Corsi sicurezza', `${BASE}/corsi-sicurezza`)],
     noscript: `
       <h1>Corsi di sicurezza sul lavoro online — e-learning D.Lgs 81/08</h1>
-      <p>MB Consulting promuove e vende 26 corsi di sicurezza sul lavoro in modalità e-learning asincrona, in convenzione con O.P.N. Italia Lavoro (soggetto formatore: O.P.N. Italia Lavoro – CNL – EBAFoS). Si seguono da computer, tablet o telefono negli orari che preferisci; superato il test finale si riceve l'attestato, verificabile tramite QR code sul sito opnitalialavoro.it.</p>
+      <p>MB Consulting vende corsi di sicurezza sul lavoro in modalità e-learning asincrona, in convenzione con O.P.N. Italia Lavoro (soggetto formatore: O.P.N. Italia Lavoro – CNL – EBAFoS). Si seguono da computer, tablet o telefono negli orari che preferisci; superato il test finale si riceve l'attestato, verificabile tramite QR code sul sito opnitalialavoro.it.</p>
       <p>I percorsi sono conformi al D.Lgs. 9 aprile 2008 n. 81 e all'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR), pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025. Dal 24 maggio 2026, concluso il periodo transitorio di dodici mesi, l'Accordo disciplina in via esclusiva durata e contenuti minimi della formazione in materia di salute e sicurezza sul lavoro.</p>
-      <h2>Lavoratori</h2>
-      <p>Formazione obbligatoria per tutti i dipendenti</p>
-      <ul>
-        <li><strong>Formazione generale dei lavoratori</strong> — 4 ore, 35 € a partecipante, IVA compresa. Tutti i lavoratori dipendenti, qualunque sia il settore. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-        <li><strong>Formazione generale dei lavoratori — in inglese</strong> — 4 ore, 45 € a partecipante, IVA compresa. Lavoratori di lingua inglese. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-        <li><strong>Formazione specifica — rischio basso</strong> — 4 ore, 39 € a partecipante, IVA compresa. Lavoratori di uffici, commercio, servizi e altri settori a rischio basso. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-        <li><strong>Formazione generale + specifica — rischio basso</strong> — 8 ore, 59 € a partecipante, IVA compresa. Neoassunti in settori a rischio basso: assolve l’intero obbligo formativo. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-        <li><strong>Aggiornamento lavoratori — tutti i livelli di rischio</strong> — 6 ore, 49 € a partecipante, IVA compresa. Lavoratori già formati, in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-        <li><strong>Aggiornamento lavoratori — rischio medio</strong> — 6 ore, 49 € a partecipante, IVA compresa. Lavoratori di settori a rischio medio, in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-      </ul>
-      <h2>Datore di lavoro</h2>
-      <p>Obblighi formativi di chi guida l’azienda</p>
-      <ul>
-        <li><strong>Formazione datore di lavoro</strong> — 16 ore, 149 € a partecipante, IVA compresa. Datori di lavoro. Riferimento: D.Lgs. 81/2008.</li>
-        <li><strong>Aggiornamento datore di lavoro RSPP</strong> — 8 ore, 89 € a partecipante, IVA compresa. Datori di lavoro RSPP in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 34.</li>
-        <li><strong>Modulo aggiuntivo "Cantieri" — datore di lavoro</strong> — 6 ore, 119 € a partecipante, IVA compresa. Datori di lavoro di imprese che operano in cantiere. Riferimento: D.Lgs. 81/2008, Titolo IV.</li>
-      </ul>
-      <h2>Dirigenti</h2>
-      <p>Chi attua le direttive del datore di lavoro</p>
-      <ul>
-        <li><strong>Formazione dirigenti</strong> — 12 ore, 149 € a partecipante, IVA compresa. Dirigenti con responsabilità organizzative in materia di sicurezza. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-        <li><strong>Aggiornamento dirigenti</strong> — 6 ore, 69 € a partecipante, IVA compresa. Dirigenti già formati, in scadenza quinquennale. Riferimento: D.Lgs. 81/2008, art. 37.</li>
-        <li><strong>Modulo aggiuntivo "Cantieri" — dirigenti</strong> — 6 ore, 119 € a partecipante, IVA compresa. Dirigenti di imprese che operano in cantiere. Riferimento: D.Lgs. 81/2008, Titolo IV.</li>
-      </ul>
-      <h2>RSPP e ASPP</h2>
-      <p>Servizio di prevenzione e protezione</p>
-      <ul>
-        <li><strong>RSPP e ASPP — Modulo A</strong> — 28 ore, 169 € a partecipante, IVA compresa. Aspiranti RSPP e ASPP: modulo base comune a tutti i settori. Riferimento: D.Lgs. 81/2008, art. 32.</li>
-        <li><strong>Aggiornamento RSPP</strong> — 40 ore, 149 € a partecipante, IVA compresa. RSPP in carica, aggiornamento quinquennale. Riferimento: D.Lgs. 81/2008, art. 32.</li>
-        <li><strong>Aggiornamento ASPP</strong> — 20 ore, 139 € a partecipante, IVA compresa. ASPP in carica, aggiornamento quinquennale. Riferimento: D.Lgs. 81/2008, art. 32.</li>
-      </ul>
-      <h2>RLS</h2>
-      <p>Rappresentante dei lavoratori per la sicurezza</p>
-      <ul>
-        <li><strong>Formazione RLS</strong> — 32 ore, 149 € a partecipante, IVA compresa. Rappresentanti dei lavoratori per la sicurezza di nuova nomina. Riferimento: D.Lgs. 81/2008, art. 37 commi 10-11.</li>
-        <li><strong>Aggiornamento RLS — aziende fino a 50 lavoratori</strong> — 4 ore, 59 € a partecipante, IVA compresa. RLS di imprese fino a 50 dipendenti, aggiornamento annuale. Riferimento: D.Lgs. 81/2008, art. 37 comma 11.</li>
-        <li><strong>Aggiornamento RLS — aziende oltre 50 lavoratori</strong> — 8 ore, 89 € a partecipante, IVA compresa. RLS di imprese con oltre 50 dipendenti, aggiornamento annuale. Riferimento: D.Lgs. 81/2008, art. 37 comma 11.</li>
-      </ul>
-      <h2>Cantieri</h2>
-      <p>Coordinatori e moduli aggiuntivi per il settore edile</p>
-      <ul>
-        <li><strong>Coordinatore sicurezza — modulo normativo/giuridico</strong> — 8 ore, 79 € a partecipante, IVA compresa. Aspiranti coordinatori per la progettazione e per l’esecuzione dei lavori. Riferimento: D.Lgs. 81/2008, art. 98 e Allegato XIV.</li>
-      </ul>
-      <h2>Formatori</h2>
-      <p>Qualificazione del formatore in materia di sicurezza</p>
-      <ul>
-        <li><strong>Formazione formatori — 40 ore</strong> — 40 ore, 269 € a partecipante, IVA compresa. Chi vuole qualificarsi come formatore in materia di salute e sicurezza. Riferimento: D.I. 6 marzo 2013.</li>
-        <li><strong>Formazione formatori — 24 ore</strong> — 24 ore, 189 € a partecipante, IVA compresa. Percorso ridotto per chi possiede già parte dei requisiti. Riferimento: D.I. 6 marzo 2013.</li>
-        <li><strong>Aggiornamento formatori</strong> — 24 ore, 149 € a partecipante, IVA compresa. Formatori qualificati, aggiornamento triennale. Riferimento: D.I. 6 marzo 2013.</li>
-      </ul>
-      <h2>HACCP e alimentaristi</h2>
-      <p>Igiene degli alimenti per chi lavora nel settore alimentare</p>
-      <ul>
-        <li><strong>Responsabile industria alimentare (HACCP OSA)</strong> — 12 ore, 39 € a partecipante, IVA compresa. Titolari e responsabili di imprese del settore alimentare. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
-        <li><strong>Alimentaristi — rischio elevato (cat. A)</strong> — 8 ore, 29 € a partecipante, IVA compresa. Chi manipola alimenti in attività a rischio elevato. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
-        <li><strong>Alimentaristi — rischio medio (cat. B)</strong> — 6 ore, 25 € a partecipante, IVA compresa. Chi manipola alimenti in attività a rischio medio. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
-        <li><strong>Aggiornamento alimentaristi (cat. A e B)</strong> — 4 ore, 25 € a partecipante, IVA compresa. Alimentaristi già formati, in scadenza. Riferimento: Reg. CE 852/2004 e normativa regionale.</li>
-      </ul>
       <h2>Come funziona l'iscrizione</h2>
       <p>Scegli il corso e il numero di partecipanti, inserisci i dati di fatturazione (privato o azienda) e, per ogni partecipante, nome, cognome, codice fiscale ed email; paghi online. Entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma: ciascuno riceve dalla piattaforma O.P.N. Italia Lavoro un'email con link di accesso, nome utente e password (pu\u00f2 finire nello spam). Al primo accesso completa i suoi dati e inizia il corso. Superato il test finale riceve l'attestato, verificabile tramite QR code.</p>
     `,

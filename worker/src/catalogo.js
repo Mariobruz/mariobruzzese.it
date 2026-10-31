@@ -235,7 +235,10 @@ export const catalogo = [
 ];
 
 // Corsi non vendibili in e-learning: il server li rifiuta.
-const SOSPESI = new Set(['rspp-datore-lavoro-8h', 'aggiornamento-csp-cse-40h']);
+const SOSPESI = new Set([
+  'rspp-datore-lavoro-8h', 'aggiornamento-csp-cse-40h',
+  'aggiornamento-lavoratori-rischio-medio-6h', 'coordinatore-modulo-giuridico-8h', 'formatori-40h',
+]);
 
 // ---------------------------------------------------------------- PREZZO DI LANCIO
 // "prezzo" e il prezzo pieno; "prezzoLancio" vale fino a "lancioFino" compreso

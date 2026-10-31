@@ -99,6 +99,7 @@ export const corsi = [
   },
   {
     id: 'aggiornamento-lavoratori-rischio-medio-6h',
+    sospeso: "Doppione: l'aggiornamento lavoratori (ASR 2025) è unico, 6 ore per tutti i livelli di rischio",
     categoria: 'lavoratori',
     titolo: 'Aggiornamento lavoratori — rischio medio',
     titoloAttestato: 'CORSO DI AGGIORNAMENTO DEI LAVORATORI - RISCHIO MEDIO - 6 ORE',
@@ -312,6 +313,7 @@ export const corsi = [
   // ------------------------------------------------------------------- CANTIERI
   {
     id: 'coordinatore-modulo-giuridico-8h',
+    sospeso: "Non presente nel catalogo O.P.N. Italia Lavoro (il modulo giuridico ASR 2025 è di 28 ore)",
     categoria: 'cantieri',
     titolo: 'Coordinatore sicurezza — modulo normativo/giuridico',
     titoloAttestato: 'CORSO DI FORMAZIONE PER COORDINATORE DELLA SICUREZZA - MODULO NORMATIVO/GIURIDICO - 8 ORE',
@@ -343,6 +345,7 @@ export const corsi = [
   // ------------------------------------------------------------------ FORMATORI
   {
     id: 'formatori-40h',
+    sospeso: "Il corso formatori O.P.N. Italia Lavoro è di 24 ore",
     categoria: 'formatori',
     titolo: 'Formazione formatori — 40 ore',
     titoloAttestato: 'CORSO DI FORMAZIONE PER FORMATORI - 40 ORE',

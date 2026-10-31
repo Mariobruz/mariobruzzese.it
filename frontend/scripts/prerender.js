@@ -95,7 +95,9 @@ async function caricaCorsi() {
     .readFileSync(path.join(dir, 'corsiSicurezza.js'), 'utf8')
     .replace(/^import \{ programmi \} from '\.\/programmiCorsi';$/m, programmi);
   const modulo = await import('data:text/javascript;base64,' + Buffer.from(sorgente).toString('base64'));
-  return modulo.corsiPubblicabili();
+  const lista = modulo.corsiPubblicabili();
+  lista.categorie = modulo.categorie;
+  return lista;
 }
 
 let SCADENZE = {};
@@ -204,9 +206,16 @@ if (catalogo) {
     ...catalogo.schema.filter((x) => x['@type'] !== 'ItemList'),
   ];
   // collegamenti a tutte le schede anche nella versione senza JavaScript
-  catalogo.noscript += `<h2>Tutti i corsi</h2><ul>${corsi
-    .map((c) => `<li><a href="${BASE}/corsi-sicurezza/${c.id}">${esc(c.seoTitolo)}</a> — ${c.prezzo} €</li>`)
-    .join('')}</ul>`;
+  // elenco per categoria generato dal catalogo: prezzi e corsi sempre allineati al sito
+  catalogo.noscript += (corsi.categorie || [])
+    .map((cat) => {
+      const delGruppo = corsi.filter((c) => c.categoria === cat.id);
+      if (!delGruppo.length) return '';
+      return `<h2>${esc(cat.nome)}</h2><p>${esc(cat.descrizione)}</p><ul>${delGruppo
+        .map((c) => `<li><a href="${BASE}/corsi-sicurezza/${c.id}"><strong>${esc(c.titolo)}</strong></a> — ${c.ore} ore, ${c.prezzo} € a partecipante. ${esc(c.destinatari || '')}</li>`)
+        .join('')}</ul>`;
+    })
+    .join('');
 }
 // Durate e scadenze: il prospetto va anche nell'HTML servito a Google, non solo nella pagina React
 const scadenze = pages.find((p) => p.slug === 'durata-scadenza-corsi-sicurezza');

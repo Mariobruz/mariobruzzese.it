@@ -409,7 +409,7 @@ export default function CorsiSicurezza() {
             >
               Tutti i corsi
             </button>
-            {categorie.map((cat) => (
+            {categorie.filter((cat) => corsi.some((c) => c.categoria === cat.id)).map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setCategoriaAttiva(cat.id)}
