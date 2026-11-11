@@ -6,6 +6,8 @@ import {
   STATI_CONSULENTE, centesimi, creaCodice, cruscotto, csvCruscotto, elencoConsulenti,
   normalizzaCodice, registraPagamento,
 } from './consulenti-dati';
+import { emailConsulenteAttivato } from './email-consulenti';
+import { inviaEmail } from './email';
 
 const testo = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
 const percentuale = (v, def) => {
@@ -27,6 +29,24 @@ function datiConsulente(corpo) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) errori.push('Email non valida');
   if (/[<>]/.test(Object.values(d).join(''))) errori.push('Caratteri non ammessi');
   return { d, errori };
+}
+
+/** Email al consulente appena attivato, con i suoi codici. true se partita. */
+async function avvisaAttivazione(env, id) {
+  if (!env.BREVO_API_KEY) return false;
+  const c = await env.DB.prepare('SELECT * FROM consulenti WHERE id = ?').bind(id).first();
+  const k = await env.DB.prepare('SELECT codice, sconto_pct FROM codici_sconto WHERE consulente_id = ? AND attivo = 1').bind(id).all();
+  const codici = (k.results || []).map((x) => ({ codice: x.codice, scontoPct: x.sconto_pct }));
+  if (!c || !codici.length) return false;
+  try {
+    await inviaEmail(env, emailConsulenteAttivato({
+      consulente: c, codici, areaUrl: env.AREA_CONSULENTI_URL || 'https://area-consulenti.mario-bruz.workers.dev',
+    }));
+    return true;
+  } catch (e) {
+    console.error('email attivazione consulente', e.message);
+    return false;
+  }
 }
 
 async function leggiCorpo(richiesta) {
@@ -59,7 +79,8 @@ export async function apiConsulenti(env, richiesta, url, metodo, utente, rispost
     const id = r.meta.last_row_id;
     const codice = await creaCodice(env, { base: d.cognome, scontoPct: percentuale(corpo.scontoPct, 20), consulenteId: id });
     console.log('consulente creato', id, codice, utente);
-    return risposta({ ok: true, id, codice });
+    const emailInviata = d.stato === 'attivo' ? await avvisaAttivazione(env, id) : false;
+    return risposta({ ok: true, id, codice, emailInviata });
   }
 
   let m = pathname.match(/^\/api\/consulenti\/(\d+)$/);
@@ -73,13 +94,16 @@ export async function apiConsulenti(env, richiesta, url, metodo, utente, rispost
     if (errori.length) return risposta({ errore: errori.join('. ') }, 400);
     const altro = await env.DB.prepare('SELECT id FROM consulenti WHERE email = ? AND id <> ?').bind(d.email, Number(m[1])).first();
     if (altro) return risposta({ errore: 'Questa email è già di un altro consulente' }, 409);
+    const prima = await env.DB.prepare('SELECT stato FROM consulenti WHERE id = ?').bind(Number(m[1])).first();
     const r = await env.DB.prepare(
       `UPDATE consulenti SET nome = ?, cognome = ?, ragione_sociale = ?, piva_cf = ?, pec = ?, email = ?, telefono = ?,
          compenso_pct = ?, stato = ?, note = ? WHERE id = ?`
     ).bind(d.nome, d.cognome, d.ragioneSociale, d.pivaCf, d.pec, d.email, d.telefono, d.compensoPct, d.stato, d.note, Number(m[1])).run();
     if (!r.meta || !r.meta.changes) return risposta({ errore: 'Consulente non trovato' }, 404);
     console.log('consulente modificato', m[1], d.stato, d.compensoPct, utente);
-    return risposta({ ok: true });
+    // passa ad "Attivo": il consulente riceve l'email con il codice
+    const emailInviata = prima && prima.stato !== 'attivo' && d.stato === 'attivo' ? await avvisaAttivazione(env, Number(m[1])) : false;
+    return risposta({ ok: true, emailInviata });
   }
 
   m = pathname.match(/^\/api\/consulenti\/(\d+)\/csv$/);

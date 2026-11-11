@@ -178,14 +178,18 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
     var ln = el('label', { style: 'grid-column:1/-1' }, 'Note interne (non visibili al consulente)');
     var tn = el('textarea', { rows: '3' }); tn.value = c ? (c.note || '') : ''; campi.note = tn; ln.appendChild(tn); f.appendChild(ln);
     box.appendChild(f);
-    box.appendChild(el('p', { class: 'cr-nota' }, 'Il codice sconto funziona solo con stato "Attivo" (contratto firmato).'));
+    box.appendChild(el('p', { class: 'cr-nota' }, 'Il codice sconto funziona solo con stato "Attivo" (contratto firmato). Quando lo metti "Attivo" il consulente riceve un\'email con il codice.'));
     var az = el('div', { class: 'co-azioni' });
     var salva = el('button', null, 'Salva');
     salva.addEventListener('click', function () {
       var corpo = {};
       Object.keys(campi).forEach(function (k) { corpo[k] = campi[k].value; });
       api(c ? '/api/consulenti/' + c.id : '/api/consulenti', { method: 'POST', body: JSON.stringify(corpo) })
-        .then(function (r) { if (!c) { alert('Consulente creato. Codice: ' + r.codice); aperto = r.id; } carica(); })
+        .then(function (r) {
+          if (!c) { alert('Consulente creato. Codice: ' + r.codice + (r.emailInviata ? '\nGli è stata inviata l\'email con il codice.' : '')); aperto = r.id; }
+          else if (r.emailInviata) alert('Consulente attivato: gli è stata inviata l\'email con il suo codice.');
+          carica();
+        })
         .catch(function (e) { alert(e.message); });
     });
     var annulla = el('button', null, 'Annulla');

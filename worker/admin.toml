@@ -30,6 +30,7 @@ NOME_MITTENTE = "MB Consulting"
 EMAIL_AMMINISTRATORE = "corsi@mariobruzzese.it"
 # Account Cloudflare da cui leggere le statistiche di visita (non è un segreto)
 CF_ACCOUNT_ID = "cb511a5045db1f2dc8b568a6eac340e1"
+AREA_CONSULENTI_URL = "https://area-consulenti.mario-bruz.workers.dev"
 
 # Segreto (lo stesso del Worker pubblico):
 #   npx wrangler secret put BREVO_API_KEY -c admin.toml

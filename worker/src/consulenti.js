@@ -5,9 +5,13 @@
  * un link che vale 15 minuti e si usa una volta sola. Il link apre una
  * sessione di 30 giorni in un cookie firmato (HMAC) valido solo su questo
  * indirizzo. Ogni consulente vede solo i propri ordini.
+ *
+ * Registrazione: /registrati (il link da mettere nelle email promozionali).
+ * Il consulente nasce "in attesa di contratto" con un codice già assegnato,
+ * che funziona solo quando MB Consulting lo mette "Attivo" dal pannello.
  */
-import { cruscotto, csvCruscotto } from './consulenti-dati';
-import { emailAccessoConsulente } from './email-consulenti';
+import { creaCodice, cruscotto, csvCruscotto } from './consulenti-dati';
+import { emailAccessoConsulente, emailNuovoConsulenteAdmin, emailRegistrazioneConsulente } from './email-consulenti';
 import { inviaEmail } from './email';
 import { RENDER_CRUSCOTTO, STILE_CRUSCOTTO } from './cruscotto-vista';
 import { ipBloccato, registraEvento } from './sicurezza';
@@ -83,6 +87,13 @@ button{cursor:pointer;padding:7px 12px;border:1px solid #111;border-radius:6px;b
 .accesso{max-width:420px;margin:40px auto;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px}
 .accesso input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #d1d5db;border-radius:8px;margin:8px 0 12px}
 .accesso button{background:#111;color:#fff;width:100%;padding:10px}
+.accesso.largo{max-width:560px}
+.accesso label{display:block;font-size:13px;color:#374151;margin-top:4px}
+.accesso label input{margin:4px 0 8px}
+.accesso .spunta{display:flex;gap:8px;align-items:flex-start;margin:10px 0 14px}
+.accesso .spunta input{width:auto;margin:3px 0 0}
+.accesso .esca{position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden}
+.accesso a{color:#111}
 ${STILE_CRUSCOTTO}
 </style></head><body>
 <header><strong>Area consulenti · MB Consulting</strong><span id="utente"></span></header>
@@ -125,6 +136,53 @@ const SCRIPT = RENDER_CRUSCOTTO + String.raw`
         .catch(function (e) { esito.textContent = e.message; bt.disabled = false; });
     });
     b.appendChild(i); b.appendChild(bt); b.appendChild(esito);
+    var reg = el('p', { class: 'cr-nota' }, 'Non sei ancora registrato? ');
+    reg.appendChild(el('a', { href: '/registrati' }, 'Registrati come consulente'));
+    b.appendChild(reg);
+    app.appendChild(b);
+  }
+
+  function registrazione() {
+    app.textContent = '';
+    var b = el('div', { class: 'accesso largo' });
+    b.appendChild(el('h2', null, 'Registrazione consulenti'));
+    b.appendChild(el('p', null, 'Compila i tuoi dati: riceverai subito il link per entrare nella tua area riservata. ' +
+      'Il tuo codice sconto per i clienti si attiva quando è completato l\'accordo di collaborazione.'));
+    var campi = {};
+    [['nome', 'Nome *', 'text', 'given-name'], ['cognome', 'Cognome *', 'text', 'family-name'],
+     ['ragioneSociale', 'Studio / ragione sociale', 'text', 'organization'], ['pivaCf', 'Partita IVA o codice fiscale *', 'text', 'off'],
+     ['email', 'Email *', 'email', 'email'], ['pec', 'PEC', 'email', 'off'], ['telefono', 'Telefono *', 'tel', 'tel']].forEach(function (x) {
+      var l = el('label', null, x[1]);
+      var i = el('input', { type: x[2], autocomplete: x[3], name: x[0] });
+      campi[x[0]] = i; l.appendChild(i); b.appendChild(l);
+    });
+    // campo trappola per i robot: le persone non lo vedono
+    var trappola = el('input', { type: 'text', name: 'sito', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' });
+    var esca = el('div', { class: 'esca' }); esca.appendChild(trappola); b.appendChild(esca);
+    var sp = el('label', { class: 'spunta' });
+    var ok = el('input', { type: 'checkbox' });
+    var testo = el('span', null, 'Ho letto l\'');
+    testo.appendChild(el('a', { href: 'https://www.mariobruzzese.it/privacy', target: '_blank', rel: 'noopener' }, 'informativa privacy'));
+    testo.appendChild(document.createTextNode(' e acconsento al trattamento dei miei dati per la gestione della collaborazione. *'));
+    sp.appendChild(ok); sp.appendChild(testo); b.appendChild(sp);
+    var bt = el('button', null, 'Registrati');
+    var esito = el('p', { class: 'cr-nota', role: 'status' });
+    bt.addEventListener('click', function () {
+      var corpo = { privacy: ok.checked, sito: trappola.value };
+      Object.keys(campi).forEach(function (k) { corpo[k] = campi[k].value; });
+      bt.disabled = true; esito.textContent = 'Invio in corso…';
+      api('/api/registrazione', { method: 'POST', body: JSON.stringify(corpo) })
+        .then(function (d) {
+          b.textContent = '';
+          b.appendChild(el('h2', null, 'Grazie!'));
+          b.appendChild(el('p', null, d.messaggio));
+        })
+        .catch(function (e) { esito.textContent = e.message; bt.disabled = false; });
+    });
+    b.appendChild(bt); b.appendChild(esito);
+    var gia = el('p', { class: 'cr-nota' }, 'Sei già registrato? ');
+    gia.appendChild(el('a', { href: '/' }, 'Accedi'));
+    b.appendChild(gia);
     app.appendChild(b);
   }
 
@@ -151,7 +209,8 @@ const SCRIPT = RENDER_CRUSCOTTO + String.raw`
   }
 
   var q = new URLSearchParams(location.search);
-  if (q.get('errore') === 'link') { accesso('Il link è scaduto o è già stato usato: chiedine uno nuovo.'); history.replaceState(null, '', '/'); }
+  if (location.pathname === '/registrati') registrazione();
+  else if (q.get('errore') === 'link') { accesso('Il link è scaduto o è già stato usato: chiedine uno nuovo.'); history.replaceState(null, '', '/'); }
   else carica();
 })();
 `;
@@ -181,15 +240,91 @@ async function chiediLink(env, richiesta) {
     await registraEvento(env, richiesta, 'accesso_consulente_negato', c ? 'consulente sospeso' : 'email non registrata');
     return risposta({ messaggio });
   }
-  const token = b64url(crypto.getRandomValues(new Uint8Array(32)));
-  await env.DB.prepare('INSERT INTO accessi_consulenti (token_hash, consulente_id, scade_il) VALUES (?, ?, ?)')
-    .bind(await sha256(token), c.id, new Date(Date.now() + DURATA_LINK).toISOString()).run();
-  const link = `${new URL(richiesta.url).origin}/entra?t=${token}`;
+  const link = await nuovoLink(env, richiesta, c.id);
   try {
     await inviaEmail(env, emailAccessoConsulente({ consulente: c, link }));
   } catch (e) {
     console.error('email accesso consulente', e.message);
     return risposta({ errore: 'Non è stato possibile inviare l\'email: riprova fra poco' }, 502);
+  }
+  return risposta({ messaggio });
+}
+
+const testo = (v, max) => String(v == null ? '' : v).trim().replace(/\s+/g, ' ').slice(0, max);
+
+/** Crea un token di accesso (15 minuti) e restituisce il link. */
+async function nuovoLink(env, richiesta, id) {
+  const token = b64url(crypto.getRandomValues(new Uint8Array(32)));
+  await env.DB.prepare('INSERT INTO accessi_consulenti (token_hash, consulente_id, scade_il) VALUES (?, ?, ?)')
+    .bind(await sha256(token), id, new Date(Date.now() + DURATA_LINK).toISOString()).run();
+  return `${new URL(richiesta.url).origin}/entra?t=${token}`;
+}
+
+/**
+ * Registrazione dal modulo pubblico. La risposta è la stessa anche se l'email
+ * esiste già (in quel caso parte solo un normale link di accesso), così il modulo
+ * non rivela chi è registrato.
+ */
+async function registra(env, richiesta) {
+  const ip = richiesta.headers.get('CF-Connecting-IP') || 'sconosciuto';
+  if (env.LIMITE_ACCESSI) {
+    const { success } = await env.LIMITE_ACCESSI.limit({ key: ip });
+    if (!success) {
+      await registraEvento(env, richiesta, 'troppe_richieste', 'area consulenti: troppe registrazioni');
+      return risposta({ errore: 'Troppe richieste: riprova fra qualche minuto' }, 429);
+    }
+  }
+  let corpo = {};
+  try { corpo = await richiesta.json(); } catch (e) { /* vuoto */ }
+  const messaggio = 'Registrazione ricevuta. Ti abbiamo mandato un\'email con il link per entrare nella tua area: controlla anche lo spam.';
+
+  // robot: il campo trappola è pieno. Risposta normale, nessun dato salvato.
+  if (corpo.sito) {
+    await registraEvento(env, richiesta, 'registrazione_robot', 'campo trappola compilato');
+    return risposta({ messaggio });
+  }
+  const d = {
+    nome: testo(corpo.nome, 60), cognome: testo(corpo.cognome, 60), ragioneSociale: testo(corpo.ragioneSociale, 150),
+    pivaCf: testo(corpo.pivaCf, 20).replace(/\s/g, '').toUpperCase(), pec: testo(corpo.pec, 120).toLowerCase(),
+    email: testo(corpo.email, 120).toLowerCase(), telefono: testo(corpo.telefono, 25),
+  };
+  const errori = [];
+  if (!d.nome) errori.push('Il nome è obbligatorio');
+  if (!d.cognome) errori.push('Il cognome è obbligatorio');
+  if (!/^([0-9]{11}|[A-Z0-9]{16})$/.test(d.pivaCf)) errori.push('Partita IVA (11 cifre) o codice fiscale (16 caratteri) non valido');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) errori.push('Email non valida');
+  if (d.pec && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.pec)) errori.push('PEC non valida');
+  if (!/^\+?[0-9 ./-]{6,20}$/.test(d.telefono)) errori.push('Telefono non valido');
+  if (corpo.privacy !== true) errori.push('Serve il consenso all\'informativa privacy');
+  if (/[<>]/.test(Object.values(d).join(''))) errori.push('Caratteri non ammessi');
+  if (errori.length) return risposta({ errore: errori.join('. ') }, 400);
+
+  const esiste = await env.DB.prepare('SELECT * FROM consulenti WHERE email = ?').bind(d.email).first();
+  if (esiste) {
+    await registraEvento(env, richiesta, 'registrazione_doppia', 'email già registrata');
+    if (esiste.stato !== 'sospeso') {
+      try { await inviaEmail(env, emailAccessoConsulente({ consulente: esiste, link: await nuovoLink(env, richiesta, esiste.id) })); }
+      catch (e) { console.error('email accesso (registrazione doppia)', e.message); }
+    }
+    return risposta({ messaggio });
+  }
+
+  const adesso = new Date();
+  const nota = `Registrato dal modulo online il ${adesso.toLocaleString('it-IT', { timeZone: 'Europe/Rome' })}; consenso privacy dato.`;
+  const r = await env.DB.prepare(
+    `INSERT INTO consulenti (nome, cognome, ragione_sociale, piva_cf, pec, email, telefono, compenso_pct, stato, note, creato_il)
+     VALUES (?, ?, ?, ?, ?, ?, ?, 40, 'in_attesa_contratto', ?, ?)`
+  ).bind(d.nome, d.cognome, d.ragioneSociale, d.pivaCf, d.pec, d.email, d.telefono, nota, adesso.toISOString()).run();
+  const id = r.meta.last_row_id;
+  const codice = await creaCodice(env, { base: d.cognome, scontoPct: 20, consulenteId: id });
+  console.log('consulente registrato dal modulo', id, codice);
+
+  const consulente = { ...d, id, codice };
+  try { await inviaEmail(env, emailRegistrazioneConsulente({ consulente, link: await nuovoLink(env, richiesta, id) })); }
+  catch (e) { console.error('email registrazione consulente', e.message); }
+  if (env.EMAIL_AMMINISTRATORE) {
+    try { await inviaEmail(env, emailNuovoConsulenteAdmin({ consulente, a: env.EMAIL_AMMINISTRATORE })); }
+    catch (e) { console.error('email nuovo consulente admin', e.message); }
   }
   return risposta({ messaggio });
 }
@@ -239,7 +374,7 @@ export default {
 
     if (await ipBloccato(env, richiesta)) return risposta('Accesso temporaneamente bloccato', 403, 'text/plain; charset=utf-8');
 
-    if (metodo === 'GET' && (pathname === '/' || pathname === '/index.html')) return risposta(PAGINA, 200, 'text/html; charset=utf-8');
+    if (metodo === 'GET' && (pathname === '/' || pathname === '/index.html' || pathname === '/registrati')) return risposta(PAGINA, 200, 'text/html; charset=utf-8');
     if (metodo === 'GET' && pathname === '/app.js') return risposta(SCRIPT, 200, 'text/javascript; charset=utf-8');
     if (metodo === 'GET' && pathname === '/robots.txt') return risposta('User-agent: *\nDisallow: /\n', 200, 'text/plain');
     if (metodo === 'GET' && pathname === '/favicon.ico') return new Response(null, { status: 204 });
@@ -258,6 +393,7 @@ export default {
       }
       try {
         if (metodo === 'POST' && pathname === '/api/accesso') return await chiediLink(env, richiesta);
+        if (metodo === 'POST' && pathname === '/api/registrazione') return await registra(env, richiesta);
         if (metodo === 'POST' && pathname === '/api/esci') {
           return risposta({ ok: true }, 200, undefined, { 'Set-Cookie': `${COOKIE}=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0` });
         }

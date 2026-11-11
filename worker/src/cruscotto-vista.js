@@ -26,9 +26,11 @@ function disegnaCruscotto(box, dati, opz) {
 
   // codici e link da condividere
   var rc = riquadro('Il tuo codice sconto');
-  var attivi = (dati.codici || []).filter(function (k) { return k.attivo; });
-  if (!attivi.length) rc.appendChild(el('p', { class: 'cr-nota' }, c.stato === 'attivo'
-    ? 'Nessun codice attivo.' : 'Il codice si attiva quando il contratto è completato.'));
+  // finché il consulente non è "Attivo" il codice non funziona: non lo mostriamo come da condividere
+  var attivi = c.stato === 'attivo' ? (dati.codici || []).filter(function (k) { return k.attivo; }) : [];
+  if (c.stato === 'in_attesa_contratto') {
+    rc.appendChild(el('p', null, 'Registrazione ricevuta: il tuo codice sconto si attiva appena è completato l\'accordo di collaborazione. Ti avviseremo via email.'));
+  } else if (!attivi.length) rc.appendChild(el('p', { class: 'cr-nota' }, 'Nessun codice attivo.'));
   attivi.forEach(function (k) {
     var link = sito + '/corsi-sicurezza?codice=' + encodeURIComponent(k.codice);
     var riga = el('div', { class: 'cr-codice' });
