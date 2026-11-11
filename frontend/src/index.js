@@ -6,6 +6,7 @@ import App from "@/App";
 import { avviaStatistiche } from "@/statistiche";
 import { avviaGoogleAds } from "@/googleAds";
 import { registraProvenienza } from "@/provenienza";
+import { registraCodiceDaLink } from "@/codiceSconto";
 
 const rootElement = document.getElementById("root");
 
@@ -26,5 +27,6 @@ if (rootElement.hasChildNodes()) {
 }
 
 registraProvenienza();
+registraCodiceDaLink();
 avviaStatistiche();
 avviaGoogleAds();

@@ -12,6 +12,8 @@ import { PAGINA, SCRIPT } from './admin-pagina';
 import { statisticheVisite } from './visite';
 import { SCRIPT_PROVENIENZA } from './admin-provenienza';
 import { SCRIPT_SICUREZZA } from './admin-sicurezza';
+import { SCRIPT_CONSULENTI } from './admin-consulenti-ui';
+import { apiConsulenti } from './admin-consulenti';
 import { csvEventi, elencoBloccati, elencoEventi, registraEvento, sbloccaIp } from './sicurezza';
 
 const STATI_ATTIVI = ['in_attesa_bonifico', 'pagato', 'caricato', 'importo_da_verificare'];
@@ -198,7 +200,7 @@ export default {
       return risposta(PAGINA, 200, 'text/html; charset=utf-8');
     }
     if (metodo === 'GET' && pathname === '/app.js') {
-      return risposta(`${SCRIPT}\n${SCRIPT_PROVENIENZA}\n${SCRIPT_SICUREZZA}`, 200, 'text/javascript; charset=utf-8');
+      return risposta(`${SCRIPT}\n${SCRIPT_PROVENIENZA}\n${SCRIPT_SICUREZZA}\n${SCRIPT_CONSULENTI}`, 200, 'text/javascript; charset=utf-8');
     }
 
     if (pathname.startsWith('/api/')) {
@@ -245,6 +247,17 @@ export default {
         } catch (e) {
           console.error('statistiche visite', e.message);
           return risposta({ configurato: true, errore: 'Cloudflare non ha risposto: ' + e.message });
+        }
+      }
+
+      if (pathname.startsWith('/api/consulenti') || pathname.startsWith('/api/codici')) {
+        try {
+          const r = await apiConsulenti(env, richiesta, url, metodo, email, risposta);
+          if (r) return r;
+        } catch (e) {
+          console.error('consulenti', e.message);
+          const mancano = /no such table|no such column/i.test(e.message);
+          return risposta({ errore: mancano ? 'Database da aggiornare: esegui la migrazione dei codici sconto' : 'Errore: ' + e.message }, 500);
         }
       }
 

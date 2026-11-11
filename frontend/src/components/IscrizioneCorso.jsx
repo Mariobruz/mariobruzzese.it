@@ -17,6 +17,7 @@ import { province, regioneDiProvincia } from '../data/province';
 import { ricordaAcquistoInCorso, tracciaAcquisto } from '../googleAds';
 import { leggiProvenienza } from '../provenienza';
 import { corsiPubblicabili } from '../data/corsiSicurezza';
+import { applicaSconto, codiceIniziale, normalizza, prezzoTesto, verificaCodice } from '../codiceSconto';
 
 const ENDPOINT = process.env.REACT_APP_ISCRIZIONI_URL;
 // Chiave pubblica di Cloudflare Turnstile (anti-bot). Se non c'è, il controllo resta spento.
@@ -140,11 +141,41 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   const [erroreInvio, setErroreInvio] = useState(null);
   const [metodoPagamento, setMetodoPagamento] = useState('carta');
   const [esito, setEsito] = useState(null);
+  // codice sconto: lo verifica il server; qui serve solo a mostrare i prezzi scontati
+  const [codiceInput, setCodiceInput] = useState(codiceIniziale());
+  const [sconto, setSconto] = useState(null); // { codice, pct }
+  const [statoCodice, setStatoCodice] = useState(''); // '' | 'verifica' | 'ko' | 'troppi' | 'errore'
+
+  const applicaCodice = async (valore) => {
+    const v = normalizza(valore);
+    if (!v) { setSconto(null); setStatoCodice('ko'); return; }
+    setStatoCodice('verifica');
+    try {
+      const r = await verificaCodice(v);
+      if (r.valido) {
+        setSconto({ codice: r.codice, pct: Number(r.scontoPct) || 0 });
+        setCodiceInput(r.codice);
+        setStatoCodice('');
+      } else {
+        setSconto(null);
+        setStatoCodice(r.troppi ? 'troppi' : 'ko');
+      }
+    } catch (e) {
+      setSconto(null);
+      setStatoCodice('errore');
+    }
+  };
+
+  // codice arrivato dal link del consulente: si verifica subito
+  useEffect(() => {
+    if (codiceInput) applicaCodice(codiceInput);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Un'azienda può scegliere un corso diverso per ogni partecipante; un privato acquista il corso della pagina.
   const multiCorso = fatturazione.tipo === 'azienda';
   const corsoDi = (p) => (multiCorso && CATALOGO.find((c) => c.id === p.corsoId)) || corso;
-  const totale = partecipanti.reduce((somma, p) => somma + corsoDi(p).prezzo, 0);
+  const prezzoDi = (p) => (sconto ? applicaSconto(corsoDi(p).prezzo, sconto.pct) : corsoDi(p).prezzo);
+  const totale = Math.round(partecipanti.reduce((somma, p) => somma + prezzoDi(p), 0) * 100) / 100;
   const richiedeCcnl = partecipanti.some((p) => corsoDi(p).richiedeCcnl);
 
   const aggiornaPartecipante = (indice, campo, valore) => {
@@ -230,6 +261,10 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
   };
 
   const inviaEPaga = async () => {
+    if (codiceInput.trim() && !sconto) {
+      setErroreInvio('Premi «Applica» per usare il codice sconto, oppure cancellalo dal campo.');
+      return;
+    }
     if (richiedeCcnl && !consensi.ccnl) {
       setErroreInvio('Per i corsi RLS devi confermare che il CCNL applicato ammette la formazione in e-learning.');
       return;
@@ -269,6 +304,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
           consensi,
           metodoPagamento,
           totale,
+          codiceSconto: sconto ? sconto.codice : undefined,
           turnstile: tokenAntibot || undefined,
           provenienza: leggiProvenienza() || undefined,
         }),
@@ -276,6 +312,8 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
       if (!risposta.ok) {
         const err = new Error('richiesta rifiutata');
         err.stato = risposta.status;
+        err.dati = await risposta.json().catch(() => ({}));
+        if (err.dati.codice === 'codice_non_valido') { setSconto(null); setStatoCodice('ko'); }
         throw err;
       }
       const dati = await risposta.json();
@@ -292,7 +330,9 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
       setTokenAntibot('');
       if (TURNSTILE_SITE_KEY && window.turnstile) window.turnstile.reset();
       setErroreInvio(
-        err.stato === 429
+        err.dati && err.dati.codice === 'codice_non_valido'
+          ? 'Il codice sconto non è più valido: toglilo o inseriscine un altro, poi riprova.'
+          : err.stato === 429
           ? 'Troppi tentativi ravvicinati: attendi un minuto e riprova. I dati inseriti restano qui.'
           : err.stato === 403
           ? 'La verifica anti-bot non è andata a buon fine: attendi che si completi e riprova.'
@@ -342,7 +382,9 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
         <p className="text-sm font-medium text-gray-500 mb-2">Iscrizione al corso</p>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{corso.titolo}</h1>
         <p className="text-gray-600">
-          {corso.ore} ore · e-learning asincrono · {corso.prezzo}&nbsp;€ a partecipante, IVA compresa
+          {corso.ore} ore · e-learning asincrono · {sconto
+            ? <><s className="text-gray-400">{corso.prezzo}&nbsp;€</s> {prezzoTesto(applicaSconto(corso.prezzo, sconto.pct))}&nbsp;€</>
+            : <>{corso.prezzo}&nbsp;€</>} a partecipante, IVA compresa
         </p>
         {corso.avviso && <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mt-4">{corso.avviso}</p>}
       </div>
@@ -420,10 +462,11 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
               ) : (
                 <div className="bg-gray-50 rounded-xl p-6 flex items-center justify-between">
                   <span className="text-gray-600">
-                    {partecipanti.length} × {corso.prezzo}&nbsp;€
+                    {partecipanti.length} × {prezzoTesto(sconto ? applicaSconto(corso.prezzo, sconto.pct) : corso.prezzo)}&nbsp;€
+                    {sconto && <span className="block text-xs text-gray-500 mt-1">con il codice {sconto.codice} (−{sconto.pct}%)</span>}
                   </span>
                   <span className="text-right">
-                    <span className="block text-2xl font-bold leading-none">{totale}&nbsp;€</span>
+                    <span className="block text-2xl font-bold leading-none">{prezzoTesto(totale)}&nbsp;€</span>
                     <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
                   </span>
                 </div>
@@ -511,7 +554,8 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                     )}
                   </div>
                   <div className="mt-4 flex justify-end text-sm text-gray-600">
-                    Costo: <strong className="ml-1 text-gray-900">{corsoDi(p).prezzo}&nbsp;€</strong>
+                    Costo:{sconto && <s className="ml-1 text-gray-400">{corsoDi(p).prezzo}&nbsp;€</s>}
+                    <strong className="ml-1 text-gray-900">{prezzoTesto(prezzoDi(p))}&nbsp;€</strong>
                   </div>
                 </div>
               ))}
@@ -519,7 +563,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
               <div className="bg-gray-50 rounded-xl p-6 flex items-center justify-between">
                 <span className="text-gray-600">Totale · {partecipanti.length} partecipant{partecipanti.length > 1 ? 'i' : 'e'}</span>
                 <span className="text-right">
-                  <span className="block text-2xl font-bold leading-none">{totale}&nbsp;€</span>
+                  <span className="block text-2xl font-bold leading-none">{prezzoTesto(totale)}&nbsp;€</span>
                   <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
                 </span>
               </div>
@@ -529,6 +573,34 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
           {passo === 3 && (
             <section className="space-y-6">
               <h2 className="text-xl font-bold text-gray-900">Controlla e conferma</h2>
+
+              <div className="border-2 border-gray-200 rounded-xl p-5">
+                <label htmlFor="codice-sconto" className="block text-sm font-medium text-gray-700 mb-1.5">Codice sconto (facoltativo)</label>
+                <div className="flex gap-2">
+                  <input
+                    id="codice-sconto"
+                    value={codiceInput}
+                    onChange={(e) => { setCodiceInput(e.target.value.toUpperCase()); setSconto(null); setStatoCodice(''); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applicaCodice(codiceInput); } }}
+                    placeholder="Es. ROSSI-7K3"
+                    autoComplete="off"
+                    className="flex-1 min-w-0 px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-black outline-none uppercase"
+                  />
+                  {sconto ? (
+                    <button type="button" onClick={() => { setSconto(null); setCodiceInput(''); }} className="px-4 rounded-lg border-2 border-gray-200 hover:border-black text-sm font-medium">
+                      Rimuovi
+                    </button>
+                  ) : (
+                    <button type="button" onClick={() => applicaCodice(codiceInput)} disabled={!codiceInput.trim() || statoCodice === 'verifica'} className="px-4 rounded-lg bg-black text-white text-sm font-medium disabled:opacity-40">
+                      {statoCodice === 'verifica' ? 'Verifico…' : 'Applica'}
+                    </button>
+                  )}
+                </div>
+                {sconto && <p className="text-sm text-green-700 mt-2">Codice {sconto.codice} applicato: sconto del {sconto.pct}% su tutti i corsi.</p>}
+                {statoCodice === 'ko' && <p className="text-sm text-red-600 mt-2">Codice non valido o non più attivo.</p>}
+                {statoCodice === 'troppi' && <p className="text-sm text-red-600 mt-2">Troppi tentativi: riprova fra un minuto.</p>}
+                {statoCodice === 'errore' && <p className="text-sm text-red-600 mt-2">Non riesco a verificare il codice adesso: riprova fra poco.</p>}
+              </div>
 
               <div className="border-2 border-gray-200 rounded-xl divide-y divide-gray-100">
                 <div className="p-5 flex justify-between gap-4">
@@ -551,7 +623,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                           <span className="text-gray-400">· {p.codiceFiscale}</span>
                           <span className="block text-sm text-gray-600">{corsoDi(p).titolo} · {corsoDi(p).ore} ore</span>
                         </span>
-                        <span className="font-medium whitespace-nowrap">{corsoDi(p).prezzo}&nbsp;€</span>
+                        <span className="font-medium whitespace-nowrap">{prezzoTesto(prezzoDi(p))}&nbsp;€</span>
                       </li>
                     ))}
                   </ul>
@@ -559,7 +631,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                 <div className="p-5 flex justify-between items-center bg-gray-50">
                   <span className="text-gray-600">Totale</span>
                   <span className="text-right">
-                    <span className="block text-2xl font-bold leading-none">{totale}&nbsp;€</span>
+                    <span className="block text-2xl font-bold leading-none">{prezzoTesto(totale)}&nbsp;€</span>
                     <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
                   </span>
                 </div>

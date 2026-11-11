@@ -199,6 +199,7 @@ export function emailAmministratore(env, { ordine, partecipanti, riferimento, to
       <h2 style="margin-bottom:4px">${etichetta} · ${riferimento}</h2>
       <p style="margin-top:0"><strong>${esc(corsoLeggibile(ordine.corso))}</strong>
       — ${esc(righeFattura(partecipanti, ordine))} = <strong>${totale}&nbsp;€</strong></p>
+      ${ordine.codiceSconto ? `<p style="margin-top:0">Codice sconto <strong>${esc(ordine.codiceSconto)}</strong> (−${esc(ordine.scontoPct)}%) · prezzo di listino ${esc(ordine.totaleListino)}&nbsp;€</p>` : ''}
       <p style="background:#f5f5f5;padding:12px;border-radius:8px">
         ${stato === 'pagato'
           ? (azienda

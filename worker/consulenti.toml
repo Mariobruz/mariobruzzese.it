@@ -1,0 +1,37 @@
+# Area riservata dei consulenti (Worker separato).
+# Si pubblica con:  npm run deploy:consulenti
+# Segreti (una volta sola):
+#   npx wrangler secret put BREVO_API_KEY -c consulenti.toml      (la stessa chiave degli altri Worker)
+#   npx wrangler secret put SESSIONE_SEGRETO -c consulenti.toml   (stringa casuale di almeno 32 caratteri)
+name = "area-consulenti"
+main = "src/consulenti.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# Richieste di link di accesso: massimo 5 al minuto dallo stesso IP
+[[unsafe.bindings]]
+name = "LIMITE_ACCESSI"
+type = "ratelimit"
+namespace_id = "2406"
+simple = { limit = 5, period = 60 }
+
+# Contatore degli eventi sospetti (blocco IP 24 ore, come nel Worker delle iscrizioni)
+[[unsafe.bindings]]
+name = "LIMITE_SOSPETTI"
+type = "ratelimit"
+namespace_id = "2404"
+simple = { limit = 10, period = 60 }
+
+[[analytics_engine_datasets]]
+binding = "EVENTI_SICUREZZA"
+dataset = "eventi_sicurezza"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "iscrizioni-corsi"
+database_id = "c36aa84d-e0a4-496e-aae3-f63ac225b356"
+
+[vars]
+EMAIL_MITTENTE = "corsi@mariobruzzese.it"
+NOME_MITTENTE = "MB Consulting"
+EMAIL_AMMINISTRATORE = "corsi@mariobruzzese.it"

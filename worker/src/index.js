@@ -25,6 +25,8 @@ import {
 } from './validazione';
 import { province } from './province';
 import { ipBloccato, registraEvento } from './sicurezza';
+import { applicaSconto, centesimi, cercaCodice, registraClick, registraCompenso } from './consulenti-dati';
+import { emailNuovoOrdineConsulente } from './email-consulenti';
 
 const MAX_PARTECIPANTI = 50;
 const MAX_CORPO = 100000; // caratteri: 50 partecipanti stanno ampiamente sotto
@@ -83,7 +85,7 @@ function intestazioniCors(env, richiesta) {
   const consentita = ammesse.includes(origine) ? origine : ammesse[0] || '';
   return {
     'Access-Control-Allow-Origin': consentita,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
@@ -190,7 +192,7 @@ function corsoOrdine(corso, partecipanti) {
   return { ...corso, titolo: `Più corsi (${diversi.length})`, ore: null, prezzo: 0 };
 }
 
-async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza }) {
+async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza, codice, totaleListino }) {
   const adesso = new Date().toISOString();
   const valori = [
     null, corso.id, corso.titolo, corso.sku, corso.ore,
@@ -203,6 +205,19 @@ async function salvaOrdine(env, { corso, fatturazione, partecipanti, consensi, m
        fatturazione, consensi, creato_il`;
   let risultato;
   try {
+    // con il codice sconto: codice, sconto, totale di listino e consulente a cui spetta il compenso
+    risultato = await env.DB.prepare(
+      `INSERT INTO ordini (${colonne}, provenienza, codice_sconto, sconto_pct, totale_listino, consulente_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(...valori, provenienza || null, codice ? codice.codice : null, codice ? codice.scontoPct : null,
+      totaleListino, codice ? codice.consulenteId : null).run();
+  } catch (e0) {
+    // database non ancora aggiornato per i codici sconto: un ordine con codice non si salva senza
+    if (!/codice_sconto|sconto_pct|totale_listino|consulente_id/i.test(String(e0 && e0.message))) throw e0;
+    if (codice) throw e0;
+    console.error('colonne dei codici sconto mancanti: eseguire la migrazione del database');
+  }
+  if (!risultato) try {
     risultato = await env.DB.prepare(
       `INSERT INTO ordini (${colonne}, provenienza) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(...valori, provenienza || null).run();
@@ -342,16 +357,33 @@ async function gestisciIscrizione(env, richiesta) {
   }
 
   const { corso, fatturazione, partecipanti, consensi, metodo, provenienza } = controllo;
-  const totale = partecipanti.reduce((somma, p) => somma + p.corso.prezzo, 0);
+
+  // codice sconto: lo verifica e lo applica il server, sul prezzo del catalogo
+  let codice = null;
+  if (corpo.codiceSconto) {
+    codice = await cercaCodice(env, corpo.codiceSconto);
+    if (!codice) {
+      return json({ errore: 'Codice sconto non valido', codice: 'codice_non_valido',
+        dettagli: ['Il codice sconto non è valido o non è più attivo: correggilo o toglilo per procedere'] }, 422);
+    }
+    partecipanti.forEach((p) => {
+      p.corso = { ...p.corso, prezzoListino: p.corso.prezzo, prezzo: applicaSconto(p.corso.prezzo, codice.scontoPct) };
+    });
+  }
+  const totaleListino = centesimi(partecipanti.reduce((somma, p) => somma + (p.corso.prezzoListino ?? p.corso.prezzo), 0));
+  const totale = centesimi(partecipanti.reduce((somma, p) => somma + p.corso.prezzo, 0));
   // si incassa sempre il prezzo del catalogo; un totale diverso dal browser si annota soltanto
   // (può essere una pagina vecchia rimasta in cache dopo un cambio di prezzo, oppure una manomissione)
   if (corpo.totale !== undefined && Number(corpo.totale) !== totale) {
     await registraEvento(env, richiesta, 'totale_diverso', `inviato ${corpo.totale} €, catalogo ${totale} €`);
   }
-  const ordine = { corso: corsoOrdine(corso, partecipanti), fatturazione };
+  const ordine = {
+    corso: corsoOrdine(corso, partecipanti), fatturazione,
+    codiceSconto: codice ? codice.codice : null, scontoPct: codice ? codice.scontoPct : null, totaleListino,
+  };
 
   const { id, riferimento } = await salvaOrdine(env, {
-    corso: ordine.corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza,
+    corso: ordine.corso, fatturazione, partecipanti, consensi, metodo, totale, provenienza, codice, totaleListino,
   });
 
   if (metodo === 'bonifico') {
@@ -437,6 +469,7 @@ async function gestisciWebhook(env, richiesta) {
   await inviaNotifiche(env, {
     ordine: {
       corso: corsoTestata,
+      codiceSconto: ordine.codice_sconto || null, scontoPct: ordine.sconto_pct, totaleListino: ordine.totale_listino,
       fatturazione: JSON.parse(ordine.fatturazione),
     },
     partecipanti,
@@ -445,7 +478,48 @@ async function gestisciWebhook(env, richiesta) {
     stato: 'pagato',
   });
 
+  // ordine fatto con il codice di un consulente: compenso (uno per ordine) e avviso al consulente
+  if (ordine.consulente_id) {
+    try {
+      const esito = await registraCompenso(env, ordine);
+      if (esito) {
+        await inviaEmail(env, emailNuovoOrdineConsulente({
+          consulente: esito.consulente, ordine, partecipanti, compenso: esito.compenso, pct: esito.pct,
+          areaUrl: env.AREA_CONSULENTI_URL,
+        }));
+      }
+    } catch (e) {
+      // l'ordine è già pagato e notificato: il compenso si recupera dal pannello
+      console.error('compenso consulente', riferimento, e.message);
+    }
+  }
+
   return json({ ricevuto: true });
+}
+
+/** Verifica di un codice sconto dal modulo: valido sì/no e percentuale. */
+async function gestisciCodice(env, richiesta, valore, click) {
+  const origine = richiesta.headers.get('Origin') || '';
+  const ammesse = (env.ORIGINI_AMMESSE || '').split(',').map((o) => o.trim()).filter(Boolean);
+  if (ammesse.length && !ammesse.includes(origine)) {
+    await registraEvento(env, richiesta, 'origine_non_ammessa', `codici: ${origine || 'nessuna Origin'}`);
+    return json({ errore: 'Richiesta non ammessa' }, 403);
+  }
+  // freno a chi prova i codici a raffica
+  if (env.LIMITE_CODICI) {
+    const ip = richiesta.headers.get('CF-Connecting-IP') || 'sconosciuto';
+    const { success } = await env.LIMITE_CODICI.limit({ key: ip });
+    if (!success) {
+      await registraEvento(env, richiesta, 'troppi_tentativi_codice', 'oltre 20 verifiche di codici al minuto');
+      return json({ errore: 'Troppi tentativi: riprova fra un minuto' }, 429);
+    }
+  }
+  if (click) {
+    try { await registraClick(env, valore); } catch (e) { console.error('click codice', e.message); }
+    return json({ ok: true });
+  }
+  const codice = await cercaCodice(env, valore);
+  return json(codice ? { valido: true, codice: codice.codice, scontoPct: codice.scontoPct } : { valido: false });
 }
 
 export default {
@@ -468,6 +542,13 @@ export default {
 
     if (url.pathname === '/stripe/webhook' && richiesta.method === 'POST') {
       return gestisciWebhook(env, richiesta);
+    }
+
+    const codiceUrl = url.pathname.match(/^\/codici\/([^/]{1,40})(\/click)?$/);
+    if (codiceUrl && ((richiesta.method === 'GET' && !codiceUrl[2]) || (richiesta.method === 'POST' && codiceUrl[2]))) {
+      const risposta = await gestisciCodice(env, richiesta, decodeURIComponent(codiceUrl[1]), Boolean(codiceUrl[2]));
+      Object.entries(cors).forEach(([k, v]) => risposta.headers.set(k, v));
+      return risposta;
     }
 
     if (url.pathname === '/') return json({ servizio: 'iscrizioni corsi sicurezza', stato: 'attivo' });

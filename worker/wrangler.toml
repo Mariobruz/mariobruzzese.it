@@ -23,6 +23,13 @@ type = "ratelimit"
 namespace_id = "2404"
 simple = { limit = 10, period = 60 }
 
+# Verifica dei codici sconto dal modulo: massimo 20 al minuto dallo stesso IP
+[[unsafe.bindings]]
+name = "LIMITE_CODICI"
+type = "ratelimit"
+namespace_id = "2405"
+simple = { limit = 20, period = 60 }
+
 # Registro degli eventi di sicurezza (Workers Analytics Engine, conservazione ~3 mesi)
 [[analytics_engine_datasets]]
 binding = "EVENTI_SICUREZZA"
@@ -43,6 +50,8 @@ EMAIL_AMMINISTRATORE = "corsi@mariobruzzese.it"
 # chi riceve la conferma di ogni acquisto, con tutti i dati e il CSV (separati da virgola)
 EMAIL_NOTIFICHE = "corsi@mariobruzzese.it,mariobruzzese@hotmail.com"
 INTESTATARIO_CONTO = "Mario Bruzzese"
+# indirizzo dell'area consulenti, citato nelle email ai consulenti
+AREA_CONSULENTI_URL = "https://area-consulenti.mario-bruz.workers.dev"
 
 # I segreti NON vanno qui. Si impostano con:
 #   wrangler secret put STRIPE_SECRET_KEY

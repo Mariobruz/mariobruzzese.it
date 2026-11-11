@@ -50,7 +50,7 @@ export async function creaSessionePagamento(env, { ordine, partecipanti, riferim
     customer_email: ordine.fatturazione.email,
     success_url: `${env.SITO_URL}/corsi-sicurezza?iscrizione=ok&rif=${riferimento}`,
     cancel_url: `${env.SITO_URL}/corsi-sicurezza?iscrizione=annullata`,
-    metadata: { riferimento, corso: ordine.corso.id, partecipanti: String(partecipanti.length) },
+    metadata: { riferimento, corso: ordine.corso.id, partecipanti: String(partecipanti.length), codice_sconto: ordine.codiceSconto || undefined },
     line_items: righePagamento(ordine, partecipanti),
   }).join('&');
 
