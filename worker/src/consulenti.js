@@ -131,6 +131,17 @@ main{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
 .grazie .tondo{width:64px;height:64px;border-radius:50%;background:#ecfdf5;color:#047857;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
 .grazie .tondo svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .caricamento{padding:80px 0;text-align:center;color:#6b7280}
+.wa-fisso{position:fixed;right:20px;bottom:20px;z-index:20;display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:999px;box-shadow:0 10px 25px -8px rgba(0,0,0,.35)}
+.wa-fisso:hover{background:#1ebe5b}
+.wa-ico{width:22px;height:22px;fill:currentColor;flex:none}
+.wa-riga{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:11px;border:2px solid #25D366;border-radius:10px;color:#111;text-decoration:none;font-weight:600;font-size:14px}
+.wa-riga:hover{background:#25D3661a}
+.wa-riga .wa-ico{color:#1ebe5b;width:20px;height:20px}
+.aiuto{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:18px 22px;margin:0 0 18px}
+.aiuto strong{display:block;font-size:16px}.aiuto span{color:#6b7280;font-size:14px}
+.aiuto .wa-riga{margin:0;padding:10px 16px}
+.aiuto .wa-riga span{color:#111;font-size:14px}
+@media (max-width:600px){.wa-fisso span{display:none}.wa-fisso{padding:14px;right:16px;bottom:16px}}
 @media (max-width:860px){.schermo{grid-template-columns:1fr}.lato{padding:36px 24px}.lato h1{font-size:28px}.modulo{padding:24px 16px 48px}}
 @media (max-width:480px){.utente .nome{display:none}.griglia2{grid-template-columns:1fr}.carta{padding:22px}.marchio small{display:none}}
 ${STILE_CRUSCOTTO}
@@ -185,6 +196,31 @@ const SCRIPT = RENDER_CRUSCOTTO + String.raw`
     s.appendChild(u);
     return s;
   }
+  // WhatsApp di MB Consulting (stesso numero del sito)
+  var WHATSAPP = '393291747521';
+  var LOGO_WA = '<path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zm8.4-18.2C18.2 1.3 15.2 0 12 0 5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6c1.8 1 3.8 1.5 5.8 1.5 6.6 0 12-5.4 12-12 0-3.2-1.2-6.2-3.6-8.4z"/>';
+  function logoWa() {
+    var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('class', 'wa-ico'); s.setAttribute('aria-hidden', 'true');
+    s.innerHTML = LOGO_WA; return s;
+  }
+  function linkWa(testo) { return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(testo); }
+  /** Pulsante verde fisso in basso a destra, con il messaggio adatto alla pagina. */
+  function whatsapp(testo) {
+    var a = document.getElementById('wa-fisso');
+    if (!a) {
+      a = el('a', { id: 'wa-fisso', class: 'wa-fisso', target: '_blank', rel: 'noopener', 'aria-label': 'Scrivici su WhatsApp' });
+      a.appendChild(logoWa()); a.appendChild(el('span', null, 'Scrivici su WhatsApp'));
+      document.body.appendChild(a);
+    }
+    a.setAttribute('href', linkWa(testo));
+  }
+  function rigaWa(testo, etichetta) {
+    var a = el('a', { class: 'wa-riga', href: linkWa(testo), target: '_blank', rel: 'noopener' });
+    a.appendChild(logoWa()); a.appendChild(el('span', null, etichetta));
+    return a;
+  }
+
   function schermo(titolo, testo, carta) {
     app.textContent = '';
     var g = el('div', { class: 'schermo' });
@@ -223,6 +259,8 @@ const SCRIPT = RENDER_CRUSCOTTO + String.raw`
     var p = el('p', { class: 'piede' }, 'Non sei ancora registrato? ');
     p.appendChild(el('a', { href: '/registrati' }, 'Diventa consulente'));
     c.appendChild(p);
+    c.appendChild(rigaWa('Ciao, sono un consulente e ho bisogno di aiuto per accedere all\'area consulenti.', 'Problemi ad accedere? Scrivici su WhatsApp'));
+    whatsapp('Ciao, sono un consulente e ho bisogno di aiuto per accedere all\'area consulenti.');
     schermo('Bentornato nella tua area consulenti', 'Il tuo codice sconto, gli ordini dei tuoi clienti e i tuoi compensi, sempre aggiornati.', c);
   }
 
@@ -270,6 +308,8 @@ const SCRIPT = RENDER_CRUSCOTTO + String.raw`
     var gia = el('p', { class: 'piede' }, 'Sei già registrato? ');
     gia.appendChild(el('a', { href: '/' }, 'Accedi'));
     c.appendChild(gia);
+    c.appendChild(rigaWa('Ciao, vorrei informazioni sul programma consulenti di MB Consulting.', 'Hai domande? Scrivici su WhatsApp'));
+    whatsapp('Ciao, vorrei informazioni sul programma consulenti di MB Consulting.');
     schermo('Offri ai tuoi clienti i corsi sulla sicurezza, a un prezzo migliore', 'Corsi e-learning D.Lgs. 81/08 e HACCP in convenzione con O.P.N. Italia Lavoro. Tu segnali, noi gestiamo iscrizioni, piattaforma e attestati.', c);
   }
 
@@ -308,6 +348,14 @@ const SCRIPT = RENDER_CRUSCOTTO + String.raw`
       app.appendChild(barra());
       var box = el('div'); app.appendChild(box);
       disegnaCruscotto(box, d, {});
+      var cons = d.consulente;
+      var cod = (d.codici || []).filter(function (k) { return k.attivo; }).map(function (k) { return k.codice; }).join(', ');
+      var msg = 'Ciao, sono ' + cons.nome + ' ' + cons.cognome + (cod ? ' (codice ' + cod + ')' : '') + ' e ti scrivo dall\'area consulenti.';
+      var aiuto = el('section', { class: 'aiuto' });
+      var t = el('div'); t.appendChild(el('strong', null, 'Serve aiuto?')); t.appendChild(el('span', null, 'Per domande su ordini, clienti o compensi scrivici: ti rispondiamo su WhatsApp.'));
+      aiuto.appendChild(t); aiuto.appendChild(rigaWa(msg, 'Scrivici su WhatsApp'));
+      app.appendChild(aiuto);
+      whatsapp(msg);
     }).catch(function (e) { app.textContent = ''; app.appendChild(el('p', { class: 'caricamento' }, 'Errore: ' + e.message)); });
   }
 
