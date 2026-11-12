@@ -40,7 +40,7 @@ const DOMANDE = [
   ['Come si calcola il compenso?', 'È il 40% di quanto effettivamente incassato per ogni ordine pagato con il tuo codice, cioè sul prezzo già scontato. Gli ordini non pagati non generano compenso.'],
   ['Il cliente paga di più?', 'No: con il tuo codice il cliente ha il 20% di sconto sul prezzo esposto sul sito.'],
   ['Cosa vedo dei miei clienti?', 'Per ogni ordine fatto con il tuo codice: intestatario, contatti, partecipanti, corsi acquistati, importo e stato del tuo compenso.'],
-  ['Serve una password?', 'No. Entri nella tua area con un link che ti mandiamo per email, valido 15 minuti e utilizzabile una sola volta.'],
+  ['Come entro nella mia area? Serve una password?', 'Non serve nessuna password. Dopo la registrazione ti arriva subito un’email con il pulsante «Entra»: lo apri e sei dentro. Le volte successive vai su questa pagina, clicchi «Accedi alla tua area» e scrivi la tua email: ti mandiamo un nuovo link per entrare. Sullo stesso computer o telefono resti collegato per 30 giorni, quindi di solito ti basta riaprire la pagina. Per sicurezza ogni link vale 15 minuti e si usa una sola volta: se scade, ne chiedi un altro.'],
 ];
 
 const Campo = ({ etichetta, nome, tipo = 'text', valore, onChange, autoComplete, placeholder, obbligatorio }) => (
