@@ -38,7 +38,7 @@ export const corsi = [
     sku: '001',
     idEnte: 41,
     immagine: '/img/corsi/formazione-generale-lavoratori-4h.webp',
-    prezzo: 35,
+    prezzo: 50,
   },
   {
     id: 'formazione-generale-lavoratori-4h-eng',
@@ -52,7 +52,7 @@ export const corsi = [
     sku: 'corade_120',
     idEnte: 87,
     immagine: '/img/corsi/formazione-generale-lavoratori-4h-eng.webp',
-    prezzo: 40,
+    prezzo: 57,
   },
   {
     id: 'formazione-specifica-rischio-basso-4h',
@@ -67,7 +67,7 @@ export const corsi = [
     sku: 'forcih_462',
     idEnte: 42,
     immagine: '/img/corsi/formazione-specifica-rischio-basso-4h.webp',
-    prezzo: 39,
+    prezzo: 56,
   },
   {
     id: 'formazione-specifica-rischio-basso-turismo-4h',
@@ -81,7 +81,7 @@ export const corsi = [
     sku: 'opn-373',
     programmaDa: 'formazione-specifica-rischio-basso-4h',
     immagine: '/img/corsi/formazione-specifica-rischio-basso-turismo-4h.webp',
-    prezzo: 50,
+    prezzo: 71,
   },
   {
     id: 'formazione-specifica-rischio-basso-uffici-4h',
@@ -95,7 +95,7 @@ export const corsi = [
     sku: 'opn-377',
     programmaDa: 'formazione-specifica-rischio-basso-4h',
     immagine: '/img/corsi/formazione-specifica-rischio-basso-uffici-4h.webp',
-    prezzo: 50,
+    prezzo: 71,
   },
   {
     id: 'formazione-specifica-rischio-basso-4h-eng',
@@ -109,7 +109,7 @@ export const corsi = [
     sku: 'opn-363',
     programmaDa: 'formazione-specifica-rischio-basso-4h',
     immagine: '/img/corsi/formazione-specifica-rischio-basso-4h-eng.webp',
-    prezzo: 50,
+    prezzo: 71,
   },
   {
     id: 'formazione-generale-specifica-rischio-basso-8h',
@@ -123,7 +123,7 @@ export const corsi = [
     sku: 'coroma_445',
     idEnte: 60,
     immagine: '/img/corsi/formazione-generale-specifica-rischio-basso-8h.webp',
-    prezzo: 59,
+    prezzo: 84,
   },
   {
     id: 'formazione-generale-specifica-rischio-basso-8h-eng',
@@ -137,7 +137,7 @@ export const corsi = [
     sku: 'opn-365',
     programmaDa: 'formazione-generale-specifica-rischio-basso-8h',
     immagine: '/img/corsi/formazione-generale-specifica-rischio-basso-8h-eng.webp',
-    prezzo: 50,
+    prezzo: 71,
   },
   {
     id: 'aggiornamento-lavoratori-tutti-rischi-6h',
@@ -151,7 +151,7 @@ export const corsi = [
     sku: 'corrnr_592',
     idEnte: 43,
     immagine: '/img/corsi/aggiornamento-lavoratori-tutti-rischi-6h.webp',
-    prezzo: 49,
+    prezzo: 70,
   },
   {
     id: 'aggiornamento-lavoratori-6h-eng',
@@ -165,7 +165,7 @@ export const corsi = [
     sku: 'opn-369',
     programmaDa: 'aggiornamento-lavoratori-tutti-rischi-6h',
     immagine: '/img/corsi/aggiornamento-lavoratori-6h-eng.webp',
-    prezzo: 50,
+    prezzo: 71,
   },
   {
     id: 'aggiornamento-lavoratori-rischio-medio-6h',
@@ -180,7 +180,7 @@ export const corsi = [
     sku: 'corsrr_297',
     idEnte: 56,
     immagine: '/img/corsi/aggiornamento-lavoratori-rischio-medio-6h.webp',
-    prezzo: 49,
+    prezzo: 70,
   },
 
   // ------------------------------------------------------------ DATORE DI LAVORO
@@ -196,7 +196,7 @@ export const corsi = [
     sku: 'cors-d_123',
     idEnte: 70,
     immagine: '/img/corsi/datore-di-lavoro-16h.webp',
-    prezzo: 99,
+    prezzo: 141,
   },
   {
     id: 'aggiornamento-datore-lavoro-6h',
@@ -209,7 +209,7 @@ export const corsi = [
     normativa: 'D.Lgs. 81/2008',
     sku: 'opn-379',
     immagine: '/img/corsi/aggiornamento-datore-lavoro-6h.webp',
-    prezzo: 50,
+    prezzo: 71,
   },
   {
     id: 'datore-di-lavoro-16h-eng',
@@ -223,7 +223,7 @@ export const corsi = [
     sku: 'opn-378',
     programmaDa: 'datore-di-lavoro-16h',
     immagine: '/img/corsi/datore-di-lavoro-16h-eng.webp',
-    prezzo: 50,
+    prezzo: 71,
   },
   {
     id: 'rspp-datore-lavoro-8h',
@@ -238,7 +238,7 @@ export const corsi = [
     sku: 'cosoa-_188',
     idEnte: 49,
     immagine: '/img/corsi/rspp-datore-lavoro-8h.webp',
-    prezzo: 119,
+    prezzo: 170,
   },
   {
     id: 'aggiornamento-rspp-datore-lavoro-8h',
@@ -252,7 +252,7 @@ export const corsi = [
     sku: 'corieo_173',
     idEnte: 78,
     immagine: '/img/corsi/aggiornamento-rspp-datore-lavoro-8h.webp',
-    prezzo: 89,
+    prezzo: 127,
   },
   {
     id: 'modulo-cantieri-datore-6h',
@@ -266,7 +266,7 @@ export const corsi = [
     sku: 'cordiz_385',
     idEnte: 76,
     immagine: '/img/corsi/modulo-cantieri-datore-6h.webp',
-    prezzo: 79,
+    prezzo: 113,
   },
 
   // ------------------------------------------------------------------ DIRIGENTI
@@ -282,7 +282,7 @@ export const corsi = [
     sku: 'coroio_352',
     idEnte: 83,
     immagine: '/img/corsi/dirigenti-12h.webp',
-    prezzo: 149,
+    prezzo: 213,
   },
   {
     id: 'aggiornamento-dirigenti-6h',
@@ -296,7 +296,7 @@ export const corsi = [
     sku: 'corggi_610',
     idEnte: 44,
     immagine: '/img/corsi/aggiornamento-dirigenti-6h.webp',
-    prezzo: 69,
+    prezzo: 99,
   },
   {
     id: 'modulo-cantieri-dirigenti-6h',
@@ -310,7 +310,7 @@ export const corsi = [
     sku: 'cortn__284',
     idEnte: 77,
     immagine: '/img/corsi/modulo-cantieri-dirigenti-6h.webp',
-    prezzo: 79,
+    prezzo: 113,
   },
 
   // ---------------------------------------------------------------- RSPP / ASPP
@@ -326,7 +326,7 @@ export const corsi = [
     sku: 'rspppo_867',
     idEnte: 45,
     immagine: '/img/corsi/rspp-aspp-modulo-a-28h.webp',
-    prezzo: 49,
+    prezzo: 70,
   },
   {
     id: 'aggiornamento-rspp-40h',
@@ -340,7 +340,7 @@ export const corsi = [
     sku: 'coroea_180',
     idEnte: 58,
     immagine: '/img/corsi/aggiornamento-rspp-40h.webp',
-    prezzo: 99,
+    prezzo: 141,
   },
   {
     id: 'aggiornamento-aspp-20h',
@@ -354,7 +354,7 @@ export const corsi = [
     sku: 'cor-rm_653',
     idEnte: 61,
     immagine: '/img/corsi/aggiornamento-aspp-20h.webp',
-    prezzo: 139,
+    prezzo: 199,
   },
 
   // ----------------------------------------------------------------------- RLS
@@ -372,7 +372,7 @@ export const corsi = [
     sku: 'corona_906',
     idEnte: 51,
     immagine: '/img/corsi/rls-32h.webp',
-    prezzo: 149,
+    prezzo: 213,
   },
   {
     id: 'aggiornamento-rls-fino-50-4h',
@@ -388,7 +388,7 @@ export const corsi = [
     sku: 'cor-rl_382',
     idEnte: 46,
     immagine: '/img/corsi/aggiornamento-rls-fino-50-4h.webp',
-    prezzo: 20,
+    prezzo: 50,
   },
   {
     id: 'aggiornamento-rls-oltre-50-8h',
@@ -404,7 +404,7 @@ export const corsi = [
     sku: 'cora-i_223',
     idEnte: 54,
     immagine: '/img/corsi/aggiornamento-rls-oltre-50-8h.webp',
-    prezzo: 29,
+    prezzo: 80,
   },
 
   // ------------------------------------------------------------------- CANTIERI
@@ -421,7 +421,7 @@ export const corsi = [
     sku: 'cormln_716',
     idEnte: 57,
     immagine: '/img/corsi/coordinatore-modulo-giuridico-8h.webp',
-    prezzo: 79,
+    prezzo: 113,
   },
   {
     id: 'aggiornamento-csp-cse-40h',
@@ -436,7 +436,7 @@ export const corsi = [
     sku: 'rspsas_820',
     idEnte: 47,
     immagine: '/img/corsi/aggiornamento-csp-cse-40h.webp',
-    prezzo: 199,
+    prezzo: 284,
   },
 
   // ------------------------------------------------------------------ FORMATORI
@@ -453,7 +453,7 @@ export const corsi = [
     sku: 'coraor_886',
     idEnte: 63,
     immagine: '/img/corsi/formatori-40h.webp',
-    prezzo: 99,
+    prezzo: 141,
   },
   {
     id: 'formatori-24h',
@@ -467,7 +467,7 @@ export const corsi = [
     sku: 'cor4ia_615',
     idEnte: 95,
     immagine: '/img/corsi/formatori-24h.webp',
-    prezzo: 99,
+    prezzo: 141,
   },
   {
     id: 'aggiornamento-formatori-24h',
@@ -481,7 +481,7 @@ export const corsi = [
     sku: 'corg-t_163',
     idEnte: 59,
     immagine: '/img/corsi/aggiornamento-formatori-24h.webp',
-    prezzo: 29,
+    prezzo: 41,
   },
 
   // ---------------------------------------------------------------------- HACCP
@@ -497,7 +497,7 @@ export const corsi = [
     sku: 'coradr_126',
     idEnte: 89,
     immagine: '/img/corsi/responsabile-industria-alimentare.webp',
-    prezzo: 39,
+    prezzo: 56,
   },
   {
     id: 'osa-rischio-elevato-8h',
@@ -511,7 +511,7 @@ export const corsi = [
     sku: 'core_l_774',
     idEnte: 71,
     immagine: '/img/corsi/osa-rischio-elevato-8h.webp',
-    prezzo: 29,
+    prezzo: 50,
   },
   {
     id: 'osa-rischio-medio-6h',
@@ -525,7 +525,7 @@ export const corsi = [
     sku: 'corees_172',
     idEnte: 73,
     immagine: '/img/corsi/osa-rischio-medio-6h.webp',
-    prezzo: 25,
+    prezzo: 45,
   },
   {
     id: 'aggiornamento-osa-4h',
@@ -539,7 +539,7 @@ export const corsi = [
     sku: 'corn_o_533',
     idEnte: 72,
     immagine: '/img/corsi/aggiornamento-osa-4h.webp',
-    prezzo: 25,
+    prezzo: 40,
   },
 ];
 

@@ -349,7 +349,7 @@ export default function CorsiSicurezza() {
       <WhatsAppFisso testo="Ciao, vorrei informazioni sui corsi di sicurezza sul lavoro." />
       <SEOHead
         title="Corsi Sicurezza sul Lavoro Online – Accordo Stato-Regioni 2025"
-        description="Corsi di sicurezza sul lavoro online, Accordo Stato-Regioni 2025: lavoratori, datore di lavoro, RSPP, RLS, formatori, HACCP. Attestato con QR code, da 20 €."
+        description="Corsi di sicurezza sul lavoro online, Accordo Stato-Regioni 2025: lavoratori, datore di lavoro, RSPP, RLS, formatori, HACCP. Attestato con QR code, da 40 €."
         canonical="https://www.mariobruzzese.it/corsi-sicurezza"
         schema={schema}
       />
