@@ -19,6 +19,17 @@ import { ipBloccato, registraEvento } from './sicurezza';
 const DURATA_LINK = 15 * 60 * 1000;
 const DURATA_SESSIONE = 30 * 24 * 3600 * 1000;
 const COOKIE = '__Host-sessione';
+// pagina pubblica del programma consulenti sul sito (presentazione + registrazione)
+const PAGINA_SITO = 'https://www.mariobruzzese.it/consulenti';
+// il modulo di registrazione sul sito chiama questo Worker da qui
+const ORIGINI_SITO = ['https://www.mariobruzzese.it', 'https://mariobruzzese.it'];
+const cors = (richiesta) => {
+  const o = richiesta.headers.get('Origin');
+  return ORIGINI_SITO.includes(o) ? {
+    'Access-Control-Allow-Origin': o, 'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Area', 'Access-Control-Max-Age': '86400', Vary: 'Origin',
+  } : {};
+};
 
 const SICUREZZA = {
   'X-Content-Type-Options': 'nosniff',
@@ -257,7 +268,7 @@ const SCRIPT = RENDER_CRUSCOTTO + String.raw`
     e.i.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') invia(); });
     c.appendChild(bt); c.appendChild(esito);
     var p = el('p', { class: 'piede' }, 'Non sei ancora registrato? ');
-    p.appendChild(el('a', { href: '/registrati' }, 'Diventa consulente'));
+    p.appendChild(el('a', { href: 'https://www.mariobruzzese.it/consulenti' }, 'Diventa consulente'));
     c.appendChild(p);
     c.appendChild(rigaWa('Ciao, sono un consulente e ho bisogno di aiuto per accedere all\'area consulenti.', 'Problemi ad accedere? Scrivici su WhatsApp'));
     whatsapp('Ciao, sono un consulente e ho bisogno di aiuto per accedere all\'area consulenti.');
@@ -528,7 +539,10 @@ export default {
 
     if (await ipBloccato(env, richiesta)) return risposta('Accesso temporaneamente bloccato', 403, 'text/plain; charset=utf-8');
 
-    if (metodo === 'GET' && (pathname === '/' || pathname === '/index.html' || pathname === '/registrati')) return risposta(PAGINA, 200, 'text/html; charset=utf-8');
+    // la registrazione ora sta sul sito: il vecchio indirizzo porta lì
+    if (metodo === 'GET' && pathname === '/registrati') return new Response(null, { status: 301, headers: { Location: PAGINA_SITO } });
+    if (metodo === 'OPTIONS' && pathname === '/api/registrazione') return new Response(null, { status: 204, headers: cors(richiesta) });
+    if (metodo === 'GET' && (pathname === '/' || pathname === '/index.html')) return risposta(PAGINA, 200, 'text/html; charset=utf-8');
     if (metodo === 'GET' && pathname === '/app.js') return risposta(SCRIPT, 200, 'text/javascript; charset=utf-8');
     if (metodo === 'GET' && pathname === '/robots.txt') return risposta('User-agent: *\nDisallow: /\n', 200, 'text/plain');
     if (metodo === 'GET' && pathname === '/favicon.ico') return new Response(null, { status: 204 });
@@ -547,7 +561,11 @@ export default {
       }
       try {
         if (metodo === 'POST' && pathname === '/api/accesso') return await chiediLink(env, richiesta);
-        if (metodo === 'POST' && pathname === '/api/registrazione') return await registra(env, richiesta);
+        if (metodo === 'POST' && pathname === '/api/registrazione') {
+          const r = await registra(env, richiesta);
+          Object.entries(cors(richiesta)).forEach(([k, v]) => r.headers.set(k, v));
+          return r;
+        }
         if (metodo === 'POST' && pathname === '/api/esci') {
           return risposta({ ok: true }, 200, undefined, { 'Set-Cookie': `${COOKIE}=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0` });
         }

@@ -268,6 +268,29 @@ const pages = [
     `,
   },
   {
+    slug: 'consulenti',
+    title: `Programma consulenti \u2013 Corsi sicurezza sul lavoro | ${SITE}`,
+    description:
+      'Consulente del lavoro, commercialista o RSPP? Offri ai tuoi clienti i corsi di sicurezza online con il 20% di sconto e ricevi il 40% dell\u2019incassato. Registrazione gratuita.',
+    priority: '0.5',
+    changefreq: 'monthly',
+    schema: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Programma consulenti',
+        url: `${BASE}/consulenti`,
+        isPartOf: { '@type': 'WebSite', name: SITE, url: BASE },
+      },
+      breadcrumb('Programma consulenti', `${BASE}/consulenti`),
+    ],
+    noscript: `
+      <h1>Programma consulenti</h1>
+      <p>Per consulenti del lavoro, commercialisti e RSPP esterni: un codice personale che d\u00e0 ai clienti il 20% di sconto sui corsi di sicurezza sul lavoro in e-learning e al consulente il 40% dell'incassato, con un'area riservata per seguire ordini e compensi.</p>
+      <p>Come funziona: registrazione gratuita, accordo di collaborazione, attivazione del codice, condivisione con i clienti.</p>
+    `,
+  },
+  {
     slug: 'privacy',
     title: `Informativa privacy | ${SITE}`,
     description:

@@ -16,6 +16,7 @@ import RischioAteco from "./pages/RischioAteco";
 import CorsiSicurezza from "@/pages/CorsiSicurezza";
 import CondizioniVendita from "@/pages/CondizioniVendita";
 import Privacy from "@/pages/Privacy";
+import Consulenti from "@/pages/Consulenti";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/corsi-sicurezza/:corsoId/iscrizione" element={<CorsiSicurezza />} />
           <Route path="/condizioni-vendita" element={<CondizioniVendita />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/consulenti" element={<Consulenti />} />
         </Routes>
         <Footer />
         <Toaster />
