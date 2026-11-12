@@ -42,7 +42,7 @@ async function idAccount(env) {
   return primo.id;
 }
 
-const QUERY = `query Visite($account: String!, $filtro: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject!, $filtroCorsi: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject!) {
+const QUERY = `query Visite($account: String!, $filtro: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject!, $filtroCorsi: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject!, $filtroConsulenti: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject!) {
   viewer { accounts(filter: { accountTag: $account }) {
     totale: rumPageloadEventsAdaptiveGroups(filter: $filtro, limit: 1) { count sum { visits } }
     giorni: rumPageloadEventsAdaptiveGroups(filter: $filtro, limit: 100, orderBy: [date_ASC]) { count sum { visits } dimensions { date } }
@@ -50,6 +50,8 @@ const QUERY = `query Visite($account: String!, $filtro: AccountRumPageloadEvents
     provenienze: rumPageloadEventsAdaptiveGroups(filter: $filtro, limit: 10, orderBy: [sum_visits_DESC]) { sum { visits } dimensions { refererHost } }
     dispositivi: rumPageloadEventsAdaptiveGroups(filter: $filtro, limit: 5, orderBy: [sum_visits_DESC]) { sum { visits } dimensions { deviceType } }
     corsi: rumPageloadEventsAdaptiveGroups(filter: $filtroCorsi, limit: 500, orderBy: [count_DESC]) { count sum { visits } dimensions { requestPath } }
+    consulenti: rumPageloadEventsAdaptiveGroups(filter: $filtroConsulenti, limit: 100, orderBy: [date_ASC]) { count sum { visits } dimensions { date } }
+    consulentiDa: rumPageloadEventsAdaptiveGroups(filter: $filtroConsulenti, limit: 10, orderBy: [sum_visits_DESC]) { sum { visits } dimensions { refererHost } }
   } }
 }`;
 
@@ -94,6 +96,8 @@ export async function statisticheVisite(env, giorniRichiesti) {
       account,
       filtro: { AND: base },
       filtroCorsi: { AND: [...base, { requestPath_like: '/corsi-sicurezza/%' }] },
+      // pagina del programma consulenti, in tutte le varianti dell'indirizzo
+      filtroConsulenti: { AND: [...base, { requestPath_in: ['/consulenti', '/consulenti/', '/consulenti.html', '/consulenti/index.html'] }] },
     },
   });
   if (risposta.errors && risposta.errors.length) throw new Error(risposta.errors[0].message);
@@ -139,6 +143,26 @@ export async function statisticheVisite(env, giorniRichiesti) {
     .sort((x, y) => y.pagati - x.pagati || y.ordini - x.ordini || y.scheda - x.scheda);
 
   const pagatiTot = ordini.filter((o) => PAGATI.includes(o.stato));
+
+  // programma consulenti: visite alla pagina → registrazioni dal modulo nello stesso periodo
+  let registrazioni = 0;
+  try {
+    const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM consulenti WHERE creato_il >= ? AND note LIKE 'Registrato dal modulo%'")
+      .bind(da.toISOString()).first();
+    registrazioni = (r && r.n) || 0;
+  } catch (e) { /* tabella non ancora creata */ }
+  const provConsulenti = new Map();
+  for (const r of acc.consulentiDa || []) {
+    const nome = nomeProvenienza(r.dimensions.refererHost);
+    provConsulenti.set(nome, (provConsulenti.get(nome) || 0) + visite(r));
+  }
+  const consulenti = {
+    visite: (acc.consulenti || []).reduce((t, r) => t + visite(r), 0),
+    visualizzazioni: (acc.consulenti || []).reduce((t, r) => t + (r.count || 0), 0),
+    registrazioni,
+    perGiorno: (acc.consulenti || []).map((r) => ({ data: r.dimensions.date, visite: visite(r) })),
+    provenienze: [...provConsulenti.entries()].map(([nome, v]) => ({ nome, visite: v })).sort((x, y) => y.visite - x.visite),
+  };
   const dati = {
     configurato: true,
     giorni,
@@ -155,6 +179,7 @@ export async function statisticheVisite(env, giorniRichiesti) {
     provenienze: [...provenienze.entries()].map(([nome, v]) => ({ nome, visite: v })).sort((x, y) => y.visite - x.visite),
     dispositivi: acc.dispositivi.map((r) => ({ tipo: r.dimensions.deviceType || 'altro', visite: visite(r) })),
     corsi,
+    consulenti,
   };
   cache[giorni] = { scade: adesso + 5 * 60 * 1000, dati };
   return dati;

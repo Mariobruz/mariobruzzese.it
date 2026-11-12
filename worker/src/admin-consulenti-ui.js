@@ -128,6 +128,8 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
     azioni.appendChild(nuovo); azioni.appendChild(gen);
     vista.appendChild(azioni);
 
+    vista.appendChild(boxPagina());
+
     var attesa = d.consulenti.filter(function (c) { return c.stato === 'in_attesa_contratto'; });
     if (attesa.length) {
       var ap = el('section', { class: 'co-approva' });
@@ -192,6 +194,45 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
       g.appendChild(r);
     });
     vista.appendChild(g);
+  }
+
+  // visite alla pagina pubblica www.mariobruzzese.it/consulenti (Cloudflare Web Analytics)
+  var giorniPagina = 30;
+  function boxPagina() {
+    var box = el('section', { class: 'cr-box' });
+    var testa = el('div', { style: 'display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap' });
+    var h = el('h3', { style: 'margin:0' }, 'Pagina pubblica www.mariobruzzese.it/consulenti');
+    testa.appendChild(h);
+    var scelte = el('div', { class: 'co-azioni', style: 'margin:0' });
+    [[1, 'Oggi'], [7, '7 giorni'], [30, '30 giorni']].forEach(function (x) {
+      var b = el('button', giorniPagina === x[0] ? { style: 'background:#111;color:#fff;border-color:#111' } : null, x[1]);
+      b.addEventListener('click', function () { giorniPagina = x[0]; var nuovo = boxPagina(); box.replaceWith(nuovo); });
+      scelte.appendChild(b);
+    });
+    testa.appendChild(scelte);
+    box.appendChild(testa);
+    var corpo = el('div', { style: 'margin-top:12px' }, 'Caricamento…');
+    box.appendChild(corpo);
+    api('/api/visite?giorni=' + giorniPagina).then(function (v) {
+      corpo.textContent = '';
+      if (!v.configurato) { corpo.appendChild(el('p', { class: 'cr-nota' }, 'Statistiche di visita non attive: serve il token CF_API_TOKEN del pannello.')); return; }
+      if (v.errore) { corpo.appendChild(el('p', { class: 'cr-nota' }, v.errore)); return; }
+      var c = v.consulenti || { visite: 0, visualizzazioni: 0, registrazioni: 0, provenienze: [] };
+      var g = el('div', { style: 'display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px' });
+      [['Visite', c.visite], ['Pagine viste', c.visualizzazioni], ['Registrazioni', c.registrazioni],
+       ['Conversione', c.visite ? (Math.round(c.registrazioni / c.visite * 1000) / 10).toLocaleString('it-IT') + '%' : '—']].forEach(function (k) {
+        var x = el('div', { style: 'border:1px solid #e7e7ea;border-radius:12px;padding:12px 14px' });
+        x.appendChild(el('div', { class: 'cr-nota', style: 'margin:0' }, k[0]));
+        x.appendChild(el('div', { style: 'font-size:22px;font-weight:800' }, String(k[1])));
+        g.appendChild(x);
+      });
+      corpo.appendChild(g);
+      if (c.provenienze && c.provenienze.length) {
+        corpo.appendChild(el('p', { class: 'cr-nota' }, 'Da dove arrivano: ' + c.provenienze.slice(0, 5).map(function (p) { return p.nome + ' ' + p.visite; }).join(' · ')));
+      }
+      corpo.appendChild(el('p', { class: 'cr-nota' }, 'Visite anonime, senza cookie (Cloudflare Web Analytics). Le registrazioni sono quelle fatte dal modulo nello stesso periodo.'));
+    }).catch(function (e) { corpo.textContent = 'Errore: ' + e.message; });
+    return box;
   }
 
   function bottoneAttivo(k) {
