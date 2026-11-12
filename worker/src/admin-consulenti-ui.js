@@ -12,7 +12,25 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
     '.co-tab td.n{text-align:right}.co-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}' +
     '.co-form label{display:flex;flex-direction:column;font-size:13px;color:#374151;gap:4px}' +
     '.co-form input,.co-form select,.co-form textarea{padding:7px;border:1px solid #d1d5db;border-radius:6px;font:inherit}' +
-    '.co-azioni{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.co-badge{font-size:12px;padding:2px 8px;border-radius:999px;background:#f3f4f6}';
+    '.co-azioni{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.co-badge{font-size:12px;padding:2px 8px;border-radius:999px;background:#f3f4f6}' +
+    '.co-stato{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap}' +
+    '.co-stato-attivo{background:#ecfdf5;color:#047857}.co-stato-in_attesa_contratto{background:#fffbeb;color:#b45309}.co-stato-sospeso{background:#fef2f2;color:#b91c1c}' +
+    '.co-approva{border:2px solid #f59e0b;background:#fffbeb;border-radius:14px;padding:16px 18px;margin:12px 0}' +
+    '.co-approva h3{margin:0 0 10px;font-size:16px}' +
+    '.co-card{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;background:#fff;border:1px solid #fde68a;border-radius:12px;padding:12px 14px;margin-top:8px}' +
+    '.co-card .co-dati{display:flex;flex-direction:column;gap:2px;min-width:220px}.co-card .co-dati span{font-size:13px;color:#6b7280}' +
+    '.co-si{background:#047857!important;color:#fff!important;border-color:#047857!important;font-weight:600}' +
+    '.co-no{color:#b91c1c!important;border-color:#fca5a5!important}' +
+    '.co-banner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;border-radius:14px;padding:14px 18px;margin:12px 0}' +
+    '.co-banner p{margin:0}.co-banner-in_attesa_contratto{background:#fffbeb;border:2px solid #f59e0b}' +
+    '.co-banner-attivo{background:#ecfdf5;border:1px solid #a7f3d0}.co-banner-sospeso{background:#fef2f2;border:1px solid #fca5a5}' +
+    '#vista-consulenti .cr-box{background:#fff;border:1px solid #e7e7ea;border-radius:14px;padding:16px 18px;margin:14px 0}' +
+    '#vista-consulenti .cr-box h3{margin:0 0 10px;font-size:16px}' +
+    '#vista-consulenti .cr-nota{color:#6b7280;font-size:13px}' +
+    '#vista-consulenti button{font:inherit;font-size:13px;font-weight:600;padding:6px 12px;border:1px solid #d4d4d8;border-radius:8px;background:#fff;color:#111;cursor:pointer}' +
+    '#vista-consulenti button:hover{background:#f4f4f5}#vista-consulenti button:disabled{opacity:.45;cursor:default}' +
+    '#vista-consulenti input[type=date]{font:inherit;font-size:13px;padding:5px 8px;border:1px solid #d4d4d8;border-radius:8px}' +
+    '#vista-consulenti .co-si:hover{background:#065f46!important}';
   var st = document.createElement('style'); st.textContent = STILE; document.head.appendChild(st);
 
   var NOMI_STATO = { in_attesa_contratto: 'In attesa di contratto', attivo: 'Attivo', sospeso: 'Sospeso' };
@@ -36,6 +54,20 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
         return d;
       });
     });
+  }
+  function badgeStato(stato) { return el('span', { class: 'co-stato co-stato-' + stato }, NOMI_STATO[stato] || stato); }
+  function cambiaStato(c, stato, dopo) {
+    var testi = {
+      attivo: 'Attivo ' + c.nome + ' ' + c.cognome + '?\n\nIl suo codice sconto inizierà a funzionare e gli arriverà un\'email con il codice e il link da condividere.',
+      sospeso: 'Sospendo ' + c.nome + ' ' + c.cognome + '?\n\nIl codice smette di funzionare e non può più entrare nella sua area.',
+      in_attesa_contratto: 'Rimetto ' + c.nome + ' ' + c.cognome + ' in attesa di contratto?'
+    };
+    if (!confirm(testi[stato])) return;
+    api('/api/consulenti/' + c.id + '/stato', { method: 'POST', body: JSON.stringify({ stato: stato }) })
+      .then(function (r) {
+        if (stato === 'attivo') alert(r.emailInviata ? 'Consulente attivato: gli è stata inviata l\'email con il codice.' : 'Consulente attivato. Attenzione: l\'email non è partita (controlla la chiave Brevo del pannello).');
+        (dopo || carica)();
+      }).catch(function (e) { alert(e.message); });
   }
   function qs() { return '?da=' + periodo.da + '&a=' + periodo.a; }
 
@@ -96,6 +128,33 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
     azioni.appendChild(nuovo); azioni.appendChild(gen);
     vista.appendChild(azioni);
 
+    var attesa = d.consulenti.filter(function (c) { return c.stato === 'in_attesa_contratto'; });
+    if (attesa.length) {
+      var ap = el('section', { class: 'co-approva' });
+      ap.appendChild(el('h3', null, 'Da approvare (' + attesa.length + ')'));
+      ap.appendChild(el('p', { class: 'cr-nota', style: 'margin:0' }, 'Consulenti registrati in attesa del contratto. Approva quando il contratto è firmato: il codice si attiva e il consulente riceve un\'email.'));
+      attesa.forEach(function (c) {
+        var card = el('div', { class: 'co-card' });
+        var dt = el('div', { class: 'co-dati' });
+        dt.appendChild(el('strong', null, c.cognome + ' ' + c.nome + (c.ragioneSociale ? ' · ' + c.ragioneSociale : '')));
+        dt.appendChild(el('span', null, [c.email, c.telefono, c.pivaCf].filter(Boolean).join(' · ')));
+        dt.appendChild(el('span', null, 'Registrato il ' + new Date(c.creatoIl).toLocaleDateString('it-IT') + ' · codice ' +
+          (c.codici.map(function (k) { return k.codice; }).join(', ') || '—')));
+        card.appendChild(dt);
+        var bs = el('div', { class: 'co-azioni', style: 'margin:0' });
+        var si = el('button', { class: 'co-si' }, '✓ Approva e attiva');
+        si.addEventListener('click', function () { cambiaStato(c, 'attivo'); });
+        var apri = el('button', null, 'Apri');
+        apri.addEventListener('click', function () { aperto = c.id; carica(); });
+        var no = el('button', { class: 'co-no' }, 'Rifiuta');
+        no.addEventListener('click', function () { cambiaStato(c, 'sospeso'); });
+        bs.appendChild(si); bs.appendChild(apri); bs.appendChild(no);
+        card.appendChild(bs);
+        ap.appendChild(card);
+      });
+      vista.appendChild(ap);
+    }
+
     var box = el('section', { class: 'cr-box' });
     box.appendChild(el('h3', null, 'Consulenti (classifica per incassato)'));
     if (!d.consulenti.length) box.appendChild(el('p', { class: 'cr-nota' }, 'Nessun consulente: creane uno con "Nuovo consulente".'));
@@ -108,7 +167,7 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
       d.consulenti.slice().sort(function (x, y) { return y.incassato - x.incassato; }).forEach(function (c) {
         var r = el('tr');
         r.appendChild(el('td', null, c.cognome + ' ' + c.nome + (c.ragioneSociale ? ' · ' + c.ragioneSociale : '')));
-        r.appendChild(el('td', null, NOMI_STATO[c.stato] || c.stato));
+        var tds = el('td'); tds.appendChild(badgeStato(c.stato)); r.appendChild(tds);
         r.appendChild(el('td', null, c.codici.filter(function (k) { return k.attivo; }).map(function (k) { return k.codice; }).join(', ') || '—'));
         [c.click, c.ordini, c.conversione == null ? '—' : c.conversione + '%', euro(c.incassato), euro(c.compensoMaturato), euro(c.daPagare)]
           .forEach(function (v) { r.appendChild(el('td', { class: 'n' }, String(v))); });
@@ -206,16 +265,30 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
     torna.addEventListener('click', function () { aperto = null; carica(); });
     vista.appendChild(torna);
     vista.appendChild(el('h2', null, c.cognome + ' ' + c.nome + (c.ragioneSociale ? ' · ' + c.ragioneSociale : '')));
+    var ban = el('div', { class: 'co-banner co-banner-' + c.stato });
+    var bt = el('div');
+    bt.appendChild(badgeStato(c.stato));
+    bt.appendChild(el('p', { style: 'margin-top:6px' }, c.stato === 'attivo' ? 'Il codice funziona e il consulente vede ordini e compensi.'
+      : c.stato === 'sospeso' ? 'Il codice non funziona e il consulente non può entrare nella sua area.'
+      : 'Registrato, in attesa del contratto: il codice non funziona ancora. Approva quando il contratto è firmato.'));
+    ban.appendChild(bt);
+    var ba = el('div', { class: 'co-azioni', style: 'margin:0' });
+    function bott(testo, stato, cls) { var b = el('button', cls ? { class: cls } : null, testo); b.addEventListener('click', function () { cambiaStato(c, stato); }); ba.appendChild(b); }
+    if (c.stato === 'in_attesa_contratto') { bott('✓ Approva e attiva', 'attivo', 'co-si'); bott('Rifiuta', 'sospeso', 'co-no'); }
+    if (c.stato === 'attivo') bott('Sospendi', 'sospeso', 'co-no');
+    if (c.stato === 'sospeso') { bott('Riattiva', 'attivo', 'co-si'); bott('Rimetti in attesa', 'in_attesa_contratto'); }
+    ban.appendChild(ba);
+    vista.appendChild(ban);
     vista.appendChild(barraPeriodo());
 
     // sezione solo admin
-    var adm = el('section', { class: 'cr-box', style: 'border-color:#111' });
+    var adm = el('section', { class: 'cr-box', style: 'border:2px solid #111' });
     adm.appendChild(el('h3', null, 'Solo per te'));
     adm.appendChild(el('p', null, (NOMI_STATO[c.stato] || c.stato) + ' · compenso ' + c.compensoPct + '% · ' + c.email +
       (c.pec ? ' · PEC ' + c.pec : '') + (c.pivaCf ? ' · ' + c.pivaCf : '') + (c.telefono ? ' · ' + c.telefono : '')));
     if (c.note) adm.appendChild(el('p', { class: 'cr-nota' }, 'Note: ' + c.note));
     var az = el('div', { class: 'co-azioni' });
-    var mod = el('button', null, 'Modifica dati, % e stato');
+    var mod = el('button', null, 'Modifica dati e %');
     mod.addEventListener('click', function () { formConsulente(c); });
     var paga = el('button', null, 'Registra pagamento (' + euro(d.numeri.daPagare) + ')');
     paga.disabled = !d.numeri.daPagare;
@@ -246,7 +319,8 @@ export const SCRIPT_CONSULENTI = RENDER_CRUSCOTTO + String.raw`
     vista.appendChild(el('h3', { style: 'margin-top:18px' }, 'Come lo vede il consulente'));
     var cr = el('div');
     vista.appendChild(cr);
-    disegnaCruscotto(cr, d, {});
+    cr.style.cssText = 'background:#f5f5f6;border-radius:16px;padding:14px';
+    disegnaCruscotto(cr, d, { anteprima: true });
   }
 })();
 `;

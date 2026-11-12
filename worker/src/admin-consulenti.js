@@ -106,6 +106,20 @@ export async function apiConsulenti(env, richiesta, url, metodo, utente, rispost
     return risposta({ ok: true, emailInviata });
   }
 
+  // approva / sospendi / riattiva con un clic
+  m = pathname.match(/^\/api\/consulenti\/(\d+)\/stato$/);
+  if (m && metodo === 'POST') {
+    const corpo = await leggiCorpo(richiesta);
+    if (!STATI_CONSULENTE.includes(corpo.stato)) return risposta({ errore: 'Stato non valido' }, 400);
+    const id = Number(m[1]);
+    const prima = await env.DB.prepare('SELECT stato FROM consulenti WHERE id = ?').bind(id).first();
+    if (!prima) return risposta({ errore: 'Consulente non trovato' }, 404);
+    await env.DB.prepare('UPDATE consulenti SET stato = ? WHERE id = ?').bind(corpo.stato, id).run();
+    console.log('stato consulente', id, prima.stato, '→', corpo.stato, utente);
+    const emailInviata = prima.stato !== 'attivo' && corpo.stato === 'attivo' ? await avvisaAttivazione(env, id) : false;
+    return risposta({ ok: true, emailInviata });
+  }
+
   m = pathname.match(/^\/api\/consulenti\/(\d+)\/csv$/);
   if (m && metodo === 'GET') {
     const dati = await cruscotto(env, Number(m[1]), q.get('da'), q.get('a'));
