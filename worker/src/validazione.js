@@ -92,10 +92,13 @@ export function validaObbligatorio(valore, etichetta) {
   return null;
 }
 
-/** Codice ATECO: 2 cifre, poi fino a due gruppi da 1-2 cifre (es. 55.1, 82.99, 47.11.40). */
-export function validaAteco(valore) {
+/**
+ * Codice ATECO: 2 cifre, poi fino a due gruppi da 1-2 cifre (es. 55.1, 82.99, 47.11.40).
+ * Obbligatorio per le aziende; per i privati è facoltativo (se c'è, il formato deve essere giusto).
+ */
+export function validaAteco(valore, { facoltativo = false } = {}) {
   const ateco = (valore || '').trim();
-  if (!ateco) return 'Il codice ATECO è obbligatorio';
+  if (!ateco) return facoltativo ? null : 'Il codice ATECO è obbligatorio';
   if (!/^\d{2}(\.\d{1,2}){0,2}$/.test(ateco)) return 'Formato ATECO non valido (es. 47.11 o 82.99.99)';
   return null;
 }

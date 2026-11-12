@@ -126,7 +126,7 @@ function verificaIscrizione(corpo) {
   if (!provinciaValida(f.provincia)) aggiungi('Provincia non valida');
   aggiungi(validaEmail(f.email));
   aggiungi(validaTelefono(f.telefono));
-  aggiungi(validaAteco(f.ateco));
+  aggiungi(validaAteco(f.ateco, { facoltativo: f.tipo !== 'azienda' }));
 
   const visti = new Set();
   partecipanti.forEach((p, i) => {

@@ -215,7 +215,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
     e.f_provincia = validaObbligatorio(fatturazione.provincia, 'La provincia');
     e.f_email = validaEmail(fatturazione.email);
     e.f_telefono = validaTelefono(fatturazione.telefono);
-    e.f_ateco = validaAteco(fatturazione.ateco);
+    e.f_ateco = validaAteco(fatturazione.ateco, { facoltativo: fatturazione.tipo !== 'azienda' });
     return e;
   };
 
@@ -501,7 +501,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                 <Campo label="Email" tipo="email" value={fatturazione.email} onChange={(v) => aggiornaFatturazione('email', v)} errore={errori.f_email} />
                 <Campo label="Telefono" tipo="tel" value={fatturazione.telefono} onChange={(v) => aggiornaFatturazione('telefono', v)} errore={errori.f_telefono} />
                 <Campo
-                  label={fatturazione.tipo === 'azienda' ? 'Codice ATECO dell’azienda' : 'Codice ATECO dell’attività svolta'}
+                  label={fatturazione.tipo === 'azienda' ? 'Codice ATECO dell’azienda' : 'Codice ATECO dell’attività svolta (facoltativo)'}
                   value={fatturazione.ateco}
                   onChange={(v) => aggiornaFatturazione('ateco', v)}
                   errore={errori.f_ateco}
@@ -511,7 +511,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                   Il codice ATECO compare sull’attestato come settore di appartenenza e determina la classe di rischio.
                   {fatturazione.tipo === 'azienda'
                     ? ' Lo trovi nella visura camerale o nel cassetto fiscale.'
-                    : ' Indica quello dell’attività in cui lavori o per cui segui il corso.'}
+                    : ' Se lo conosci, indica quello dell’attività in cui lavori o per cui segui il corso; puoi anche lasciarlo vuoto.'}
                 </p>
               </div>
             </section>
@@ -611,7 +611,7 @@ export default function IscrizioneCorso({ corso, onIndietro }) {
                 </div>
                 <div className="p-5 flex justify-between gap-4">
                   <span className="text-gray-600">Codice ATECO</span>
-                  <span className="font-medium text-right">{fatturazione.ateco}</span>
+                  <span className="font-medium text-right">{fatturazione.ateco || 'non indicato'}</span>
                 </div>
                 <div className="p-5">
                   <span className="text-gray-600 block mb-2">Partecipanti e corsi</span>
