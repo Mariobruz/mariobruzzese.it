@@ -21,7 +21,7 @@ export const catalogo = [
     "titolo": "Formazione generale dei lavoratori — in inglese",
     "titoloAttestato": "CORSO DI FORMAZIONE GENERALE PER I LAVORATORI - 4 ORE (ENG)",
     "ore": 4,
-    "prezzo": 57,
+    "prezzo": 55,
     "sku": "corade_120"
   },
   {
@@ -29,7 +29,7 @@ export const catalogo = [
     "titolo": "Formazione specifica — rischio basso",
     "titoloAttestato": "CORSO DI FORMAZIONE SPECIFICA DEI LAVORATORI PER I SETTORI DELLA CLASSE DI RISCHIO BASSO - 4 ORE",
     "ore": 4,
-    "prezzo": 56,
+    "prezzo": 55,
     "sku": "forcih_462"
   },
   {
@@ -37,7 +37,7 @@ export const catalogo = [
     "titolo": "Formazione generale + specifica — rischio basso",
     "titoloAttestato": "CORSO DI FORMAZIONE GENERALE E SPECIFICA DEI LAVORATORI PER I SETTORI DELLA CLASSE DI RISCHIO BASSO - 8 ORE",
     "ore": 8,
-    "prezzo": 84,
+    "prezzo": 85,
     "sku": "coroma_445"
   },
   {
@@ -61,7 +61,7 @@ export const catalogo = [
     "titolo": "Formazione datore di lavoro",
     "titoloAttestato": "CORSO DI FORMAZIONE DATORE DI LAVORO - 16 ORE",
     "ore": 16,
-    "prezzo": 141,
+    "prezzo": 140,
     "sku": "cors-d_123"
   },
   {
@@ -77,7 +77,7 @@ export const catalogo = [
     "titolo": "Aggiornamento datore di lavoro RSPP",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER DATORE DI LAVORO CHE SVOLGE DIRETTAMENTE I COMPITI DI PREVENZIONE E PROTEZIONE DAI RISCHI (RSPP DL) 8 ORE",
     "ore": 8,
-    "prezzo": 127,
+    "prezzo": 125,
     "sku": "corieo_173"
   },
   {
@@ -85,7 +85,7 @@ export const catalogo = [
     "titolo": "Modulo aggiuntivo \"Cantieri\" — datore di lavoro",
     "titoloAttestato": "CORSO DI FORMAZIONE MODULO AGGIUNTIVO “CANTIERI” per DATORE DI LAVORO (6 ore)",
     "ore": 6,
-    "prezzo": 113,
+    "prezzo": 115,
     "sku": "cordiz_385"
   },
   {
@@ -93,7 +93,7 @@ export const catalogo = [
     "titolo": "Formazione dirigenti",
     "titoloAttestato": "CORSO DI FORMAZIONE DEI DIRIGENTI - 12 ORE",
     "ore": 12,
-    "prezzo": 213,
+    "prezzo": 215,
     "sku": "coroio_352"
   },
   {
@@ -101,7 +101,7 @@ export const catalogo = [
     "titolo": "Aggiornamento dirigenti",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO DEI DIRIGENTI - 6 ORE",
     "ore": 6,
-    "prezzo": 99,
+    "prezzo": 100,
     "sku": "corggi_610"
   },
   {
@@ -109,7 +109,7 @@ export const catalogo = [
     "titolo": "Modulo aggiuntivo \"Cantieri\" — dirigenti",
     "titoloAttestato": "CORSO DI FORMAZIONE MODULO AGGIUNTIVO “CANTIERI” per DIRIGENTI (6 ore)",
     "ore": 6,
-    "prezzo": 113,
+    "prezzo": 115,
     "sku": "cortn__284"
   },
   {
@@ -125,7 +125,7 @@ export const catalogo = [
     "titolo": "Aggiornamento RSPP",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER RESPONSABILI DEI SERVIZI DI PREVENZIONE E PROTEZIONE (RSPP) - 40 ORE",
     "ore": 40,
-    "prezzo": 141,
+    "prezzo": 140,
     "sku": "coroea_180"
   },
   {
@@ -133,7 +133,7 @@ export const catalogo = [
     "titolo": "Aggiornamento ASPP",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER ADDETTI DEI SERVIZI DI PREVENZIONE E PROTEZIONE (ASPP) - 20 ORE",
     "ore": 20,
-    "prezzo": 199,
+    "prezzo": 200,
     "sku": "cor-rm_653"
   },
   {
@@ -141,7 +141,7 @@ export const catalogo = [
     "titolo": "Formazione RLS",
     "titoloAttestato": "CORSO DI FORMAZIONE PER RAPPRESENTANTE DEI LAVORATORI PER LA SICUREZZA (RLS) - 32 ORE",
     "ore": 32,
-    "prezzo": 213,
+    "prezzo": 215,
     "sku": "corona_906"
   },
   {
@@ -165,7 +165,7 @@ export const catalogo = [
     "titolo": "Coordinatore sicurezza — modulo normativo/giuridico",
     "titoloAttestato": "CORSO DI FORMAZIONE PER COORDINATORE DELLA SICUREZZA - MODULO NORMATIVO/GIURIDICO - 8 ORE",
     "ore": 8,
-    "prezzo": 113,
+    "prezzo": 115,
     "sku": "cormln_716"
   },
   {
@@ -173,7 +173,7 @@ export const catalogo = [
     "titolo": "Aggiornamento coordinatori CSP/CSE",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO COORDINATORE PER LA PROGETTAZIONE E PER L’ESECUZIONE DEI LAVORI - 40 ORE",
     "ore": 40,
-    "prezzo": 284,
+    "prezzo": 285,
     "sku": "rspsas_820"
   },
   {
@@ -181,7 +181,7 @@ export const catalogo = [
     "titolo": "Formazione formatori — 40 ore",
     "titoloAttestato": "CORSO DI FORMAZIONE PER FORMATORI - 40 ORE",
     "ore": 40,
-    "prezzo": 141,
+    "prezzo": 140,
     "sku": "coraor_886"
   },
   {
@@ -189,7 +189,7 @@ export const catalogo = [
     "titolo": "Formazione formatori — 24 ore",
     "titoloAttestato": "CORSO DI FORMAZIONE PER FORMATORI - 24 ORE",
     "ore": 24,
-    "prezzo": 141,
+    "prezzo": 140,
     "sku": "cor4ia_615"
   },
   {
@@ -197,7 +197,7 @@ export const catalogo = [
     "titolo": "Aggiornamento formatori",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER FORMATORI - 24 ORE",
     "ore": 24,
-    "prezzo": 41,
+    "prezzo": 40,
     "sku": "corg-t_163"
   },
   {
@@ -205,7 +205,7 @@ export const catalogo = [
     "titolo": "Responsabile industria alimentare (HACCP OSA)",
     "titoloAttestato": "CORSO DI FORMAZIONE PER RESPONSABILE INDUSTRIA ALIMENTARE - (HACCP OSA)",
     "ore": 12,
-    "prezzo": 56,
+    "prezzo": 55,
     "sku": "coradr_126"
   },
   {
@@ -237,7 +237,7 @@ export const catalogo = [
     "titolo": "Formazione specifica — rischio basso: turismo e ristorazione",
     "titoloAttestato": "CORSO DI FORMAZIONE SPECIFICA PER LAVORATORI RISCHIO BASSO (SETTORE ALLOGGIO, TURISMO E RISTORAZIONE)",
     "ore": 4,
-    "prezzo": 71,
+    "prezzo": 70,
     "sku": "opn-373"
   },
   {
@@ -245,7 +245,7 @@ export const catalogo = [
     "titolo": "Formazione specifica — rischio basso: uffici e servizi",
     "titoloAttestato": "CORSO DI FORMAZIONE SPECIFICA PER LAVORATORI RISCHIO BASSO (SETTORE ATTIVITA' DI UFFICIO, AMMINISTRATIVE E DI SERVIZI DI SUPPORTO ALLE IMPRESE)",
     "ore": 4,
-    "prezzo": 71,
+    "prezzo": 70,
     "sku": "opn-377"
   },
   {
@@ -253,7 +253,7 @@ export const catalogo = [
     "titolo": "Formazione specifica — rischio basso — in inglese",
     "titoloAttestato": "SPECIFIC SAFETY TRAINING COURSE FOR WORKERS (LOW-RISK SECTOR)",
     "ore": 4,
-    "prezzo": 71,
+    "prezzo": 70,
     "sku": "opn-363"
   },
   {
@@ -261,7 +261,7 @@ export const catalogo = [
     "titolo": "Formazione generale + specifica — rischio basso — in inglese",
     "titoloAttestato": "GENERAL AND SPECIFIC TRAINING COURSE — LOW RISK",
     "ore": 8,
-    "prezzo": 71,
+    "prezzo": 70,
     "sku": "opn-365"
   },
   {
@@ -269,7 +269,7 @@ export const catalogo = [
     "titolo": "Aggiornamento lavoratori — in inglese",
     "titoloAttestato": "WORKERS’ REFRESHER TRAINING COURSE",
     "ore": 6,
-    "prezzo": 71,
+    "prezzo": 70,
     "sku": "opn-369"
   },
   {
@@ -277,7 +277,7 @@ export const catalogo = [
     "titolo": "Aggiornamento datore di lavoro",
     "titoloAttestato": "CORSO DI AGGIORNAMENTO PER DATORE DI LAVORO",
     "ore": 6,
-    "prezzo": 71,
+    "prezzo": 70,
     "sku": "opn-379"
   },
   {
@@ -285,7 +285,7 @@ export const catalogo = [
     "titolo": "Formazione datore di lavoro — in inglese",
     "titoloAttestato": "TRAINING COURSE FOR EMPLOYERS",
     "ore": 16,
-    "prezzo": 71,
+    "prezzo": 70,
     "sku": "opn-378"
   }
 ];
