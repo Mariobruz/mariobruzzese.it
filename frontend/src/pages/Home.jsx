@@ -56,6 +56,19 @@ const AnimatedCounter = ({ end, duration = 2 }) => {
 
 
 const _seoSchemaHome = "{\"@context\":\"https://schema.org\",\"@type\":\"WebPage\",\"name\":\"Fondi Interprofessionali | MB Consulting\",\"url\":\"https://www.mariobruzzese.it/\",\"description\":\"Consulenza fondi interprofessionali per la formazione aziendale finanziata al 100%.\"}";
+
+// Competenze certificate di Mario Bruzzese (immagini in public/img/badge)
+const BADGE = [
+  { file: 'bocconi-ai-business', titolo: 'Artificial Intelligence for Business: from idea to implementation', ente: 'Università Bocconi' },
+  { file: 'bocconi-ai-marketing', titolo: 'Artificial Intelligence (AI) and Marketing', ente: 'Università Bocconi' },
+  { file: 'polimi-ai-legal', titolo: 'Artificial Intelligence and Legal Issues', ente: 'Politecnico di Milano' },
+  { file: 'polimi-ai-educational', titolo: 'Creating High-Quality Educational Content Using AI', ente: 'Politecnico di Milano' },
+  { file: 'gemini-docente', titolo: 'Docente certificato Gemini', ente: 'Google for Education' },
+  { file: 'agenti-ia-workflow', titolo: 'Agenti IA e workflow', ente: 'OpenAI Academy' },
+  { file: 'ia-piccole-imprese', titolo: 'IA per le piccole imprese', ente: 'PayPal e Anthropic' },
+  { file: 'claude-code', titolo: 'Sviluppo con Claude Code', ente: 'Anthropic' },
+];
+
 const Home = () => {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
@@ -314,6 +327,48 @@ const Home = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
             </Button>
           </motion.div>
+        </div>
+      </section>
+
+      <section className="py-16 px-6 bg-white border-b border-gray-100" aria-labelledby="titolo-competenze">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-10"
+          >
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gray-400 mb-3">Formazione continua</p>
+            <h2 id="titolo-competenze" className="text-2xl md:text-3xl font-bold text-gray-900">Competenze certificate</h2>
+            <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
+              Intelligenza artificiale applicata all’impresa, alla formazione e al diritto: percorsi conclusi con università e aziende di riferimento.
+            </p>
+          </motion.div>
+          <ul className="grid grid-cols-4 lg:grid-cols-8 gap-x-3 gap-y-6 md:gap-x-4 md:gap-y-8">
+            {BADGE.map((b, i) => (
+              <motion.li
+                key={b.file}
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                className="flex flex-col items-center text-center group"
+              >
+                <img
+                  src={`/img/badge/${b.file}.webp`}
+                  alt={`${b.titolo} — ${b.ente}`}
+                  title={`${b.titolo} — ${b.ente}`}
+                  width="120"
+                  height="120"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-[72px] h-[72px] sm:w-24 sm:h-24 md:w-28 md:h-28 object-contain transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105"
+                />
+                <span className="mt-2 md:mt-3 text-[10px] md:text-[11px] leading-tight text-gray-500 font-medium">{b.ente}</span>
+              </motion.li>
+            ))}
+          </ul>
         </div>
       </section>
 
