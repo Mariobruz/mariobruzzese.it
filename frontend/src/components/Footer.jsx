@@ -48,6 +48,11 @@ const Footer = () => {
                 </a>
               </li>
               <li>
+                <a href="/corsi-sicurezza-calabria" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Corsi Sicurezza in Calabria
+                </a>
+              </li>
+              <li>
                 <a href="/faq" className="text-gray-400 hover:text-white transition-colors text-sm">
                   FAQ
                 </a>

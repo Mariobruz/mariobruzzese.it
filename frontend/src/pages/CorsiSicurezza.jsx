@@ -385,6 +385,12 @@ export default function CorsiSicurezza() {
                 esclusiva durata e contenuti minimi della formazione: i corsi qui proposti seguono il nuovo impianto.
               </p>
             </div>
+            <p className="mt-6 text-[15px] text-gray-600">
+              Hai un’azienda in Calabria?{' '}
+              <Link to="/corsi-sicurezza-calabria" className="font-semibold text-gray-900 underline underline-offset-4">
+                Corsi di sicurezza online per le aziende calabresi
+              </Link>
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-20">

@@ -17,6 +17,7 @@ import CorsiSicurezza from "@/pages/CorsiSicurezza";
 import CondizioniVendita from "@/pages/CondizioniVendita";
 import Privacy from "@/pages/Privacy";
 import Consulenti from "@/pages/Consulenti";
+import CorsiCalabria from "@/pages/CorsiCalabria";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/condizioni-vendita" element={<CondizioniVendita />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/consulenti" element={<Consulenti />} />
+          <Route path="/corsi-sicurezza-calabria" element={<CorsiCalabria />} />
         </Routes>
         <Footer />
         <Toaster />

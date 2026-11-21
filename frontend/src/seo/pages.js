@@ -268,6 +268,38 @@ const pages = [
     `,
   },
   {
+    slug: 'corsi-sicurezza-calabria',
+    title: `Corsi Sicurezza sul Lavoro Online in Calabria | ${SITE}`,
+    description:
+      'Corsi di sicurezza sul lavoro online per aziende di Catanzaro, Cosenza, Crotone, Reggio Calabria e Vibo Valentia. Accordo Stato-Regioni 2025, attestato con QR code.',
+    priority: '0.8',
+    changefreq: 'weekly',
+    schema: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: 'Corsi di sicurezza sul lavoro online in Calabria',
+        url: `${BASE}/corsi-sicurezza-calabria`,
+        areaServed: { '@type': 'State', name: 'Calabria' },
+        provider: { '@type': 'Organization', name: 'MB Consulting di Mario Bruzzese', url: BASE },
+      },
+      breadcrumb('Corsi sicurezza in Calabria', `${BASE}/corsi-sicurezza-calabria`),
+    ],
+    noscript: `
+      <h1>Corsi di sicurezza sul lavoro online in Calabria</h1>
+      <p>Formazione obbligatoria D.Lgs. 81/08 in e-learning per aziende e lavoratori delle province di Catanzaro, Cosenza, Crotone, Reggio Calabria e Vibo Valentia, conforme all'Accordo Stato-Regioni del 17 aprile 2025. Attestato verificabile tramite QR code, soggetto formatore O.P.N. Italia Lavoro \u2013 CNL \u2013 EBAFoS.</p>
+      <h2>In tutte le province calabresi</h2>
+      <ul>
+        <li>Provincia di Catanzaro: Catanzaro, Lamezia Terme, Soverato, Girifalco, Borgia, Sellia Marina</li>
+        <li>Provincia di Cosenza: Cosenza, Rende, Corigliano-Rossano, Castrovillari, Paola, Amantea, Scalea</li>
+        <li>Provincia di Crotone: Crotone, Isola di Capo Rizzuto, Cir\u00f2 Marina, Cutro, Petilia Policastro</li>
+        <li>Provincia di Reggio Calabria: Reggio Calabria, Gioia Tauro, Palmi, Villa San Giovanni, Siderno, Locri, Taurianova</li>
+        <li>Provincia di Vibo Valentia: Vibo Valentia, Tropea, Pizzo, Serra San Bruno, Mileto, Nicotera</li>
+      </ul>
+      <p>MB Consulting ha sede legale a Reggio Calabria, Via Aspromonte 16. <a href="${BASE}/corsi-sicurezza">Vedi tutti i corsi di sicurezza sul lavoro online</a>.</p>
+    `,
+  },
+  {
     slug: 'consulenti',
     title: `Programma consulenti \u2013 Corsi sicurezza sul lavoro | ${SITE}`,
     description:
