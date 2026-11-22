@@ -63,6 +63,7 @@ const BADGE = [
   { file: 'bocconi-ai-marketing', titolo: 'Artificial Intelligence (AI) and Marketing', ente: 'Università Bocconi' },
   { file: 'polimi-ai-legal', titolo: 'Artificial Intelligence and Legal Issues', ente: 'Politecnico di Milano' },
   { file: 'polimi-ai-educational', titolo: 'Creating High-Quality Educational Content Using AI', ente: 'Politecnico di Milano' },
+  { file: 'polimi-smart-learning', titolo: 'Spazi e tecnologie per lo smart learning', ente: 'Politecnico di Milano' },
   { file: 'gemini-docente', titolo: 'Docente certificato Gemini', ente: 'Google for Education' },
   { file: 'agenti-ia-workflow', titolo: 'Agenti IA e workflow', ente: 'OpenAI Academy' },
   { file: 'ia-piccole-imprese', titolo: 'IA per le piccole imprese', ente: 'PayPal e Anthropic' },
@@ -345,7 +346,7 @@ const Home = () => {
               Intelligenza artificiale applicata all’impresa, alla formazione e al diritto: percorsi conclusi con università e aziende di riferimento.
             </p>
           </motion.div>
-          <ul className="grid grid-cols-4 lg:grid-cols-8 gap-x-3 gap-y-6 md:gap-x-4 md:gap-y-8">
+          <ul className="flex flex-wrap justify-center gap-x-3 gap-y-6 md:gap-x-4 md:gap-y-8">
             {BADGE.map((b, i) => (
               <motion.li
                 key={b.file}
@@ -353,7 +354,7 @@ const Home = () => {
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="flex flex-col items-center text-center group"
+                className="w-[22%] sm:w-[18%] lg:w-[calc((100%-8rem)/9)] flex flex-col items-center text-center group"
               >
                 <img
                   src={`/img/badge/${b.file}.webp`}
