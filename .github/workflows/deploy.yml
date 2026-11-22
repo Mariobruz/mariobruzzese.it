@@ -43,13 +43,13 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Carica i file su Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: frontend/build
 
       - name: Pubblica su GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       - name: Avvisa Bing con IndexNow
         if: success()
