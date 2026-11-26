@@ -11,7 +11,8 @@
     "deploy:admin": "wrangler deploy -c admin.toml",
     "db:provenienza": "wrangler d1 execute iscrizioni-corsi --remote --command=\"ALTER TABLE ordini ADD COLUMN provenienza TEXT\"",
     "deploy:consulenti": "wrangler deploy -c consulenti.toml",
-    "db:codici": "wrangler d1 execute iscrizioni-corsi --remote --file=migrazioni/2026-11-codici-sconto.sql"
+    "db:codici": "wrangler d1 execute iscrizioni-corsi --remote --file=migrazioni/2026-11-codici-sconto.sql",
+    "db:prenotazioni": "wrangler d1 execute iscrizioni-corsi --remote --file=migrazioni/2026-11-prenotazioni-finanziate.sql"
   },
   "devDependencies": {
     "wrangler": "^3.90.0"

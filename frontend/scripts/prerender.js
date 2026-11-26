@@ -246,6 +246,15 @@ if (ateco) {
   ateco.noscript += `<p><a href="${BASE}/corsi-sicurezza">Corsi di sicurezza sul lavoro online</a> — <a href="${BASE}/durata-scadenza-corsi-sicurezza">durata e scadenza di ogni corso</a></p>`;
 }
 
+// Formazione finanziata: l'elenco dei corsi anche nell'HTML servito a Google
+const finanziata = pages.find((p) => p.slug === 'formazione-finanziata');
+if (finanziata) {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'catalogoFinanziato.js'), 'utf8');
+  const m = await import('data:text/javascript;base64,' + Buffer.from(src).toString('base64'));
+  finanziata.noscript += m.TEMI_FINANZIATI.map((t) => `<h2>${esc(t.nome)}</h2><ul>${m.CORSI_FINANZIATI
+    .filter((c) => c.tema === t.id).map((c) => `<li>${esc(c.titolo)} — ${c.ore} ore (${esc(c.area)})</li>`).join('')}</ul>`).join('');
+}
+
 const iscrizioni = schede.map((p) => ({
   ...p, slug: `${p.slug}/iscrizione`, canonical: `${BASE}/${p.slug}`, noindex: true,
   title: `Iscrizione — ${p.title}`,

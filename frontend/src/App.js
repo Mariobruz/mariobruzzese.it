@@ -18,6 +18,7 @@ import CondizioniVendita from "@/pages/CondizioniVendita";
 import Privacy from "@/pages/Privacy";
 import Consulenti from "@/pages/Consulenti";
 import CorsiCalabria from "@/pages/CorsiCalabria";
+import FormazioneFinanziata from "@/pages/FormazioneFinanziata";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/consulenti" element={<Consulenti />} />
           <Route path="/corsi-sicurezza-calabria" element={<CorsiCalabria />} />
+          <Route path="/formazione-finanziata" element={<FormazioneFinanziata />} />
         </Routes>
         <Footer />
         <Toaster />

@@ -300,6 +300,28 @@ const pages = [
     `,
   },
   {
+    slug: 'formazione-finanziata',
+    title: `Formazione finanziata per le aziende \u2013 Catalogo corsi | ${SITE}`,
+    description:
+      'Corsi di formazione finanziata per le aziende aderenti a Fonarcom: sicurezza, digitale, intelligenza artificiale, lingue, organizzazione. Scegli i corsi e richiedili online.',
+    priority: '0.8',
+    changefreq: 'monthly',
+    schema: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Formazione finanziata per le aziende',
+        url: `${BASE}/formazione-finanziata`,
+        isPartOf: { '@type': 'WebSite', name: SITE, url: BASE },
+      },
+      breadcrumb('Formazione finanziata', `${BASE}/formazione-finanziata`),
+    ],
+    noscript: `
+      <h1>Formazione finanziata per la tua azienda</h1>
+      <p>Corsi finanziati dal fondo interprofessionale per le aziende aderenti a Fonarcom: l'azienda non paga i corsi. Scegli i corsi dal catalogo, indica quanti partecipanti e invia la richiesta: verifichiamo l'adesione al fondo e inseriamo i corsi nel piano formativo.</p>
+    `,
+  },
+  {
     slug: 'consulenti',
     title: `Programma consulenti \u2013 Corsi sicurezza sul lavoro | ${SITE}`,
     description:

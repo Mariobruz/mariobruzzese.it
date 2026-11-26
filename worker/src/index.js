@@ -27,6 +27,7 @@ import { province } from './province';
 import { ipBloccato, registraEvento } from './sicurezza';
 import { applicaSconto, centesimi, cercaCodice, registraClick, registraCompenso } from './consulenti-dati';
 import { emailNuovoOrdineConsulente } from './email-consulenti';
+import { gestisciPrenotazione } from './prenotazioni';
 
 const MAX_PARTECIPANTI = 50;
 const MAX_CORPO = 100000; // caratteri: 50 partecipanti stanno ampiamente sotto
@@ -536,6 +537,13 @@ export default {
 
     if (url.pathname === '/iscrizioni' && richiesta.method === 'POST') {
       const risposta = await gestisciIscrizione(env, richiesta);
+      Object.entries(cors).forEach(([k, v]) => risposta.headers.set(k, v));
+      return risposta;
+    }
+
+    // formazione finanziata: richiesta di adesione ai corsi, senza pagamento
+    if (url.pathname === '/prenotazioni' && richiesta.method === 'POST') {
+      const risposta = await gestisciPrenotazione(env, richiesta);
       Object.entries(cors).forEach(([k, v]) => risposta.headers.set(k, v));
       return risposta;
     }

@@ -14,6 +14,8 @@ import { SCRIPT_PROVENIENZA } from './admin-provenienza';
 import { SCRIPT_SICUREZZA } from './admin-sicurezza';
 import { SCRIPT_CONSULENTI } from './admin-consulenti-ui';
 import { apiConsulenti } from './admin-consulenti';
+import { SCRIPT_PRENOTAZIONI } from './admin-prenotazioni';
+import { aggiornaPrenotazione, csvPrenotazioni, elencoPrenotazioni } from './prenotazioni';
 import { csvEventi, elencoBloccati, elencoEventi, registraEvento, sbloccaIp } from './sicurezza';
 
 const STATI_ATTIVI = ['in_attesa_bonifico', 'pagato', 'caricato', 'importo_da_verificare'];
@@ -200,7 +202,7 @@ export default {
       return risposta(PAGINA, 200, 'text/html; charset=utf-8');
     }
     if (metodo === 'GET' && pathname === '/app.js') {
-      return risposta(`${SCRIPT}\n${SCRIPT_PROVENIENZA}\n${SCRIPT_SICUREZZA}\n${SCRIPT_CONSULENTI}`, 200, 'text/javascript; charset=utf-8');
+      return risposta(`${SCRIPT}\n${SCRIPT_PROVENIENZA}\n${SCRIPT_SICUREZZA}\n${SCRIPT_CONSULENTI}\n${SCRIPT_PRENOTAZIONI}`, 200, 'text/javascript; charset=utf-8');
     }
 
     if (pathname.startsWith('/api/')) {
@@ -258,6 +260,33 @@ export default {
           console.error('consulenti', e.message);
           const mancano = /no such table|no such column/i.test(e.message);
           return risposta({ errore: mancano ? 'Database da aggiornare: esegui la migrazione dei codici sconto' : 'Errore: ' + e.message }, 500);
+        }
+      }
+
+      if (pathname.startsWith('/api/prenotazioni')) {
+        try {
+          if (metodo === 'GET' && pathname === '/api/prenotazioni') {
+            return risposta(await elencoPrenotazioni(env, url.searchParams.get('stato')));
+          }
+          if (metodo === 'GET' && pathname === '/api/prenotazioni.csv') {
+            const d = await elencoPrenotazioni(env, url.searchParams.get('stato'));
+            return risposta(csvPrenotazioni(d.prenotazioni), 200, 'text/csv; charset=utf-8', {
+              'Content-Disposition': `attachment; filename="formazione-finanziata-${new Date().toISOString().slice(0, 10)}.csv"`,
+            });
+          }
+          const m = pathname.match(/^\/api\/prenotazioni\/(\d+)$/);
+          if (m && metodo === 'POST') {
+            let corpo = {};
+            try { corpo = await richiesta.json(); } catch (e) { /* vuoto */ }
+            const esito = await aggiornaPrenotazione(env, Number(m[1]), corpo);
+            if (esito.errore) return risposta({ errore: esito.errore }, esito.stato);
+            console.log('prenotazione aggiornata', m[1], corpo.stato || '', email);
+            return risposta({ ok: true });
+          }
+        } catch (e) {
+          console.error('prenotazioni', e.message);
+          const mancano = /no such table/i.test(e.message);
+          return risposta({ errore: mancano ? 'Database da aggiornare: esegui npm run db:prenotazioni' : 'Errore: ' + e.message }, 500);
         }
       }
 
