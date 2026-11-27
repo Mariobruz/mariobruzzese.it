@@ -183,18 +183,28 @@ const pages = [
   },
   {
     slug: 'casi-studio',
-    title: `Casi Studio: Aziende che hanno Ottenuto Formazione Finanziata | ${SITE}`,
+    title: `Casi studio | Formazione finanziata per professionisti e aziende | ${SITE}`,
     description:
-      'Leggi i casi reali di aziende che hanno ottenuto formazione finanziata grazie ai fondi interprofessionali con MB Consulting. Risultati verificabili.',
+      'Scopri come integrare la formazione finanziata nei tuoi progetti e rendere più competitivi i preventivi per ISO, sicurezza, Modello 231, siti web e altri servizi.',
     priority: '0.8',
     changefreq: 'monthly',
     schema: [breadcrumb('Casi studio', `${BASE}/casi-studio`)],
     noscript: `
-      <h1>Casi Studio: Formazione Finanziata dai Fondi Interprofessionali</h1>
-      <h2>Azienda Manifatturiera — Lombardia (settore metalmeccanico)</h2>
-      <p>Esigenza: aggiornamento delle competenze digitali per 25 dipendenti. Soluzione: piano formativo su Industria 4.0 e digitalizzazione dei processi produttivi. Risultati: 45.000 € di formazione finanziata, 150 ore erogate, 100% di partecipazione, zero impatto sui costi aziendali.</p>
-      <h2>Struttura Ricettiva — Reggio Calabria (turismo e hospitality)</h2>
-      <p>Esigenza: formare lo staff su accoglienza turistica, lingue straniere e marketing digitale. Soluzione: piano formativo su hospitality management, inglese professionale e social media marketing turistico. Risultati: 35.000 € di finanziamento ottenuto, 120 ore di formazione specialistica, 18 operatori formati, nessun costo per la struttura.</p>
+      <h1>Più clienti, senza regalare la formazione</h1>
+      <p>Per professionisti, studi e agenzie che vendono servizi alle aziende: se il fondo copre la formazione del personale, l'azienda ottiene lo stesso servizio e spende meno per il progetto complessivo, mentre il professionista mantiene il proprio compenso. MB Consulting verifica se la formazione è finanziabile, gestisce il piano ed eroga la formazione.</p>
+      <h2>ISO 9001: un esempio di preventivo</h2>
+      <p>Consulenza ISO e certificazione 4.000 €; formazione del personale 2.000 €. Totale a carico dell'azienda: 6.000 € senza contributo, 4.000 € con copertura integrale della formazione. Esempio illustrativo: la copertura dipende dallo strumento disponibile, dall'ammissibilità delle attività e dall'approvazione del piano formativo.</p>
+      <h2>La stessa formula, altri progetti</h2>
+      <ul>
+        <li>Sicurezza sul lavoro: DVR e procedure, con la formazione dei lavoratori quando ammessa dal fondo.</li>
+        <li>Modello 231: protocolli e formazione dei dipendenti sulle procedure.</li>
+        <li>Siti web ed e-commerce: il sito e la formazione del team che gestirà catalogo e ordini.</li>
+        <li>Marketing e comunicazione: la strategia e la formazione di chi gestirà contenuti e contatti.</li>
+        <li>Software gestionali e CRM: la configurazione e la formazione degli utenti.</li>
+        <li>Privacy e protezione dei dati: le procedure e la formazione del personale.</li>
+        <li>HACCP e sicurezza alimentare: il piano di autocontrollo e la formazione degli addetti.</li>
+      </ul>
+      <p>Hai già un preventivo da presentare? Scrivici a <a href="mailto:info@mariobruzzese.it">info@mariobruzzese.it</a>.</p>
     `,
   },
   {
