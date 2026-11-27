@@ -62,11 +62,6 @@ const Footer = () => {
                   FAQ
                 </a>
               </li>
-              <li>
-                <a href="/consulenti" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Programma consulenti
-                </a>
-              </li>
             </ul>
           </div>
 

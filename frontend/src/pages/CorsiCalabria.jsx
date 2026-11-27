@@ -208,10 +208,6 @@ export default function CorsiCalabria() {
               <Link to="/corsi-sicurezza" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white text-black font-semibold px-5 py-3 hover:bg-gray-100 transition-colors">
                 Scegli il corso <ArrowRight className="w-4 h-4" />
               </Link>
-              <p className="text-sm text-gray-400 mt-6">
-                Sei consulente del lavoro o commercialista in Calabria?{' '}
-                <Link to="/consulenti" className="underline text-white">Scopri il programma consulenti</Link>.
-              </p>
             </aside>
           </section>
         </div>
