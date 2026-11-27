@@ -12,6 +12,7 @@ import { faqCorso } from '../data/faqCorsi';
 import { WhatsAppFisso, WhatsAppLink, linkWhatsApp } from '../components/WhatsApp';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
 import { concludiAcquistoInCorso } from '../googleAds';
+import { BTN_VERDE } from '../components/stile';
 
 const ACCORDO = 'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR)';
 
@@ -34,7 +35,6 @@ const DOMANDE = [
   { domanda: 'È previsto un aggiornamento?', risposta: 'Sì: la formazione va aggiornata periodicamente e in catalogo trovi i corsi di aggiornamento per ogni figura. Nella pagina «Durate e scadenze» c’è la periodicità di ciascun corso secondo l’Accordo Stato-Regioni 2025.' },
 ];
 
-const BTN_VERDE = 'inline-flex items-center justify-center gap-2 rounded-lg bg-[#0f8a6a] text-white font-bold hover:bg-[#0c7458] transition-colors';
 const LIMITE = 6;
 const TITOLO_CATEGORIA = {
   lavoratori: 'Corsi per lavoratori', datore: 'Corsi per il datore di lavoro', dirigenti: 'Corsi per dirigenti', rspp: 'Corsi per RSPP e ASPP',

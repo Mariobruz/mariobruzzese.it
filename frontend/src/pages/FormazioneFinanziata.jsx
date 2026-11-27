@@ -7,6 +7,7 @@ import {
   Settings, ShieldCheck, Sparkles, TrendingUp, Users, X,
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
+import { BTN_VERDE } from '../components/stile';
 import { WhatsAppFisso } from '../components/WhatsApp';
 import { CORSI_FINANZIATI, TEMI_FINANZIATI } from '../data/catalogoFinanziato';
 import { province } from '../data/province';
@@ -23,10 +24,10 @@ const MSG_WA = 'Ciao, vorrei informazioni sui corsi di formazione finanziata per
 
 // riquadri delle 4 aree (classi scritte per intero: Tailwind le deve trovare nel codice)
 const TILE = {
-  generale: { icona: GraduationCap, classe: 'bg-[#dff1e3] hover:bg-[#cfe9d5]' },
-  digitale: { icona: Laptop, classe: 'bg-[#dbe8f2] hover:bg-[#c9dcec]' },
-  innovazione: { icona: Settings, classe: 'bg-[#fde3d1] hover:bg-[#fbd3b8]' },
-  organizzazione: { icona: Users, classe: 'bg-[#e6def4] hover:bg-[#d8cdee]' },
+  generale: { icona: GraduationCap, classe: 'bg-white border border-gray-200 shadow-sm hover:border-[#0f8a6a]' },
+  digitale: { icona: Laptop, classe: 'bg-white border border-gray-200 shadow-sm hover:border-[#0f8a6a]' },
+  innovazione: { icona: Settings, classe: 'bg-white border border-gray-200 shadow-sm hover:border-[#0f8a6a]' },
+  organizzazione: { icona: Users, classe: 'bg-white border border-gray-200 shadow-sm hover:border-[#0f8a6a]' },
 };
 const ICONA_AREA = {
   Sicurezza: ShieldCheck, 'Intelligenza artificiale': Sparkles, Marketing: Megaphone, Lingue: Languages,
@@ -68,9 +69,7 @@ const campagnaDaUrl = () => {
 };
 const scorri = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-// titoli in sans-serif pesante, come nel progetto grafico (il resto del sito usa il serif)
 const STILE_PAGINA = `
-.ff h1,.ff h2,.ff h3,.ff legend{font-family:'Lato',sans-serif;letter-spacing:-0.02em}
 .ff input[type=number]::-webkit-inner-spin-button{opacity:1}
 `;
 
@@ -81,7 +80,7 @@ function Campo({ label, nome, valore, onChange, errore, tipo = 'text', placehold
       <input
         type={tipo} name={nome} value={valore} placeholder={placeholder}
         onChange={(e) => onChange(nome, maiuscolo ? e.target.value.toUpperCase() : e.target.value)}
-        className={`w-full rounded-lg border-2 px-3.5 py-2.5 text-[15px] bg-white outline-none transition-colors ${errore ? 'border-red-400' : 'border-gray-300 focus:border-[#0f2e2c]'}`}
+        className={`w-full rounded-lg border-2 px-3.5 py-2.5 text-[15px] bg-white outline-none transition-colors ${errore ? 'border-red-400' : 'border-gray-300 focus:border-[#0f2742]'}`}
       />
       {errore ? <span className="block text-sm text-red-600 mt-1">{errore}</span> : aiuto && <span className="block text-xs text-gray-500 mt-1">{aiuto}</span>}
     </label>
@@ -90,7 +89,7 @@ function Campo({ label, nome, valore, onChange, errore, tipo = 'text', placehold
 
 function Tendina({ etichetta, valore, onChange, opzioni }) {
   return (
-    <label className="relative flex items-center rounded-lg border-2 border-gray-300 bg-white focus-within:border-[#0f2e2c]">
+    <label className="relative flex items-center rounded-lg border-2 border-gray-300 bg-white focus-within:border-[#0f2742]">
       <span className="pl-3 text-sm font-bold text-gray-900 whitespace-nowrap">{etichetta}:</span>
       <select value={valore} onChange={(e) => onChange(e.target.value)} aria-label={etichetta}
         className="appearance-none bg-transparent pl-1.5 pr-9 py-2.5 text-sm text-gray-700 outline-none w-full cursor-pointer">
@@ -109,7 +108,7 @@ function Passi({ passo }) {
         const n = i + 1; const ora = passo === n; const fatto = passo > n;
         return (
           <li key={v} className={`flex items-center gap-3 ${n < voci.length ? 'flex-1' : ''}`}>
-            <span className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-bold border-2 ${ora || fatto ? 'bg-[#86efb4] border-[#86efb4] text-[#0f2e2c]' : 'border-gray-400 text-gray-500'}`}>
+            <span className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-bold border-2 ${ora || fatto ? 'bg-[#0f8a6a] border-[#0f8a6a] text-white' : 'border-gray-400 text-gray-500'}`}>
               {fatto ? <Check className="w-5 h-5" /> : n}
             </span>
             <span className={`text-sm sm:text-base whitespace-nowrap ${ora ? 'font-bold text-gray-900' : 'text-gray-600 hidden sm:inline'}`}>{v}</span>
@@ -214,9 +213,9 @@ export default function FormazioneFinanziata() {
 
   // ---------------------------------------------------------------- piano formativo
   const Piano = ({ compatto }) => (
-    <div className="bg-[#0f2e2c] text-white rounded-2xl p-6 shadow-xl">
+    <div className="bg-[#0f2742] text-white rounded-2xl p-6 shadow-xl">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-2xl font-black leading-tight">Il tuo piano formativo</h3>
+        <h3 className="text-2xl font-bold leading-tight">Il tuo piano formativo</h3>
         {compatto && <button type="button" onClick={() => setPianoAperto(false)} aria-label="Chiudi" className="p-1 text-gray-300 hover:text-white"><X className="w-5 h-5" /></button>}
       </div>
       {!selezione.length ? (
@@ -256,7 +255,7 @@ export default function FormazioneFinanziata() {
       </dl>
       {passo === 1 && (
         <button type="button" onClick={vaiAiDati} disabled={!selezione.length}
-          className="mt-5 w-full rounded-xl bg-[#86efb4] text-[#0f2e2c] font-black text-lg py-3.5 hover:bg-[#6ee7a4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          className="mt-5 w-full rounded-xl bg-[#0f8a6a] text-white font-bold text-lg py-3.5 hover:bg-[#0c7458] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           {selezione.length ? 'Prosegui con i dati aziendali' : 'Invia la richiesta'}
         </button>
       )}
@@ -265,7 +264,7 @@ export default function FormazioneFinanziata() {
   );
 
   return (
-    <div className="ff bg-[#fbf7f1]">
+    <div className="ff bg-white">
       <style>{STILE_PAGINA}</style>
       <WhatsAppFisso testo={MSG_WA} sopraBarra={passo === 1 && selezione.length > 0} />
       <SEOHead
@@ -277,18 +276,18 @@ export default function FormazioneFinanziata() {
 
       {/* ------------------------------------------------ apertura */}
       <section className="pt-[88px]">
-        <div className="grid lg:grid-cols-2 bg-[#0f2e2c] lg:min-h-[580px]">
+        <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[580px]">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
             className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
-            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.02]">
-              Formazione per il tuo team.<br /><span className="text-[#86efb4]">Finanziata da FonARCom.</span>
+            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.05]">
+              Formazione per il tuo team.<br />Finanziata da FonARCom.
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-gray-100">Scegli i corsi. Noi gestiamo il piano e le pratiche.</p>
             <div className="mt-8 flex flex-wrap items-center gap-6">
-              <button type="button" onClick={() => scorri('trova')} className="rounded-lg bg-[#86efb4] text-[#0f2e2c] font-black text-lg px-7 py-3.5 hover:bg-[#6ee7a4] transition-colors">
+              <button type="button" onClick={() => scorri('trova')} className={`${BTN_VERDE} text-lg px-7 py-3.5`}>
                 Esplora i {CORSI_FINANZIATI.length} corsi
               </button>
-              <button type="button" onClick={() => scorri('come-funziona')} className="text-lg font-semibold underline underline-offset-8 decoration-2 hover:text-[#86efb4]">Come funziona</button>
+              <button type="button" onClick={() => scorri('come-funziona')} className="text-lg font-semibold text-white underline underline-offset-8 decoration-2 hover:text-[#86efb4] rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#86efb4] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0f2742]">Come funziona</button>
             </div>
           </motion.div>
           <div className="relative min-h-[260px] lg:min-h-0 overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
@@ -303,34 +302,36 @@ export default function FormazioneFinanziata() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6">
-        {/* ------------------------------------------------ trova */}
-        <section id="trova" className="pt-14 scroll-mt-28">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-950 mb-6">Trova i corsi per la tua azienda</h2>
+      {/* ------------------------------------------------ trova */}
+      <section id="trova" className="bg-[#eef8f2] scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#0f2742] mb-6">Trova i corsi per la tua azienda</h2>
           <label className="relative block">
             <Search className="w-6 h-6 text-gray-800 absolute left-5 top-1/2 -translate-y-1/2" />
             <input type="search" value={cerca} onChange={(e) => { setCerca(e.target.value); setPasso(1); }} onKeyDown={(e) => e.key === 'Enter' && scorri('catalogo')}
               placeholder="Cerca un corso, ad esempio sicurezza o inglese" aria-label="Cerca un corso"
-              className="w-full rounded-lg border-2 border-gray-400 focus:border-[#0f2e2c] bg-white outline-none pl-14 pr-4 py-4 text-lg" />
+              className="w-full rounded-xl border-2 border-gray-200 focus:border-[#0f8a6a] bg-white outline-none pl-14 pr-4 py-4 text-lg text-gray-900" />
           </label>
           <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {TEMI_FINANZIATI.map((t) => {
               const s = TILE[t.id];
               return (
                 <button key={t.id} type="button" onClick={() => scegliTema(t.id)}
-                  className={`text-left rounded-xl p-5 sm:p-7 transition-all hover:-translate-y-0.5 hover:shadow-md ${s.classe} ${tema === t.id ? 'ring-2 ring-[#0f2e2c]' : ''}`}>
-                  <s.icona className="w-9 h-9 text-gray-900" strokeWidth={1.6} />
-                  <span className="block mt-4 font-black text-gray-900 text-base sm:text-xl leading-tight" style={{ fontFamily: 'Lato, sans-serif' }}>{t.nome}</span>
+                  className={`text-left rounded-xl p-5 sm:p-7 transition-all hover:-translate-y-0.5 hover:shadow-md ${s.classe} ${tema === t.id ? 'ring-2 ring-[#0f2742]' : ''}`}>
+                  <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#e3f7ec] text-[#0f8a6a]"><s.icona className="w-7 h-7" strokeWidth={1.8} /></span>
+                  <span className="block mt-4 font-bold text-[#0f2742] text-lg sm:text-2xl leading-tight" style={{ fontFamily: "'Crimson Text', serif" }}>{t.nome}</span>
                   <span className="block mt-3 font-bold text-gray-600">{conta((c) => c.tema === t.id)}</span>
                 </button>
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
+      <div className="max-w-7xl mx-auto px-6">
         {/* ------------------------------------------------ catalogo / dati / fatto */}
         <section id="catalogo" className="pt-16 pb-20 scroll-mt-28">
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-950 mb-6">Catalogo corsi</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-[#0f2742] mb-6">Catalogo corsi</h2>
           <Passi passo={passo} />
 
           {passo === 1 && (
@@ -352,10 +353,10 @@ export default function FormazioneFinanziata() {
                     return (
                       <li key={c.id} className={`flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl bg-white border-2 p-4 sm:p-5 transition-colors ${sel ? 'border-[#3fbf7f]' : 'border-gray-200 hover:border-gray-300'}`}>
                         <div className="flex items-start gap-4 flex-1 min-w-0">
-                          <span className="w-14 h-14 rounded-xl bg-[#dcf5e6] flex items-center justify-center shrink-0"><I className="w-7 h-7 text-[#0f2e2c]" strokeWidth={1.6} /></span>
+                          <span className="w-14 h-14 rounded-xl bg-[#dcf5e6] flex items-center justify-center shrink-0"><I className="w-7 h-7 text-[#0f2742]" strokeWidth={1.6} /></span>
                           <div className="min-w-0">
-                            <span className="inline-block text-xs font-bold bg-[#dcf5e6] text-[#0f2e2c] rounded px-2 py-0.5 mb-1">{c.area}</span>
-                            <h3 className="text-lg font-black text-gray-950 leading-snug">{c.titolo}</h3>
+                            <span className="inline-block text-xs font-bold bg-[#dcf5e6] text-[#0f2742] rounded px-2 py-0.5 mb-1">{c.area}</span>
+                            <h3 className="text-lg font-bold text-[#0f2742] leading-snug">{c.titolo}</h3>
                             <p className="text-sm text-gray-600 mt-0.5">{nomeTema(c.tema)}</p>
                           </div>
                         </div>
@@ -363,13 +364,13 @@ export default function FormazioneFinanziata() {
                           <span className="flex items-center gap-1.5 font-bold text-gray-800 whitespace-nowrap"><Clock className="w-5 h-5" /> {c.ore} ore</span>
                           {sel ? (
                             <button type="button" onClick={() => togli(c.id)} title="Togli dal piano"
-                              className="group rounded-lg bg-[#86efb4] text-[#0f2e2c] font-black px-4 py-2.5 inline-flex items-center gap-2 min-w-[160px] justify-center">
+                              className="group rounded-lg bg-[#0f8a6a] text-white font-bold px-4 py-2.5 inline-flex items-center gap-2 min-w-[160px] justify-center">
                               <span className="group-hover:hidden inline-flex items-center gap-2">Aggiunto <Check className="w-5 h-5" /></span>
                               <span className="hidden group-hover:inline-flex items-center gap-2">Togli <X className="w-5 h-5" /></span>
                             </button>
                           ) : (
                             <button type="button" onClick={() => aggiungi(c.id)}
-                              className="rounded-lg border-2 border-gray-900 bg-white font-black px-4 py-2 min-w-[160px] hover:bg-[#86efb4] hover:border-[#86efb4] transition-colors">
+                              className="rounded-lg border-2 border-gray-900 bg-white font-bold px-4 py-2 min-w-[160px] hover:bg-[#e3f7ec] hover:border-[#0f8a6a] transition-colors">
                               + Aggiungi al piano
                             </button>
                           )}
@@ -400,11 +401,11 @@ export default function FormazioneFinanziata() {
                 <button type="button" onClick={tornaAlCatalogo} className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-4">
                   <ChevronLeft className="w-4 h-4" /> Torna al catalogo
                 </button>
-                <h2 className="text-3xl font-black text-gray-950 mb-1">I dati della tua azienda</h2>
+                <h2 className="text-3xl font-bold text-[#0f2742] mb-1">I dati della tua azienda</h2>
                 <p className="text-gray-600 mb-8">Ci servono per verificare l’adesione a FonARCom. Nessun costo e nessun impegno.</p>
 
                 <fieldset className="mb-8">
-                  <legend className="text-xl font-black text-gray-950 mb-4">Azienda</legend>
+                  <legend className="text-xl font-bold text-[#0f2742] mb-4">Azienda</legend>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <Campo label="Ragione sociale" nome="ragioneSociale" valore={azienda.ragioneSociale} onChange={aggiornaAzienda} errore={errori.ragioneSociale} obbligatorio larghezza="sm:col-span-2" />
                     <Campo label="Partita IVA" nome="partitaIva" valore={azienda.partitaIva} onChange={aggiornaAzienda} errore={errori.partitaIva} obbligatorio />
@@ -414,7 +415,7 @@ export default function FormazioneFinanziata() {
                       <div className="grid grid-cols-3 gap-2">
                         {[['si', 'Sì'], ['no', 'No'], ['non_so', 'Non lo so']].map(([v, t]) => (
                           <button key={v} type="button" onClick={() => aggiornaAzienda('fonarcom', v)}
-                            className={`py-2.5 rounded-lg border-2 text-sm font-black transition-colors ${azienda.fonarcom === v ? 'bg-[#0f2e2c] text-white border-[#0f2e2c]' : 'bg-white border-gray-300 hover:border-[#0f2e2c]'}`}>{t}</button>
+                            className={`py-2.5 rounded-lg border-2 text-sm font-bold transition-colors ${azienda.fonarcom === v ? 'bg-[#0f2742] text-white border-[#0f2742]' : 'bg-white border-gray-300 hover:border-[#0f2742]'}`}>{t}</button>
                         ))}
                       </div>
                       {errori.fonarcom ? <span className="block text-sm text-red-600 mt-2">{errori.fonarcom}</span>
@@ -427,7 +428,7 @@ export default function FormazioneFinanziata() {
                 </fieldset>
 
                 <fieldset className="mb-8">
-                  <legend className="text-xl font-black text-gray-950 mb-4">Sede</legend>
+                  <legend className="text-xl font-bold text-[#0f2742] mb-4">Sede</legend>
                   <div className="grid sm:grid-cols-6 gap-4">
                     <Campo label="Indirizzo" nome="indirizzo" valore={azienda.indirizzo} onChange={aggiornaAzienda} errore={errori.indirizzo} obbligatorio larghezza="sm:col-span-6" />
                     <Campo label="CAP" nome="cap" valore={azienda.cap} onChange={aggiornaAzienda} errore={errori.cap} obbligatorio larghezza="sm:col-span-2" />
@@ -435,7 +436,7 @@ export default function FormazioneFinanziata() {
                     <label className="block sm:col-span-2">
                       <span className="block text-sm font-bold text-gray-800 mb-1.5">Provincia <span className="text-rose-500">*</span></span>
                       <select value={azienda.provincia} onChange={(e) => aggiornaAzienda('provincia', e.target.value)}
-                        className={`w-full rounded-lg border-2 px-3 py-2.5 bg-white outline-none ${errori.provincia ? 'border-red-400' : 'border-gray-300 focus:border-[#0f2e2c]'}`}>
+                        className={`w-full rounded-lg border-2 px-3 py-2.5 bg-white outline-none ${errori.provincia ? 'border-red-400' : 'border-gray-300 focus:border-[#0f2742]'}`}>
                         <option value="">—</option>
                         {province.map((p) => <option key={p.sigla} value={p.sigla}>{p.nome} ({p.sigla})</option>)}
                       </select>
@@ -445,7 +446,7 @@ export default function FormazioneFinanziata() {
                 </fieldset>
 
                 <fieldset className="mb-8">
-                  <legend className="text-xl font-black text-gray-950 mb-4">Referente</legend>
+                  <legend className="text-xl font-bold text-[#0f2742] mb-4">Referente</legend>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <Campo label="Nome e cognome" nome="referente" valore={azienda.referente} onChange={aggiornaAzienda} errore={errori.referente} obbligatorio />
                     <Campo label="Ruolo" nome="ruolo" valore={azienda.ruolo} onChange={aggiornaAzienda} placeholder="titolare, HR, amministrazione…" />
@@ -456,14 +457,14 @@ export default function FormazioneFinanziata() {
                 </fieldset>
 
                 <fieldset>
-                  <legend className="text-xl font-black text-gray-950 mb-4">Preferenze <span className="text-sm font-normal text-gray-500">(facoltative)</span></legend>
+                  <legend className="text-xl font-bold text-[#0f2742] mb-4">Preferenze <span className="text-sm font-normal text-gray-500">(facoltative)</span></legend>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <span className="block text-sm font-bold text-gray-800 mb-1.5">Modalità</span>
                       <div className="grid grid-cols-3 gap-2">
                         {[['presenza', 'In presenza'], ['online', 'Online'], ['indifferente', 'Indifferente']].map(([v, t]) => (
                           <button key={v} type="button" onClick={() => aggiornaAzienda('modalita', v)}
-                            className={`py-2.5 rounded-lg border-2 text-xs sm:text-sm font-bold ${azienda.modalita === v ? 'bg-[#0f2e2c] text-white border-[#0f2e2c]' : 'bg-white border-gray-300 hover:border-[#0f2e2c]'}`}>{t}</button>
+                            className={`py-2.5 rounded-lg border-2 text-xs sm:text-sm font-bold ${azienda.modalita === v ? 'bg-[#0f2742] text-white border-[#0f2742]' : 'bg-white border-gray-300 hover:border-[#0f2742]'}`}>{t}</button>
                         ))}
                       </div>
                     </div>
@@ -471,7 +472,7 @@ export default function FormazioneFinanziata() {
                     <label className="block sm:col-span-2">
                       <span className="block text-sm font-bold text-gray-800 mb-1.5">Note</span>
                       <textarea rows="3" value={azienda.note} onChange={(e) => aggiornaAzienda('note', e.target.value)} maxLength={1000}
-                        placeholder="Esigenze particolari, sedi, orari…" className="w-full rounded-lg border-2 border-gray-300 focus:border-[#0f2e2c] outline-none px-3.5 py-2.5" />
+                        placeholder="Esigenze particolari, sedi, orari…" className="w-full rounded-lg border-2 border-gray-300 focus:border-[#0f2742] outline-none px-3.5 py-2.5" />
                     </label>
                   </div>
                 </fieldset>
@@ -480,12 +481,12 @@ export default function FormazioneFinanziata() {
                   <input type="text" name="sito" tabIndex={-1} autoComplete="off" value={trappola} onChange={(e) => setTrappola(e.target.value)} />
                 </div>
                 <label className="flex gap-3 items-start mt-8 text-sm text-gray-700 leading-relaxed">
-                  <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} className="mt-1 w-4 h-4 accent-[#0f2e2c]" />
+                  <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} className="mt-1 w-4 h-4 accent-[#0f2742]" />
                   <span>Ho letto l’<Link to="/privacy" target="_blank" className="underline font-bold text-gray-900">informativa privacy</Link>, che spiega come vengono trattati i dati inviati con questa richiesta. <span className="text-rose-500">*</span></span>
                 </label>
                 {invio.stato === 'errore' && <p role="alert" className="mt-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">{invio.messaggio}</p>}
                 <button type="submit" disabled={invio.stato === 'invio'}
-                  className="mt-6 w-full rounded-xl bg-[#86efb4] text-[#0f2e2c] font-black text-lg py-4 hover:bg-[#6ee7a4] disabled:opacity-60 transition-colors">
+                  className="mt-6 w-full rounded-xl bg-[#0f8a6a] text-white font-bold text-lg py-4 hover:bg-[#0c7458] disabled:opacity-60 transition-colors">
                   {invio.stato === 'invio' ? 'Invio in corso…' : 'Invia la richiesta'}
                 </button>
               </form>
@@ -494,9 +495,9 @@ export default function FormazioneFinanziata() {
           )}
 
           {passo === 3 && (
-            <motion.div initial={{ scale: 0.97, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto bg-[#0f2e2c] text-white rounded-3xl p-10 text-center">
-              <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-[#86efb4] text-[#0f2e2c] flex items-center justify-center"><CheckCircle2 className="w-10 h-10" /></div>
-              <h2 className="text-3xl font-black mb-3">Richiesta inviata!</h2>
+            <motion.div initial={{ scale: 0.97, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto bg-[#0f2742] text-white rounded-3xl p-10 text-center">
+              <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-[#0f8a6a] text-white flex items-center justify-center"><CheckCircle2 className="w-10 h-10" /></div>
+              <h2 className="text-3xl font-bold mb-3">Richiesta inviata!</h2>
               <p className="text-lg text-gray-200">Riferimento <strong className="text-[#86efb4]">{invio.riferimento}</strong></p>
               <p className="text-gray-300 mt-4 leading-relaxed">
                 Ti abbiamo mandato un’email di riepilogo. Nei prossimi giorni ti contattiamo per verificare l’adesione a FonARCom
@@ -510,13 +511,13 @@ export default function FormazioneFinanziata() {
         </section>
 
         {/* ------------------------------------------------ come funziona */}
-        <section id="come-funziona" className="scroll-mt-28 rounded-2xl bg-[#d9f5e3] px-6 sm:px-10 py-10">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-950 mb-8">Come funziona</h2>
+        <section id="come-funziona" className="scroll-mt-28 rounded-2xl bg-[#eef8f2] px-6 sm:px-10 py-10">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#0f2742] mb-8">Come funziona</h2>
           <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
             {PASSI_COME.map((p, i) => (
               <li key={p.titolo} className="relative text-center">
                 <span className="mx-auto w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-sm"><p.icona className="w-8 h-8 text-gray-900" strokeWidth={1.6} /></span>
-                <h3 className="mt-3 text-lg font-black text-gray-950">{p.titolo}</h3>
+                <h3 className="mt-3 text-lg font-bold text-[#0f2742]">{p.titolo}</h3>
                 <p className="mt-1 text-sm text-gray-700 leading-relaxed max-w-[15rem] mx-auto">{p.testo}</p>
                 {i < PASSI_COME.length - 1 && <ArrowRight className="hidden lg:block w-6 h-6 text-gray-800 absolute top-5 -right-5" />}
               </li>
@@ -527,7 +528,7 @@ export default function FormazioneFinanziata() {
         {/* ------------------------------------------------ FAQ */}
         <section className="pt-14 pb-24">
           <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 mb-5">
-            <h2 className="text-4xl font-black text-gray-950">FAQ</h2>
+            <h2 className="text-4xl font-bold text-[#0f2742]">FAQ</h2>
             <p className="text-gray-700">Le risposte alle domande più frequenti sulla formazione e sui fondi FonARCom.</p>
           </div>
           <div className="space-y-3">
@@ -545,13 +546,13 @@ export default function FormazioneFinanziata() {
 
       {/* barra in basso (telefono e tablet) e pannello del piano */}
       {passo === 1 && selezione.length > 0 && (
-        <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[#0f2e2c] text-white">
+        <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[#0f2742] text-white">
           <div className="px-4 py-3 flex items-center justify-between gap-3">
             <button type="button" onClick={() => setPianoAperto(true)} className="text-left text-sm">
               <span className="font-bold">{selezione.length} {selezione.length === 1 ? 'corso' : 'corsi'} · {totPartecipanti} part.</span>
               <span className="block text-xs text-[#86efb4] underline">Vedi il piano</span>
             </button>
-            <button type="button" onClick={vaiAiDati} className="rounded-lg bg-[#86efb4] text-[#0f2e2c] font-black px-4 py-2.5 text-sm">Prosegui</button>
+            <button type="button" onClick={vaiAiDati} className="rounded-lg bg-[#0f8a6a] text-white font-bold px-4 py-2.5 text-sm">Prosegui</button>
           </div>
         </div>
       )}
