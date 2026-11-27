@@ -21,7 +21,7 @@ const Header = () => {
     { name: 'Home', path: '/' },
     { name: 'Come Funziona', path: '/come-funziona' },
     { name: 'Servizi', path: '/servizi' },
-    { name: 'Perché Noi', path: '/perche-noi' },
+    { name: 'Per le aziende', path: '/formazione-finanziata' },
     { name: 'Per i professionisti', path: '/professionisti' },
     { name: 'Corsi Sicurezza', path: '/corsi-sicurezza' },
     { name: 'FAQ', path: '/faq' }
