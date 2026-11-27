@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowRight, Award, BadgeCheck, Briefcase, Calculator, Check, CheckCircle2, ChevronLeft, ClipboardList, Cpu, GraduationCap,
-  Languages, Layers, Leaf, Lightbulb, Lock, Megaphone, MessageSquare, Minus, Monitor, Network, PiggyBank, Plus, Rocket, Search,
-  ShieldCheck, Sparkles, TrendingUp, Users, X,
+  ArrowRight, Award, Calculator, CalendarDays, Check, CheckCircle2, ChevronDown, ChevronLeft, ClipboardCheck, Clock, Cpu,
+  GraduationCap, Languages, Laptop, Layers, Leaf, Lightbulb, Lock, Megaphone, MessageSquare, Network, Search, Send,
+  Settings, ShieldCheck, Sparkles, TrendingUp, Users, X,
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import { WhatsAppFisso } from '../components/WhatsApp';
@@ -21,12 +21,12 @@ import { validaAteco, validaCap, validaEmail, validaPartitaIva, validaTelefono }
 const ENDPOINT = process.env.REACT_APP_ISCRIZIONI_URL;
 const MSG_WA = 'Ciao, vorrei informazioni sui corsi di formazione finanziata per la mia azienda.';
 
-// colori e icone dei 4 temi (classi scritte per intero: Tailwind le deve trovare nel codice)
-const STILE_TEMA = {
-  generale: { icona: ShieldCheck, chip: 'bg-emerald-50 text-emerald-700 border-emerald-200', pieno: 'bg-emerald-600', riga: 'bg-emerald-500', tile: 'from-emerald-50 to-white border-emerald-200 hover:border-emerald-500', ico: 'bg-emerald-600 text-white' },
-  digitale: { icona: Monitor, chip: 'bg-violet-50 text-violet-700 border-violet-200', pieno: 'bg-violet-600', riga: 'bg-violet-500', tile: 'from-violet-50 to-white border-violet-200 hover:border-violet-500', ico: 'bg-violet-600 text-white' },
-  innovazione: { icona: Lightbulb, chip: 'bg-amber-50 text-amber-700 border-amber-200', pieno: 'bg-amber-500', riga: 'bg-amber-500', tile: 'from-amber-50 to-white border-amber-200 hover:border-amber-500', ico: 'bg-amber-500 text-white' },
-  organizzazione: { icona: Network, chip: 'bg-rose-50 text-rose-700 border-rose-200', pieno: 'bg-rose-600', riga: 'bg-rose-500', tile: 'from-rose-50 to-white border-rose-200 hover:border-rose-500', ico: 'bg-rose-600 text-white' },
+// riquadri delle 4 aree (classi scritte per intero: Tailwind le deve trovare nel codice)
+const TILE = {
+  generale: { icona: GraduationCap, classe: 'bg-[#dff1e3] hover:bg-[#cfe9d5]' },
+  digitale: { icona: Laptop, classe: 'bg-[#dbe8f2] hover:bg-[#c9dcec]' },
+  innovazione: { icona: Settings, classe: 'bg-[#fde3d1] hover:bg-[#fbd3b8]' },
+  organizzazione: { icona: Users, classe: 'bg-[#e6def4] hover:bg-[#d8cdee]' },
 };
 const ICONA_AREA = {
   Sicurezza: ShieldCheck, 'Intelligenza artificiale': Sparkles, Marketing: Megaphone, Lingue: Languages,
@@ -34,19 +34,26 @@ const ICONA_AREA = {
   Qualità: Award, Innovazione: Lightbulb, Sostenibilità: Leaf, 'Abilità personali': Users, 'Economia e imprenditorialità': TrendingUp,
   Informatica: Cpu, Comunicazione: MessageSquare, Scuola: GraduationCap,
 };
-const AREE_RAPIDE = ['Sicurezza', 'Intelligenza artificiale', 'Marketing', 'Lingue', 'Privacy e sicurezza informatica', 'Organizzazione aziendale', 'Amministrazione e contabilità', 'Sostenibilità'];
 const AREE = [...new Set(CORSI_FINANZIATI.map((c) => c.area))].sort((a, b) => a.localeCompare(b, 'it'));
 const conta = (filtro) => CORSI_FINANZIATI.filter(filtro).length;
+const nomeTema = (id) => (TEMI_FINANZIATI.find((t) => t.id === id) || {}).nome || '';
 const DURATE = [
-  { id: '', nome: 'Qualsiasi durata', ok: () => true },
+  { id: '', nome: 'Tutte le durate', ok: () => true },
   { id: 'brevi', nome: 'Fino a 8 ore', ok: (o) => o <= 8 },
   { id: 'medi', nome: 'Da 9 a 24 ore', ok: (o) => o > 8 && o <= 24 },
   { id: 'lunghi', nome: 'Oltre 24 ore', ok: (o) => o > 24 },
 ];
+const PASSI_COME = [
+  { icona: Layers, titolo: 'Scegli i corsi', testo: 'Seleziona i corsi più adatti alle esigenze della tua azienda.' },
+  { icona: Send, titolo: 'Invia la richiesta', testo: 'Ci comunichi il tuo piano formativo con un clic.' },
+  { icona: Search, titolo: 'Verifichiamo i requisiti', testo: 'Controlliamo l’adesione e la finanziabilità con FonARCom.' },
+  { icona: CalendarDays, titolo: 'Avviamo la formazione', testo: 'Organizziamo i corsi e gestiamo tutte le pratiche, fino alla chiusura.' },
+];
 const DOMANDE = [
+  ['Chi può usufruire dei corsi finanziati da FonARCom?', 'Le aziende con dipendenti aderenti a FonARCom. Se la tua azienda non aderisce ancora, ti spieghiamo come fare: l’adesione si comunica all’INPS e non comporta costi aggiuntivi.'],
   ['Quanto costa all’azienda?', 'I corsi sono finanziati dal fondo interprofessionale a cui l’azienda versa già i contributi tramite l’INPS: l’azienda non paga i corsi.'],
-  ['Chi può richiederli?', 'Le aziende con dipendenti aderenti a Fonarcom. Se la tua azienda non aderisce ancora, ti spieghiamo come fare: l’adesione si comunica all’INPS e non comporta costi aggiuntivi.'],
-  ['La richiesta è un’iscrizione definitiva?', 'No. È una richiesta di adesione: dopo l’invio ti contattiamo per verificare i requisiti e concordare corsi, partecipanti e calendario.'],
+  ['Come si costruisce un piano formativo?', 'Scegli i corsi dal catalogo e indica quanti dipendenti partecipano a ciascuno. Dopo la richiesta verifichiamo i requisiti e prepariamo con te il piano: corsi, partecipanti, calendario e modalità.'],
+  ['La richiesta è un’iscrizione definitiva?', 'No. È una richiesta di adesione senza impegno: dopo l’invio ti contattiamo per verificare i requisiti e concordare i dettagli.'],
   ['Dove si trova la matricola INPS?', 'È il codice di 10 caratteri dell’azienda presso l’INPS: lo trovi sul cassetto previdenziale o te lo indica il tuo consulente del lavoro. Se non lo hai a portata di mano puoi lasciarlo vuoto.'],
   ['I corsi di sicurezza obbligatoria ci sono?', 'Sì, nella formazione generale trovi anche corsi sulla sicurezza sul lavoro. Se ti serve un corso subito, senza attendere i tempi del piano formativo, puoi acquistarlo online nella sezione Corsi sicurezza.'],
 ];
@@ -61,52 +68,52 @@ const campagnaDaUrl = () => {
 };
 const scorri = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+// titoli in sans-serif pesante, come nel progetto grafico (il resto del sito usa il serif)
+const STILE_PAGINA = `
+.ff h1,.ff h2,.ff h3,.ff legend{font-family:'Lato',sans-serif;letter-spacing:-0.02em}
+.ff input[type=number]::-webkit-inner-spin-button{opacity:1}
+`;
+
 function Campo({ label, nome, valore, onChange, errore, tipo = 'text', placeholder, obbligatorio, larghezza = '', maiuscolo, aiuto }) {
   return (
     <label className={`block ${larghezza}`}>
-      <span className="block text-sm font-semibold text-gray-800 mb-1.5">{label}{obbligatorio && <span className="text-rose-500"> *</span>}</span>
+      <span className="block text-sm font-bold text-gray-800 mb-1.5">{label}{obbligatorio && <span className="text-rose-500"> *</span>}</span>
       <input
         type={tipo} name={nome} value={valore} placeholder={placeholder}
         onChange={(e) => onChange(nome, maiuscolo ? e.target.value.toUpperCase() : e.target.value)}
-        className={`w-full rounded-xl border-2 px-3.5 py-2.5 text-[15px] bg-white outline-none transition-colors ${errore ? 'border-red-400 bg-red-50/40' : 'border-gray-200 focus:border-gray-900'}`}
+        className={`w-full rounded-lg border-2 px-3.5 py-2.5 text-[15px] bg-white outline-none transition-colors ${errore ? 'border-red-400' : 'border-gray-300 focus:border-[#0f2e2c]'}`}
       />
       {errore ? <span className="block text-sm text-red-600 mt-1">{errore}</span> : aiuto && <span className="block text-xs text-gray-500 mt-1">{aiuto}</span>}
     </label>
   );
 }
 
-function Contatore({ valore, onChange, scuro }) {
-  const base = scuro ? 'border-white/30 text-white' : 'border-gray-300 text-gray-900';
+function Tendina({ etichetta, valore, onChange, opzioni }) {
   return (
-    <div className={`inline-flex items-center rounded-lg border ${base} overflow-hidden`}>
-      <button type="button" aria-label="Meno partecipanti" onClick={() => onChange(Math.max(1, valore - 1))} className="px-2 py-1 hover:bg-black/10"><Minus className="w-3.5 h-3.5" /></button>
-      <input
-        type="number" min="1" max="200" value={valore} aria-label="Partecipanti"
-        onChange={(e) => onChange(Math.min(200, Math.max(1, parseInt(e.target.value, 10) || 1)))}
-        className="w-10 text-center text-sm font-bold bg-transparent outline-none [appearance:textfield]"
-      />
-      <button type="button" aria-label="Più partecipanti" onClick={() => onChange(Math.min(200, valore + 1))} className="px-2 py-1 hover:bg-black/10"><Plus className="w-3.5 h-3.5" /></button>
-    </div>
+    <label className="relative flex items-center rounded-lg border-2 border-gray-300 bg-white focus-within:border-[#0f2e2c]">
+      <span className="pl-3 text-sm font-bold text-gray-900 whitespace-nowrap">{etichetta}:</span>
+      <select value={valore} onChange={(e) => onChange(e.target.value)} aria-label={etichetta}
+        className="appearance-none bg-transparent pl-1.5 pr-9 py-2.5 text-sm text-gray-700 outline-none w-full cursor-pointer">
+        {opzioni.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
+      </select>
+      <ChevronDown className="w-4 h-4 absolute right-3 pointer-events-none" />
+    </label>
   );
 }
 
-/** Indicatore dei passi in cima alla sezione di lavoro. */
 function Passi({ passo }) {
   const voci = ['Scegli i corsi', 'Dati dell’azienda', 'Richiesta inviata'];
   return (
-    <ol className="flex items-center gap-2 sm:gap-4 mb-8">
+    <ol className="flex items-center gap-3 mb-6">
       {voci.map((v, i) => {
-        const n = i + 1;
-        const fatto = passo > n; const ora = passo === n;
+        const n = i + 1; const ora = passo === n; const fatto = passo > n;
         return (
-          <li key={v} className="flex items-center gap-2 sm:gap-4 min-w-0">
-            <span className={`flex items-center gap-2 min-w-0 ${ora ? 'text-gray-900' : fatto ? 'text-emerald-700' : 'text-gray-400'}`}>
-              <span className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center text-sm font-bold ${ora ? 'bg-gray-900 text-white' : fatto ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-500'}`}>
-                {fatto ? <Check className="w-4 h-4" /> : n}
-              </span>
-              <span className={`text-sm font-semibold truncate ${ora ? '' : 'hidden sm:inline'}`}>{v}</span>
+          <li key={v} className={`flex items-center gap-3 ${n < voci.length ? 'flex-1' : ''}`}>
+            <span className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-bold border-2 ${ora || fatto ? 'bg-[#86efb4] border-[#86efb4] text-[#0f2e2c]' : 'border-gray-400 text-gray-500'}`}>
+              {fatto ? <Check className="w-5 h-5" /> : n}
             </span>
-            {n < voci.length && <span className={`h-0.5 w-6 sm:w-12 rounded ${fatto ? 'bg-emerald-600' : 'bg-gray-200'}`} />}
+            <span className={`text-sm sm:text-base whitespace-nowrap ${ora ? 'font-bold text-gray-900' : 'text-gray-600 hidden sm:inline'}`}>{v}</span>
+            {n < voci.length && <span className="flex-1 h-px bg-gray-300 min-w-4" />}
           </li>
         );
       })}
@@ -126,7 +133,8 @@ export default function FormazioneFinanziata() {
   const [trappola, setTrappola] = useState('');
   const [errori, setErrori] = useState({});
   const [invio, setInvio] = useState({ stato: 'pronto', messaggio: '', riferimento: '' });
-  const [pianoAperto, setPianoAperto] = useState(false); // pannello "piano" su telefono
+  const [pianoAperto, setPianoAperto] = useState(false); // pannello del piano su telefono
+  const [mostrati, setMostrati] = useState(20);
 
   const filtrati = useMemo(() => {
     const q = cerca.trim().toLowerCase();
@@ -134,20 +142,20 @@ export default function FormazioneFinanziata() {
     return CORSI_FINANZIATI.filter((c) => (!tema || c.tema === tema) && (!area || c.area === area) && okDurata(c.ore)
       && (!q || c.titolo.toLowerCase().includes(q) || c.area.toLowerCase().includes(q)));
   }, [cerca, tema, area, durata]);
+  useEffect(() => { setMostrati(20); }, [cerca, tema, area, durata]);
 
   const selezione = CORSI_FINANZIATI.filter((c) => scelti[c.id]);
   const totPartecipanti = selezione.reduce((s, c) => s + scelti[c.id], 0);
   const totOre = selezione.reduce((s, c) => s + c.ore, 0);
   const aggiungi = (id) => setScelti((s) => ({ ...s, [id]: s[id] || 1 }));
   const togli = (id) => setScelti((s) => { const n = { ...s }; delete n[id]; return n; });
-  const imposta = (id, n) => setScelti((s) => ({ ...s, [id]: n }));
+  const imposta = (id, n) => setScelti((s) => ({ ...s, [id]: Math.min(200, Math.max(1, n || 1)) }));
   const aggiornaAzienda = (k, v) => { setAzienda((a) => ({ ...a, [k]: v })); setErrori((e) => ({ ...e, [k]: undefined })); };
   const filtriAttivi = Boolean(cerca || tema || area || durata);
   const azzera = () => { setCerca(''); setTema(''); setArea(''); setDurata(''); };
-  const scegliTema = (id) => { setTema(id); setArea(''); scorri('catalogo'); };
-  const scegliArea = (a) => { setArea(a); setTema(''); scorri('catalogo'); };
-  const vaiAiDati = () => { if (!selezione.length) return; setPianoAperto(false); setPasso(2); setTimeout(() => scorri('lavoro'), 30); };
-  const tornaAlCatalogo = () => { setPasso(1); setTimeout(() => scorri('lavoro'), 30); };
+  const scegliTema = (id) => { setTema(id); setArea(''); setPasso(1); scorri('catalogo'); };
+  const vaiAiDati = () => { if (!selezione.length) return; setPianoAperto(false); setPasso(2); setTimeout(() => scorri('catalogo'), 30); };
+  const tornaAlCatalogo = () => { setPasso(1); setTimeout(() => scorri('catalogo'), 30); };
 
   useEffect(() => { document.body.style.overflow = pianoAperto ? 'hidden' : ''; return () => { document.body.style.overflow = ''; }; }, [pianoAperto]);
 
@@ -192,7 +200,7 @@ export default function FormazioneFinanziata() {
       if (!r.ok) throw new Error(d.errore || 'Invio non riuscito: riprova fra poco.');
       setInvio({ stato: 'fatto', messaggio: '', riferimento: d.riferimento });
       setPasso(3);
-      setTimeout(() => scorri('lavoro'), 30);
+      setTimeout(() => scorri('catalogo'), 30);
     } catch (err) {
       setInvio({ stato: 'errore', messaggio: err.message || 'Invio non riuscito: riprova fra poco.' });
     }
@@ -204,378 +212,346 @@ export default function FormazioneFinanziata() {
     mainEntity: DOMANDE.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   });
 
-  // ---------------------------------------------------------------- piano formativo (carrello)
+  // ---------------------------------------------------------------- piano formativo
   const Piano = ({ compatto }) => (
-    <div className="bg-gray-950 text-white rounded-2xl p-5 shadow-xl">
-      <div className="flex items-center justify-between gap-3 mb-1">
-        <h3 className="text-lg font-bold flex items-center gap-2"><ClipboardList className="w-5 h-5" /> Il tuo piano formativo</h3>
-        {compatto && <button type="button" onClick={() => setPianoAperto(false)} aria-label="Chiudi" className="p-1 text-gray-400 hover:text-white"><X className="w-5 h-5" /></button>}
+    <div className="bg-[#0f2e2c] text-white rounded-2xl p-6 shadow-xl">
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="text-2xl font-black leading-tight">Il tuo piano formativo</h3>
+        {compatto && <button type="button" onClick={() => setPianoAperto(false)} aria-label="Chiudi" className="p-1 text-gray-300 hover:text-white"><X className="w-5 h-5" /></button>}
       </div>
       {!selezione.length ? (
-        <div className="py-6 text-center">
-          <div className="mx-auto w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-3"><Plus className="w-5 h-5" /></div>
-          <p className="text-sm text-gray-300">Ancora vuoto. Premi <strong>«Aggiungi»</strong> sui corsi che ti interessano.</p>
-        </div>
+        <>
+          <ClipboardCheck className="w-10 h-10 text-[#86efb4] mt-5 mb-3" strokeWidth={1.6} />
+          <p className="text-sm text-gray-200 leading-relaxed">Seleziona i corsi di tuo interesse per costruire il piano formativo della tua azienda.</p>
+        </>
       ) : (
         <>
-          <div className="grid grid-cols-3 gap-2 my-4 text-center">
-            {[[selezione.length, selezione.length === 1 ? 'corso' : 'corsi'], [totPartecipanti, totPartecipanti === 1 ? 'partecipante' : 'partecipanti'], [totOre, 'ore di corso']].map(([n, t]) => (
-              <div key={t} className="rounded-xl bg-white/10 py-2"><div className="text-xl font-bold">{n}</div><div className="text-[11px] text-gray-400">{t}</div></div>
-            ))}
-          </div>
-          <ul className="space-y-2 max-h-[45vh] overflow-y-auto pr-1">
+          <p className="text-[#86efb4] font-bold mt-1">{selezione.length} {selezione.length === 1 ? 'corso selezionato' : 'corsi selezionati'}</p>
+          <ul className="mt-3 max-h-[50vh] overflow-y-auto pr-1 divide-y divide-white/15 border-t border-white/15">
             {selezione.map((c) => (
-              <li key={c.id} className="rounded-xl bg-white/5 p-3">
-                <div className="flex gap-2">
-                  <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${STILE_TEMA[c.tema].pieno}`} />
-                  <span className="text-sm leading-snug flex-1">{c.titolo}</span>
-                  <button type="button" onClick={() => togli(c.id)} aria-label={`Togli ${c.titolo}`} className="text-gray-500 hover:text-white shrink-0"><X className="w-4 h-4" /></button>
+              <li key={c.id} className="py-3">
+                <div className="flex justify-between gap-2">
+                  <span className="font-bold leading-snug">{c.titolo}</span>
+                  {passo === 1 && <button type="button" onClick={() => togli(c.id)} aria-label={`Togli ${c.titolo}`} className="text-gray-400 hover:text-white shrink-0"><X className="w-4 h-4" /></button>}
                 </div>
-                {passo === 1 && (
-                  <div className="mt-2 ml-4 flex items-center gap-2 text-xs text-gray-400"><Contatore scuro valore={scelti[c.id]} onChange={(n) => imposta(c.id, n)} /> partecipanti · {c.ore} ore</div>
-                )}
-                {passo !== 1 && <div className="mt-1 ml-4 text-xs text-gray-400">{scelti[c.id]} {scelti[c.id] === 1 ? 'partecipante' : 'partecipanti'} · {c.ore} ore</div>}
+                <div className="mt-1 flex items-center gap-1.5 text-sm text-gray-300"><Clock className="w-4 h-4" /> {c.ore} ore</div>
+                {passo === 1 ? (
+                  <label className="mt-2 flex items-center gap-3">
+                    <span className="text-sm font-bold">Partecipanti</span>
+                    <input type="number" min="1" max="200" value={scelti[c.id]} onChange={(e) => imposta(c.id, parseInt(e.target.value, 10))}
+                      className="w-20 rounded-lg bg-white text-gray-900 font-bold px-3 py-1.5 outline-none" />
+                  </label>
+                ) : <div className="mt-1 text-sm text-gray-300">{scelti[c.id]} {scelti[c.id] === 1 ? 'partecipante' : 'partecipanti'}</div>}
               </li>
             ))}
           </ul>
         </>
       )}
+      <dl className="mt-4 text-sm divide-y divide-white/15 border-y border-white/15">
+        <div className="flex justify-between py-2"><dt className="text-gray-300">Corsi selezionati</dt><dd className="font-bold">{selezione.length}</dd></div>
+        <div className="flex justify-between py-2"><dt className="text-gray-300">Partecipanti</dt><dd className="font-bold">{totPartecipanti}</dd></div>
+        <div className="flex justify-between py-2"><dt className="text-gray-300">Durata totale</dt><dd className="font-bold">{totOre} ore</dd></div>
+        <div className="flex justify-between items-center py-2"><dt className="text-gray-300">Stato</dt>
+          <dd className="text-xs border border-white/40 rounded-full px-2.5 py-0.5">{passo === 3 ? 'Inviato' : 'In definizione'}</dd></div>
+      </dl>
       {passo === 1 && (
         <button type="button" onClick={vaiAiDati} disabled={!selezione.length}
-          className="mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-white text-gray-950 font-bold py-3 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
-          Prosegui con i dati aziendali <ArrowRight className="w-4 h-4" />
+          className="mt-5 w-full rounded-xl bg-[#86efb4] text-[#0f2e2c] font-black text-lg py-3.5 hover:bg-[#6ee7a4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          {selezione.length ? 'Prosegui con i dati aziendali' : 'Invia la richiesta'}
         </button>
       )}
-      <p className="mt-3 text-[11px] text-gray-500 text-center">Nessun costo per l’azienda · nessun impegno</p>
+      <p className="mt-3 text-xs text-gray-400 text-center">Nessun costo per l’azienda · nessun impegno</p>
     </div>
   );
 
   return (
-    <>
+    <div className="ff bg-[#fbf7f1]">
+      <style>{STILE_PAGINA}</style>
       <WhatsAppFisso testo={MSG_WA} sopraBarra={passo === 1 && selezione.length > 0} />
       <SEOHead
         title="Formazione finanziata per le aziende – Catalogo corsi"
-        description={`${CORSI_FINANZIATI.length} corsi di formazione finanziata per le aziende aderenti a Fonarcom: sicurezza, digitale, intelligenza artificiale, lingue, organizzazione. Scegli i corsi e richiedili online.`}
+        description={`${CORSI_FINANZIATI.length} corsi di formazione finanziata per le aziende aderenti a FonARCom: sicurezza, digitale, intelligenza artificiale, lingue, organizzazione. Scegli i corsi e richiedili online.`}
         canonical="https://www.mariobruzzese.it/formazione-finanziata"
         schema={schema}
       />
 
       {/* ------------------------------------------------ apertura */}
-      <section className="relative overflow-hidden bg-gray-950 text-white pt-36 pb-20">
-        <div className="absolute -top-24 -right-24 w-[32rem] h-[32rem] rounded-full bg-violet-600/25 blur-3xl" />
-        <div className="absolute -bottom-32 -left-24 w-[28rem] h-[28rem] rounded-full bg-emerald-500/20 blur-3xl" />
-        <div className="max-w-7xl mx-auto px-6 relative grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
-          <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium mb-6">
-              <BadgeCheck className="w-4 h-4 text-emerald-400" /> Per le aziende aderenti a Fonarcom
-            </span>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-[1.05]">
-              Forma i tuoi dipendenti.<br /><span className="text-emerald-400">Paga il fondo, non l’azienda.</span>
+      <section className="pt-28">
+        <div className="grid lg:grid-cols-2 bg-[#0f2e2c] lg:min-h-[480px]">
+          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
+            className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
+            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.02]">
+              Formazione per il tuo team.<br /><span className="text-[#86efb4]">Finanziata da FonARCom.</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl">
-              Scegli dal catalogo i corsi che servono alla tua azienda: sono finanziati dal fondo interprofessionale.
-              Noi verifichiamo i requisiti, organizziamo i corsi e gestiamo tutta la parte burocratica.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <button type="button" onClick={() => scorri('temi')} className="inline-flex items-center gap-2 rounded-xl bg-white text-gray-950 font-bold px-6 py-3.5 hover:bg-gray-100 transition-colors">
-                Scegli i corsi <ArrowRight className="w-4 h-4" />
+            <p className="mt-6 text-lg sm:text-xl text-gray-100">Scegli i corsi. Noi gestiamo il piano e le pratiche.</p>
+            <div className="mt-8 flex flex-wrap items-center gap-6">
+              <button type="button" onClick={() => scorri('trova')} className="rounded-lg bg-[#86efb4] text-[#0f2e2c] font-black text-lg px-7 py-3.5 hover:bg-[#6ee7a4] transition-colors">
+                Esplora i {CORSI_FINANZIATI.length} corsi
               </button>
-              <button type="button" onClick={() => scorri('domande')} className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-6 py-3.5 font-semibold hover:bg-white/10 transition-colors">
-                Come funziona
-              </button>
+              <button type="button" onClick={() => scorri('come-funziona')} className="text-lg font-semibold underline underline-offset-8 decoration-2 hover:text-[#86efb4]">Come funziona</button>
             </div>
           </motion.div>
-          <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6, delay: 0.15 }} className="grid grid-cols-2 gap-4">
-            {[
-              { icona: Layers, n: CORSI_FINANZIATI.length, t: 'corsi tra cui scegliere' },
-              { icona: PiggyBank, n: '0 €', t: 'di costo dei corsi per l’azienda' },
-              { icona: Rocket, n: '2 minuti', t: 'per inviare la richiesta' },
-              { icona: Briefcase, n: 'Tutto noi', t: 'verifiche, piano e rendicontazione' },
-            ].map((k) => (
-              <div key={k.t} className="rounded-2xl bg-white/[0.06] border border-white/10 p-5 backdrop-blur-sm">
-                <k.icona className="w-6 h-6 text-emerald-400 mb-3" />
-                <div className="text-2xl md:text-3xl font-bold">{k.n}</div>
-                <div className="text-sm text-gray-400 mt-1">{k.t}</div>
-              </div>
-            ))}
-          </motion.div>
+          <div className="relative min-h-[260px] lg:min-h-0 overflow-hidden lg:[clip-path:polygon(8%_0,100%_0,100%_100%,0_100%)]">
+            <img src="/img/formazione-finanziata-team.webp" alt="Un formatore con un gruppo di dipendenti durante un corso in azienda" width="761" height="378"
+              className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute right-6 bottom-6 text-right text-white drop-shadow-lg">
+              <div className="text-6xl sm:text-7xl font-black leading-none" style={{ fontFamily: 'Lato, sans-serif' }}>0 €</div>
+              <div className="text-lg sm:text-xl font-bold">per i corsi finanziati</div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="relative bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* ------------------------------------------------ temi */}
-          <section id="temi" className="pt-16 scroll-mt-24">
-            <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-2">Da dove vuoi partire?</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Scegli un’area</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {TEMI_FINANZIATI.map((t) => {
-                const s = STILE_TEMA[t.id];
-                return (
-                  <button key={t.id} type="button" onClick={() => scegliTema(t.id)}
-                    className={`group text-left rounded-2xl border-2 bg-gradient-to-br ${s.tile} p-6 transition-all hover:-translate-y-1 hover:shadow-lg ${tema === t.id ? 'ring-2 ring-gray-900' : ''}`}>
-                    <span className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${s.ico}`}><s.icona className="w-6 h-6" /></span>
-                    <span className="block font-bold text-gray-900 text-lg leading-tight">{t.nome}</span>
-                    <span className="block text-sm text-gray-600 mt-2 leading-relaxed">{t.descrizione}</span>
-                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-gray-900">
-                      {conta((c) => c.tema === t.id)} corsi <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-            <div className="mt-6 flex flex-wrap gap-2">
-              <span className="text-sm text-gray-500 self-center mr-1">Oppure cerca per argomento:</span>
-              {AREE_RAPIDE.map((a) => {
-                const I = ICONA_AREA[a] || Layers;
-                return (
-                  <button key={a} type="button" onClick={() => scegliArea(a)}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${area === a ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-900'}`}>
-                    <I className="w-4 h-4" /> {a} <span className="text-xs opacity-60">{conta((c) => c.area === a)}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
+      <div className="max-w-7xl mx-auto px-6">
+        {/* ------------------------------------------------ trova */}
+        <section id="trova" className="pt-14 scroll-mt-28">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-950 mb-6">Trova i corsi per la tua azienda</h2>
+          <label className="relative block">
+            <Search className="w-6 h-6 text-gray-800 absolute left-5 top-1/2 -translate-y-1/2" />
+            <input type="search" value={cerca} onChange={(e) => { setCerca(e.target.value); setPasso(1); }} onKeyDown={(e) => e.key === 'Enter' && scorri('catalogo')}
+              placeholder="Cerca un corso, ad esempio sicurezza o inglese" aria-label="Cerca un corso"
+              className="w-full rounded-lg border-2 border-gray-400 focus:border-[#0f2e2c] bg-white outline-none pl-14 pr-4 py-4 text-lg" />
+          </label>
+          <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {TEMI_FINANZIATI.map((t) => {
+              const s = TILE[t.id];
+              return (
+                <button key={t.id} type="button" onClick={() => scegliTema(t.id)}
+                  className={`text-left rounded-xl p-5 sm:p-7 transition-all hover:-translate-y-0.5 hover:shadow-md ${s.classe} ${tema === t.id ? 'ring-2 ring-[#0f2e2c]' : ''}`}>
+                  <s.icona className="w-9 h-9 text-gray-900" strokeWidth={1.6} />
+                  <span className="block mt-4 font-black text-gray-900 text-base sm:text-xl leading-tight" style={{ fontFamily: 'Lato, sans-serif' }}>{t.nome}</span>
+                  <span className="block mt-3 font-bold text-gray-600">{conta((c) => c.tema === t.id)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
 
-          {/* ------------------------------------------------ catalogo / dati / fatto */}
-          <section id="lavoro" className="pt-16 pb-24 scroll-mt-24">
-            <Passi passo={passo} />
+        {/* ------------------------------------------------ catalogo / dati / fatto */}
+        <section id="catalogo" className="pt-16 pb-20 scroll-mt-28">
+          <h2 className="text-4xl sm:text-5xl font-black text-gray-950 mb-6">Catalogo corsi</h2>
+          <Passi passo={passo} />
 
-            {passo === 1 && (
-              <div id="catalogo" className="grid lg:grid-cols-[1fr_360px] gap-8 items-start scroll-mt-24">
-                <div>
-                  <div className="rounded-2xl bg-white border border-gray-200 p-4 mb-5 shadow-sm">
-                    <label className="relative block">
-                      <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                      <input type="search" value={cerca} onChange={(e) => setCerca(e.target.value)} placeholder="Cerca un corso: inglese, carrelli, intelligenza artificiale, privacy…"
-                        aria-label="Cerca un corso" className="w-full rounded-xl bg-gray-50 border-2 border-transparent focus:border-gray-900 focus:bg-white outline-none pl-12 pr-4 py-3 text-[15px]" />
-                    </label>
-                    <div className="mt-3 flex flex-wrap gap-2 items-center">
-                      <select value={tema} onChange={(e) => setTema(e.target.value)} aria-label="Area" className="rounded-lg border border-gray-200 px-3 py-2 text-sm bg-white">
-                        <option value="">Tutte le aree</option>
-                        {TEMI_FINANZIATI.map((t) => <option key={t.id} value={t.id}>{t.nome}</option>)}
-                      </select>
-                      <select value={area} onChange={(e) => setArea(e.target.value)} aria-label="Argomento" className="rounded-lg border border-gray-200 px-3 py-2 text-sm bg-white">
-                        <option value="">Tutti gli argomenti</option>
-                        {AREE.map((a) => <option key={a} value={a}>{a}</option>)}
-                      </select>
-                      <select value={durata} onChange={(e) => setDurata(e.target.value)} aria-label="Durata" className="rounded-lg border border-gray-200 px-3 py-2 text-sm bg-white">
-                        {DURATE.map((d) => <option key={d.id} value={d.id}>{d.nome}</option>)}
-                      </select>
-                      <span className="ml-auto text-sm text-gray-500" aria-live="polite">
-                        <strong className="text-gray-900">{filtrati.length}</strong> {filtrati.length === 1 ? 'corso' : 'corsi'}
-                        {filtriAttivi && <button type="button" onClick={azzera} className="ml-2 underline">azzera</button>}
-                      </span>
-                    </div>
-                  </div>
-
-                  <ul className="grid sm:grid-cols-2 gap-4">
-                    <AnimatePresence initial={false}>
-                      {filtrati.map((c) => {
-                        const s = STILE_TEMA[c.tema]; const I = ICONA_AREA[c.area] || Layers; const sel = Boolean(scelti[c.id]);
-                        return (
-                          <motion.li key={c.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}
-                            className={`relative flex flex-col rounded-2xl bg-white border-2 overflow-hidden transition-all ${sel ? 'border-gray-900 shadow-lg' : 'border-gray-100 hover:border-gray-300 hover:shadow-md'}`}>
-                            <span className={`absolute inset-x-0 top-0 h-1 ${s.riga}`} />
-                            <div className="p-5 flex-1">
-                              <div className="flex items-start gap-3">
-                                <span className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${s.chip}`}><I className="w-5 h-5" /></span>
-                                <div className="min-w-0">
-                                  <div className="text-xs font-semibold text-gray-500">{c.area}</div>
-                                  <h3 className="font-semibold text-gray-900 leading-snug mt-0.5">{c.titolo}</h3>
-                                </div>
-                              </div>
-                              <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                                <span className="inline-flex items-center rounded-full bg-gray-100 text-gray-700 font-semibold px-2.5 py-1">{c.ore} ore</span>
-                                <span className={`inline-flex items-center rounded-full border font-semibold px-2.5 py-1 ${s.chip}`}>{TEMI_FINANZIATI.find((t) => t.id === c.tema).nome}</span>
-                              </div>
-                            </div>
-                            <div className={`px-5 py-3 border-t ${sel ? 'bg-gray-900 border-gray-900' : 'bg-gray-50 border-gray-100'}`}>
-                              {sel ? (
-                                <div className="flex items-center justify-between gap-2 text-white">
-                                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Nel piano</span>
-                                  <span className="flex items-center gap-2 text-xs text-gray-300">
-                                    <Contatore scuro valore={scelti[c.id]} onChange={(n) => imposta(c.id, n)} />
-                                    <button type="button" onClick={() => togli(c.id)} aria-label={`Togli ${c.titolo}`} className="p-1 text-gray-400 hover:text-white"><X className="w-4 h-4" /></button>
-                                  </span>
-                                </div>
-                              ) : (
-                                <button type="button" onClick={() => aggiungi(c.id)} className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-white border-2 border-gray-900 py-1.5 text-sm font-bold hover:bg-gray-900 hover:text-white transition-colors">
-                                  <Plus className="w-4 h-4" /> Aggiungi al piano
-                                </button>
-                              )}
-                            </div>
-                          </motion.li>
-                        );
-                      })}
-                    </AnimatePresence>
-                  </ul>
-                  {!filtrati.length && (
-                    <div className="text-center py-16 text-gray-500">
-                      Nessun corso con questi filtri. <button type="button" onClick={azzera} className="underline font-semibold text-gray-900">Mostra tutti</button>
-                    </div>
-                  )}
+          {passo === 1 && (
+            <div className="grid lg:grid-cols-[1fr_380px] gap-6 items-start">
+              <div>
+                <div className="grid sm:grid-cols-3 gap-3 mb-3">
+                  <Tendina etichetta="Area" valore={tema} onChange={setTema} opzioni={[['', 'Tutte le aree'], ...TEMI_FINANZIATI.map((t) => [t.id, t.nome])]} />
+                  <Tendina etichetta="Argomento" valore={area} onChange={setArea} opzioni={[['', 'Tutti gli argomenti'], ...AREE.map((a) => [a, a])]} />
+                  <Tendina etichetta="Durata" valore={durata} onChange={setDurata} opzioni={DURATE.map((d) => [d.id, d.nome])} />
                 </div>
-                <aside className="hidden lg:block lg:sticky lg:top-28"><Piano /></aside>
-              </div>
-            )}
-
-            {passo === 2 && (
-              <div className="grid lg:grid-cols-[1fr_360px] gap-8 items-start">
-                <form onSubmit={invia} noValidate className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm">
-                  <button type="button" onClick={tornaAlCatalogo} className="inline-flex items-center gap-1 text-sm font-semibold text-gray-600 hover:text-gray-900 mb-4">
-                    <ChevronLeft className="w-4 h-4" /> Torna al catalogo
-                  </button>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Ultimo passo: i dati dell’azienda</h2>
-                  <p className="text-gray-600 mb-8">Ci servono per verificare l’adesione al fondo. Nessun costo e nessun impegno.</p>
-
-                  <fieldset className="mb-8">
-                    <legend className="flex items-center gap-2 font-bold text-gray-900 mb-4"><span className="w-7 h-7 rounded-full bg-gray-900 text-white text-sm flex items-center justify-center">1</span> L’azienda</legend>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <Campo label="Ragione sociale" nome="ragioneSociale" valore={azienda.ragioneSociale} onChange={aggiornaAzienda} errore={errori.ragioneSociale} obbligatorio larghezza="sm:col-span-2" />
-                      <Campo label="Partita IVA" nome="partitaIva" valore={azienda.partitaIva} onChange={aggiornaAzienda} errore={errori.partitaIva} obbligatorio />
-                      <Campo label="Codice fiscale" nome="codiceFiscale" valore={azienda.codiceFiscale} onChange={aggiornaAzienda} errore={errori.codiceFiscale} maiuscolo aiuto="Solo se diverso dalla partita IVA" />
-                      <div className="sm:col-span-2 rounded-xl bg-emerald-50 border border-emerald-200 p-4">
-                        <span className="block text-sm font-semibold text-gray-900 mb-2">L’azienda aderisce a Fonarcom? <span className="text-rose-500">*</span></span>
-                        <div className="grid grid-cols-3 gap-2">
-                          {[['si', 'Sì'], ['no', 'No'], ['non_so', 'Non lo so']].map(([v, t]) => (
-                            <button key={v} type="button" onClick={() => aggiornaAzienda('fonarcom', v)}
-                              className={`py-2.5 rounded-lg border-2 text-sm font-bold transition-colors ${azienda.fonarcom === v ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 hover:border-gray-900'}`}>{t}</button>
-                          ))}
-                        </div>
-                        {errori.fonarcom ? <span className="block text-sm text-red-600 mt-2">{errori.fonarcom}</span>
-                          : <span className="block text-xs text-gray-600 mt-2">Se non lo sai, nessun problema: lo verifichiamo noi.</span>}
-                      </div>
-                      <Campo label="Matricola INPS" nome="matricolaInps" valore={azienda.matricolaInps} onChange={aggiornaAzienda} errore={errori.matricolaInps} maiuscolo aiuto="10 caratteri. Facoltativa, ma velocizza la verifica" />
-                      <Campo label="Codice ATECO" nome="ateco" valore={azienda.ateco} onChange={aggiornaAzienda} errore={errori.ateco} placeholder="es. 56.30" />
-                      <Campo label="Numero di dipendenti" nome="dipendenti" tipo="number" valore={azienda.dipendenti} onChange={aggiornaAzienda} />
-                    </div>
-                  </fieldset>
-
-                  <fieldset className="mb-8">
-                    <legend className="flex items-center gap-2 font-bold text-gray-900 mb-4"><span className="w-7 h-7 rounded-full bg-gray-900 text-white text-sm flex items-center justify-center">2</span> La sede</legend>
-                    <div className="grid sm:grid-cols-6 gap-4">
-                      <Campo label="Indirizzo" nome="indirizzo" valore={azienda.indirizzo} onChange={aggiornaAzienda} errore={errori.indirizzo} obbligatorio larghezza="sm:col-span-6" />
-                      <Campo label="CAP" nome="cap" valore={azienda.cap} onChange={aggiornaAzienda} errore={errori.cap} obbligatorio larghezza="sm:col-span-2" />
-                      <Campo label="Città" nome="citta" valore={azienda.citta} onChange={aggiornaAzienda} errore={errori.citta} obbligatorio larghezza="sm:col-span-2" />
-                      <label className="block sm:col-span-2">
-                        <span className="block text-sm font-semibold text-gray-800 mb-1.5">Provincia <span className="text-rose-500">*</span></span>
-                        <select value={azienda.provincia} onChange={(e) => aggiornaAzienda('provincia', e.target.value)}
-                          className={`w-full rounded-xl border-2 px-3 py-2.5 bg-white outline-none ${errori.provincia ? 'border-red-400' : 'border-gray-200 focus:border-gray-900'}`}>
-                          <option value="">—</option>
-                          {province.map((p) => <option key={p.sigla} value={p.sigla}>{p.nome} ({p.sigla})</option>)}
-                        </select>
-                        {errori.provincia && <span className="block text-sm text-red-600 mt-1">{errori.provincia}</span>}
-                      </label>
-                    </div>
-                  </fieldset>
-
-                  <fieldset className="mb-8">
-                    <legend className="flex items-center gap-2 font-bold text-gray-900 mb-4"><span className="w-7 h-7 rounded-full bg-gray-900 text-white text-sm flex items-center justify-center">3</span> Chi contattiamo</legend>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <Campo label="Nome e cognome" nome="referente" valore={azienda.referente} onChange={aggiornaAzienda} errore={errori.referente} obbligatorio />
-                      <Campo label="Ruolo" nome="ruolo" valore={azienda.ruolo} onChange={aggiornaAzienda} placeholder="titolare, HR, amministrazione…" />
-                      <Campo label="Email" nome="email" tipo="email" valore={azienda.email} onChange={aggiornaAzienda} errore={errori.email} obbligatorio />
-                      <Campo label="Telefono" nome="telefono" tipo="tel" valore={azienda.telefono} onChange={aggiornaAzienda} errore={errori.telefono} obbligatorio />
-                      <Campo label="PEC" nome="pec" tipo="email" valore={azienda.pec} onChange={aggiornaAzienda} errore={errori.pec} larghezza="sm:col-span-2" />
-                    </div>
-                  </fieldset>
-
-                  <fieldset>
-                    <legend className="flex items-center gap-2 font-bold text-gray-900 mb-4"><span className="w-7 h-7 rounded-full bg-gray-900 text-white text-sm flex items-center justify-center">4</span> Preferenze <span className="font-normal text-sm text-gray-500">(facoltative)</span></legend>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <span className="block text-sm font-semibold text-gray-800 mb-1.5">Modalità</span>
-                        <div className="grid grid-cols-3 gap-2">
-                          {[['presenza', 'In presenza'], ['online', 'Online'], ['indifferente', 'Indifferente']].map(([v, t]) => (
-                            <button key={v} type="button" onClick={() => aggiornaAzienda('modalita', v)}
-                              className={`py-2.5 rounded-lg border-2 text-xs sm:text-sm font-semibold ${azienda.modalita === v ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 hover:border-gray-900'}`}>{t}</button>
-                          ))}
-                        </div>
-                      </div>
-                      <Campo label="Periodo preferito" nome="periodo" valore={azienda.periodo} onChange={aggiornaAzienda} placeholder="es. da febbraio, dopo la stagione" />
-                      <label className="block sm:col-span-2">
-                        <span className="block text-sm font-semibold text-gray-800 mb-1.5">Note</span>
-                        <textarea rows="3" value={azienda.note} onChange={(e) => aggiornaAzienda('note', e.target.value)} maxLength={1000}
-                          placeholder="Esigenze particolari, sedi, orari…" className="w-full rounded-xl border-2 border-gray-200 focus:border-gray-900 outline-none px-3.5 py-2.5" />
-                      </label>
-                    </div>
-                  </fieldset>
-
-                  <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px', width: 1, height: 1, overflow: 'hidden' }}>
-                    <input type="text" name="sito" tabIndex={-1} autoComplete="off" value={trappola} onChange={(e) => setTrappola(e.target.value)} />
-                  </div>
-                  <label className="flex gap-3 items-start mt-8 text-sm text-gray-600 leading-relaxed">
-                    <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} className="mt-1 w-4 h-4 accent-black" />
-                    <span>Ho letto l’<Link to="/privacy" target="_blank" className="underline font-medium text-gray-900">informativa privacy</Link> e acconsento al trattamento dei dati per la gestione della richiesta. <span className="text-rose-500">*</span></span>
-                  </label>
-                  {invio.stato === 'errore' && <p role="alert" className="mt-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">{invio.messaggio}</p>}
-                  <button type="submit" disabled={invio.stato === 'invio'}
-                    className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gray-950 text-white font-bold py-4 text-lg hover:bg-gray-800 disabled:opacity-60 transition-colors">
-                    {invio.stato === 'invio' ? 'Invio in corso…' : <>Invia la richiesta <ArrowRight className="w-5 h-5" /></>}
-                  </button>
-                </form>
-                <aside className="lg:sticky lg:top-28 order-first lg:order-none"><Piano /></aside>
-              </div>
-            )}
-
-            {passo === 3 && (
-              <motion.div initial={{ scale: 0.97, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-3xl p-10 text-center shadow-sm">
-                <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center"><CheckCircle2 className="w-10 h-10" /></div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-3">Richiesta inviata!</h2>
-                <p className="text-gray-600 text-lg">Riferimento <strong className="text-gray-900">{invio.riferimento}</strong></p>
-                <p className="text-gray-600 mt-4 leading-relaxed">
-                  Ti abbiamo mandato un’email di riepilogo. Nei prossimi giorni ti contattiamo per verificare l’adesione al fondo
-                  e concordare calendario e partecipanti.
+                <p className="text-sm text-gray-600 mb-4" aria-live="polite">
+                  <strong className="text-gray-900">{filtrati.length}</strong> {filtrati.length === 1 ? 'corso' : 'corsi'}{cerca && <> per «{cerca}»</>}
+                  {filtriAttivi && <button type="button" onClick={azzera} className="ml-3 underline font-semibold text-gray-900">Mostra tutti</button>}
                 </p>
-                <ul className="mt-6 text-left inline-block text-sm text-gray-700 space-y-1">
-                  {selezione.map((c) => <li key={c.id} className="flex gap-2"><Check className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />{c.titolo} — {scelti[c.id]} part.</li>)}
-                </ul>
-              </motion.div>
-            )}
-          </section>
 
-          {/* ------------------------------------------------ domande */}
-          <section id="domande" className="pb-24 scroll-mt-24 grid lg:grid-cols-[1fr_1.2fr] gap-12">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-2">Come funziona</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Quattro passi, al resto pensiamo noi</h2>
-              <ol className="space-y-4">
-                {[['Scegli i corsi', 'Dal catalogo, con il numero di partecipanti.'], ['Invia la richiesta', 'Pochi dati aziendali, nessun costo.'],
-                  ['Verifichiamo e pianifichiamo', 'Controlliamo l’adesione al fondo e prepariamo il piano formativo.'], ['Si parte', 'I dipendenti seguono i corsi, noi curiamo gestione e rendicontazione.']].map(([t, d], i) => (
-                  <li key={t} className="flex gap-4">
-                    <span className="w-9 h-9 rounded-full bg-gray-900 text-white font-bold flex items-center justify-center shrink-0">{i + 1}</span>
-                    <div><div className="font-bold text-gray-900">{t}</div><div className="text-gray-600 text-sm">{d}</div></div>
-                  </li>
-                ))}
-              </ol>
+                <ul className="space-y-3">
+                  {filtrati.slice(0, mostrati).map((c) => {
+                    const I = ICONA_AREA[c.area] || Layers; const sel = Boolean(scelti[c.id]);
+                    return (
+                      <li key={c.id} className={`flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl bg-white border-2 p-4 sm:p-5 transition-colors ${sel ? 'border-[#3fbf7f]' : 'border-gray-200 hover:border-gray-300'}`}>
+                        <div className="flex items-start gap-4 flex-1 min-w-0">
+                          <span className="w-14 h-14 rounded-xl bg-[#dcf5e6] flex items-center justify-center shrink-0"><I className="w-7 h-7 text-[#0f2e2c]" strokeWidth={1.6} /></span>
+                          <div className="min-w-0">
+                            <span className="inline-block text-xs font-bold bg-[#dcf5e6] text-[#0f2e2c] rounded px-2 py-0.5 mb-1">{c.area}</span>
+                            <h3 className="text-lg font-black text-gray-950 leading-snug">{c.titolo}</h3>
+                            <p className="text-sm text-gray-600 mt-0.5">{nomeTema(c.tema)}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between sm:justify-end gap-5 sm:pl-5 sm:border-l sm:border-gray-200 shrink-0">
+                          <span className="flex items-center gap-1.5 font-bold text-gray-800 whitespace-nowrap"><Clock className="w-5 h-5" /> {c.ore} ore</span>
+                          {sel ? (
+                            <button type="button" onClick={() => togli(c.id)} title="Togli dal piano"
+                              className="group rounded-lg bg-[#86efb4] text-[#0f2e2c] font-black px-4 py-2.5 inline-flex items-center gap-2 min-w-[160px] justify-center">
+                              <span className="group-hover:hidden inline-flex items-center gap-2">Aggiunto <Check className="w-5 h-5" /></span>
+                              <span className="hidden group-hover:inline-flex items-center gap-2">Togli <X className="w-5 h-5" /></span>
+                            </button>
+                          ) : (
+                            <button type="button" onClick={() => aggiungi(c.id)}
+                              className="rounded-lg border-2 border-gray-900 bg-white font-black px-4 py-2 min-w-[160px] hover:bg-[#86efb4] hover:border-[#86efb4] transition-colors">
+                              + Aggiungi al piano
+                            </button>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                {filtrati.length > mostrati && (
+                  <button type="button" onClick={() => setMostrati((n) => n + 20)}
+                    className="mt-5 w-full rounded-xl border-2 border-gray-900 bg-white font-bold py-3 hover:bg-gray-900 hover:text-white transition-colors">
+                    Mostra altri corsi ({filtrati.length - mostrati})
+                  </button>
+                )}
+                {!filtrati.length && (
+                  <div className="text-center py-16 text-gray-600 bg-white rounded-xl border-2 border-gray-200">
+                    Nessun corso con questi filtri. <button type="button" onClick={azzera} className="underline font-bold text-gray-900">Mostra tutti</button>
+                  </div>
+                )}
+              </div>
+              <aside className="hidden lg:block lg:sticky lg:top-28"><Piano /></aside>
             </div>
-            <div className="divide-y divide-gray-200 border-y border-gray-200 self-start">
-              {DOMANDE.map(([d, r]) => (
-                <details key={d} className="group py-5">
-                  <summary className="flex justify-between items-center gap-4 cursor-pointer list-none font-semibold text-gray-900">
-                    {d}<Plus className="w-5 h-5 shrink-0 transition-transform group-open:rotate-45" />
-                  </summary>
-                  <p className="mt-3 text-gray-600 leading-relaxed">{r}</p>
-                </details>
-              ))}
+          )}
+
+          {passo === 2 && (
+            <div className="grid lg:grid-cols-[1fr_380px] gap-6 items-start">
+              <form onSubmit={invia} noValidate className="bg-white border-2 border-gray-200 rounded-2xl p-6 md:p-8">
+                <button type="button" onClick={tornaAlCatalogo} className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-4">
+                  <ChevronLeft className="w-4 h-4" /> Torna al catalogo
+                </button>
+                <h2 className="text-3xl font-black text-gray-950 mb-1">I dati della tua azienda</h2>
+                <p className="text-gray-600 mb-8">Ci servono per verificare l’adesione a FonARCom. Nessun costo e nessun impegno.</p>
+
+                <fieldset className="mb-8">
+                  <legend className="text-xl font-black text-gray-950 mb-4">Azienda</legend>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <Campo label="Ragione sociale" nome="ragioneSociale" valore={azienda.ragioneSociale} onChange={aggiornaAzienda} errore={errori.ragioneSociale} obbligatorio larghezza="sm:col-span-2" />
+                    <Campo label="Partita IVA" nome="partitaIva" valore={azienda.partitaIva} onChange={aggiornaAzienda} errore={errori.partitaIva} obbligatorio />
+                    <Campo label="Codice fiscale" nome="codiceFiscale" valore={azienda.codiceFiscale} onChange={aggiornaAzienda} errore={errori.codiceFiscale} maiuscolo aiuto="Solo se diverso dalla partita IVA" />
+                    <div className="sm:col-span-2 rounded-xl bg-[#dcf5e6] p-4">
+                      <span className="block text-sm font-bold text-gray-900 mb-2">L’azienda aderisce a FonARCom? <span className="text-rose-500">*</span></span>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[['si', 'Sì'], ['no', 'No'], ['non_so', 'Non lo so']].map(([v, t]) => (
+                          <button key={v} type="button" onClick={() => aggiornaAzienda('fonarcom', v)}
+                            className={`py-2.5 rounded-lg border-2 text-sm font-black transition-colors ${azienda.fonarcom === v ? 'bg-[#0f2e2c] text-white border-[#0f2e2c]' : 'bg-white border-gray-300 hover:border-[#0f2e2c]'}`}>{t}</button>
+                        ))}
+                      </div>
+                      {errori.fonarcom ? <span className="block text-sm text-red-600 mt-2">{errori.fonarcom}</span>
+                        : <span className="block text-xs text-gray-700 mt-2">Se non lo sai, nessun problema: lo verifichiamo noi.</span>}
+                    </div>
+                    <Campo label="Matricola INPS" nome="matricolaInps" valore={azienda.matricolaInps} onChange={aggiornaAzienda} errore={errori.matricolaInps} maiuscolo aiuto="10 caratteri. Facoltativa, ma velocizza la verifica" />
+                    <Campo label="Codice ATECO" nome="ateco" valore={azienda.ateco} onChange={aggiornaAzienda} errore={errori.ateco} placeholder="es. 56.30" />
+                    <Campo label="Numero di dipendenti" nome="dipendenti" tipo="number" valore={azienda.dipendenti} onChange={aggiornaAzienda} />
+                  </div>
+                </fieldset>
+
+                <fieldset className="mb-8">
+                  <legend className="text-xl font-black text-gray-950 mb-4">Sede</legend>
+                  <div className="grid sm:grid-cols-6 gap-4">
+                    <Campo label="Indirizzo" nome="indirizzo" valore={azienda.indirizzo} onChange={aggiornaAzienda} errore={errori.indirizzo} obbligatorio larghezza="sm:col-span-6" />
+                    <Campo label="CAP" nome="cap" valore={azienda.cap} onChange={aggiornaAzienda} errore={errori.cap} obbligatorio larghezza="sm:col-span-2" />
+                    <Campo label="Città" nome="citta" valore={azienda.citta} onChange={aggiornaAzienda} errore={errori.citta} obbligatorio larghezza="sm:col-span-2" />
+                    <label className="block sm:col-span-2">
+                      <span className="block text-sm font-bold text-gray-800 mb-1.5">Provincia <span className="text-rose-500">*</span></span>
+                      <select value={azienda.provincia} onChange={(e) => aggiornaAzienda('provincia', e.target.value)}
+                        className={`w-full rounded-lg border-2 px-3 py-2.5 bg-white outline-none ${errori.provincia ? 'border-red-400' : 'border-gray-300 focus:border-[#0f2e2c]'}`}>
+                        <option value="">—</option>
+                        {province.map((p) => <option key={p.sigla} value={p.sigla}>{p.nome} ({p.sigla})</option>)}
+                      </select>
+                      {errori.provincia && <span className="block text-sm text-red-600 mt-1">{errori.provincia}</span>}
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset className="mb-8">
+                  <legend className="text-xl font-black text-gray-950 mb-4">Referente</legend>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <Campo label="Nome e cognome" nome="referente" valore={azienda.referente} onChange={aggiornaAzienda} errore={errori.referente} obbligatorio />
+                    <Campo label="Ruolo" nome="ruolo" valore={azienda.ruolo} onChange={aggiornaAzienda} placeholder="titolare, HR, amministrazione…" />
+                    <Campo label="Email" nome="email" tipo="email" valore={azienda.email} onChange={aggiornaAzienda} errore={errori.email} obbligatorio />
+                    <Campo label="Telefono" nome="telefono" tipo="tel" valore={azienda.telefono} onChange={aggiornaAzienda} errore={errori.telefono} obbligatorio />
+                    <Campo label="PEC" nome="pec" tipo="email" valore={azienda.pec} onChange={aggiornaAzienda} errore={errori.pec} larghezza="sm:col-span-2" />
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend className="text-xl font-black text-gray-950 mb-4">Preferenze <span className="text-sm font-normal text-gray-500">(facoltative)</span></legend>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <span className="block text-sm font-bold text-gray-800 mb-1.5">Modalità</span>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[['presenza', 'In presenza'], ['online', 'Online'], ['indifferente', 'Indifferente']].map(([v, t]) => (
+                          <button key={v} type="button" onClick={() => aggiornaAzienda('modalita', v)}
+                            className={`py-2.5 rounded-lg border-2 text-xs sm:text-sm font-bold ${azienda.modalita === v ? 'bg-[#0f2e2c] text-white border-[#0f2e2c]' : 'bg-white border-gray-300 hover:border-[#0f2e2c]'}`}>{t}</button>
+                        ))}
+                      </div>
+                    </div>
+                    <Campo label="Periodo preferito" nome="periodo" valore={azienda.periodo} onChange={aggiornaAzienda} placeholder="es. da febbraio, dopo la stagione" />
+                    <label className="block sm:col-span-2">
+                      <span className="block text-sm font-bold text-gray-800 mb-1.5">Note</span>
+                      <textarea rows="3" value={azienda.note} onChange={(e) => aggiornaAzienda('note', e.target.value)} maxLength={1000}
+                        placeholder="Esigenze particolari, sedi, orari…" className="w-full rounded-lg border-2 border-gray-300 focus:border-[#0f2e2c] outline-none px-3.5 py-2.5" />
+                    </label>
+                  </div>
+                </fieldset>
+
+                <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px', width: 1, height: 1, overflow: 'hidden' }}>
+                  <input type="text" name="sito" tabIndex={-1} autoComplete="off" value={trappola} onChange={(e) => setTrappola(e.target.value)} />
+                </div>
+                <label className="flex gap-3 items-start mt-8 text-sm text-gray-700 leading-relaxed">
+                  <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} className="mt-1 w-4 h-4 accent-[#0f2e2c]" />
+                  <span>Ho letto l’<Link to="/privacy" target="_blank" className="underline font-bold text-gray-900">informativa privacy</Link> e acconsento al trattamento dei dati per la gestione della richiesta. <span className="text-rose-500">*</span></span>
+                </label>
+                {invio.stato === 'errore' && <p role="alert" className="mt-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">{invio.messaggio}</p>}
+                <button type="submit" disabled={invio.stato === 'invio'}
+                  className="mt-6 w-full rounded-xl bg-[#86efb4] text-[#0f2e2c] font-black text-lg py-4 hover:bg-[#6ee7a4] disabled:opacity-60 transition-colors">
+                  {invio.stato === 'invio' ? 'Invio in corso…' : 'Invia la richiesta'}
+                </button>
+              </form>
+              <aside className="lg:sticky lg:top-28 order-first lg:order-none"><Piano /></aside>
             </div>
-          </section>
-        </div>
+          )}
+
+          {passo === 3 && (
+            <motion.div initial={{ scale: 0.97, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto bg-[#0f2e2c] text-white rounded-3xl p-10 text-center">
+              <div className="mx-auto mb-6 w-20 h-20 rounded-full bg-[#86efb4] text-[#0f2e2c] flex items-center justify-center"><CheckCircle2 className="w-10 h-10" /></div>
+              <h2 className="text-3xl font-black mb-3">Richiesta inviata!</h2>
+              <p className="text-lg text-gray-200">Riferimento <strong className="text-[#86efb4]">{invio.riferimento}</strong></p>
+              <p className="text-gray-300 mt-4 leading-relaxed">
+                Ti abbiamo mandato un’email di riepilogo. Nei prossimi giorni ti contattiamo per verificare l’adesione a FonARCom
+                e concordare calendario e partecipanti.
+              </p>
+              <ul className="mt-6 text-left inline-block text-sm text-gray-200 space-y-1">
+                {selezione.map((c) => <li key={c.id} className="flex gap-2"><Check className="w-4 h-4 text-[#86efb4] mt-0.5 shrink-0" />{c.titolo} — {scelti[c.id]} part.</li>)}
+              </ul>
+            </motion.div>
+          )}
+        </section>
+
+        {/* ------------------------------------------------ come funziona */}
+        <section id="come-funziona" className="scroll-mt-28 rounded-2xl bg-[#d9f5e3] px-6 sm:px-10 py-10">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-950 mb-8">Come funziona</h2>
+          <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
+            {PASSI_COME.map((p, i) => (
+              <li key={p.titolo} className="relative text-center">
+                <span className="mx-auto w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-sm"><p.icona className="w-8 h-8 text-gray-900" strokeWidth={1.6} /></span>
+                <h3 className="mt-3 text-lg font-black text-gray-950">{p.titolo}</h3>
+                <p className="mt-1 text-sm text-gray-700 leading-relaxed max-w-[15rem] mx-auto">{p.testo}</p>
+                {i < PASSI_COME.length - 1 && <ArrowRight className="hidden lg:block w-6 h-6 text-gray-800 absolute top-5 -right-5" />}
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* ------------------------------------------------ FAQ */}
+        <section className="pt-14 pb-24">
+          <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 mb-5">
+            <h2 className="text-4xl font-black text-gray-950">FAQ</h2>
+            <p className="text-gray-700">Le risposte alle domande più frequenti sulla formazione e sui fondi FonARCom.</p>
+          </div>
+          <div className="space-y-3">
+            {DOMANDE.map(([d, r]) => (
+              <details key={d} className="group rounded-lg border-2 border-gray-300 bg-white">
+                <summary className="flex justify-between items-center gap-4 cursor-pointer list-none font-bold text-gray-950 px-5 py-3.5">
+                  {d}<ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="px-5 pb-4 text-gray-700 leading-relaxed">{r}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </div>
 
       {/* barra in basso (telefono e tablet) e pannello del piano */}
       {passo === 1 && selezione.length > 0 && (
-        <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-gray-950 text-white">
+        <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[#0f2e2c] text-white">
           <div className="px-4 py-3 flex items-center justify-between gap-3">
             <button type="button" onClick={() => setPianoAperto(true)} className="text-left text-sm">
               <span className="font-bold">{selezione.length} {selezione.length === 1 ? 'corso' : 'corsi'} · {totPartecipanti} part.</span>
-              <span className="block text-xs text-gray-400 underline">Vedi il piano</span>
+              <span className="block text-xs text-[#86efb4] underline">Vedi il piano</span>
             </button>
-            <button type="button" onClick={vaiAiDati} className="inline-flex items-center gap-1.5 rounded-xl bg-white text-gray-950 font-bold px-4 py-2.5 text-sm">
-              Prosegui <ArrowRight className="w-4 h-4" />
-            </button>
+            <button type="button" onClick={vaiAiDati} className="rounded-lg bg-[#86efb4] text-[#0f2e2c] font-black px-4 py-2.5 text-sm">Prosegui</button>
           </div>
         </div>
       )}
@@ -588,6 +564,6 @@ export default function FormazioneFinanziata() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
