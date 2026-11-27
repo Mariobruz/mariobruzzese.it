@@ -1,385 +1,145 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowRight, Building2, ClipboardCheck, GraduationCap, HardHat, Search, User } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
-import { Button } from '../components/ui/button';
-import { Card } from '../components/ui/card';
-import { mockData } from '../mock';
-import { useNavigate } from 'react-router-dom';
 import ContactModal from '../components/ContactModal';
 
-const AnimatedCounter = ({ end, duration = 2 }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    let startTime;
-    let animationFrame;
-
-    const numericValue =
-      typeof end === 'string'
-        ? parseInt(end.replace(/\./g, '').replace(/[^\d]/g, ''), 10)
-        : end;
-
-    const animate = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = (timestamp - startTime) / (duration * 1000);
-
-      if (progress < 1) {
-        setCount(Math.floor(progress * numericValue));
-        animationFrame = requestAnimationFrame(animate);
-      } else {
-        setCount(numericValue);
-      }
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [isInView, end, duration]);
-
-  const formatted =
-    typeof end === 'string' && end.includes('.')
-      ? count.toLocaleString('it-IT')
-      : count;
-
-  return (
-    <span ref={ref}>
-      {formatted}
-      {typeof end === 'string' && end.includes('+') ? '+' : ''}
-      {typeof end === 'string' && end.includes('%') ? '%' : ''}
-    </span>
-  );
-};
-
-
+/**
+ * Home: stessa impaginazione delle pagine interne (apertura blu con taglio
+ * diagonale, schede chiare, fasce verde chiaro, chiusura blu).
+ */
 const _seoSchemaHome = "{\"@context\":\"https://schema.org\",\"@type\":\"WebPage\",\"name\":\"Fondi Interprofessionali | MB Consulting\",\"url\":\"https://www.mariobruzzese.it/\",\"description\":\"Consulenza fondi interprofessionali per la formazione aziendale finanziata al 100%.\"}";
 
-// Competenze certificate di Mario Bruzzese (immagini in public/img/badge)
-const BADGE = [
-  { file: 'bocconi-ai-business', titolo: 'Artificial Intelligence for Business: from idea to implementation', ente: 'Università Bocconi' },
-  { file: 'bocconi-ai-marketing', titolo: 'Artificial Intelligence (AI) and Marketing', ente: 'Università Bocconi' },
-  { file: 'polimi-ai-legal', titolo: 'Artificial Intelligence and Legal Issues', ente: 'Politecnico di Milano' },
-  { file: 'polimi-ai-educational', titolo: 'Creating High-Quality Educational Content Using AI', ente: 'Politecnico di Milano' },
-  { file: 'polimi-smart-learning', titolo: 'Spazi e tecnologie per lo smart learning', ente: 'Politecnico di Milano' },
-  { file: 'gemini-docente', titolo: 'Docente certificato Gemini', ente: 'Google for Education' },
-  { file: 'agenti-ia-workflow', titolo: 'Agenti IA e workflow', ente: 'OpenAI Academy' },
-  { file: 'ia-piccole-imprese', titolo: 'IA per le piccole imprese', ente: 'PayPal e Anthropic' },
-  { file: 'claude-code', titolo: 'Sviluppo con Claude Code', ente: 'Anthropic' },
+const BTN_VERDE = 'inline-flex items-center justify-center gap-2 rounded-lg bg-[#0f8a6a] text-white font-bold hover:bg-[#0c7458] transition-colors';
+
+const SCHEDE = [
+  { icona: Building2, titolo: 'Per le aziende', azione: 'Esplora la formazione', link: '/formazione-finanziata' },
+  { icona: User, titolo: 'Per i professionisti', azione: 'Scopri la collaborazione', link: '/professionisti' },
+  { icona: HardHat, titolo: 'E-learning 81/08', azione: 'Vai al catalogo', link: '/corsi-sicurezza' },
+];
+
+const PASSI = [
+  { icona: Search, titolo: 'Verifica del fondo' },
+  { icona: ClipboardCheck, titolo: 'Progettazione del piano' },
+  { icona: GraduationCap, titolo: 'Erogazione e rendicontazione' },
 ];
 
 const Home = () => {
-  const navigate = useNavigate();
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 300], [0, -50]);
-  const y2 = useTransform(scrollY, [0, 300], [0, 50]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-
-  const scrollToContact = () => {
-    const footer = document.getElementById('contatti');
-    if (footer) {
-      footer.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const particles = Array.from({ length: 15 }, (_, i) => ({
-    id: i,
-    size: Math.random() * 100 + 50,
-    left: Math.random() * 100,
-    delay: Math.random() * 20
-  }));
+  const [contattoAperto, setContattoAperto] = useState(false);
+  const vaiAPassi = () => document.getElementById('dal-fondo-al-piano')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
-      <>
+    <div className="bg-white">
       <SEOHead
         title="Fondi Interprofessionali | Consulenza Formazione Finanziata"
         description="Accedi ai fondi interprofessionali e finanzia la formazione aziendale al 100%. MB Consulting gestisce tutto: adesione, piano formativo e rendicontazione. Contattaci."
         canonical="https://www.mariobruzzese.it/"
         schema={_seoSchemaHome}
       />
-      <div className="min-h-screen">
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        <div className="absolute inset-0 gradient-mesh">
-          <div className="particles">
-            {particles.map((particle) => (
-              <div
-                key={particle.id}
-                className="particle"
-                style={{
-                  width: `${particle.size}px`,
-                  height: `${particle.size}px`,
-                  left: `${particle.left}%`,
-                  animationDelay: `${particle.delay}s`
-                }}
-              />
-            ))}
-          </div>
-        </div>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            style={{ y: y1, opacity }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <motion.div
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 backdrop-blur-sm rounded-full mb-8 border border-black/10"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span className="text-sm font-medium">Formazione Finanziata al 100%</span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight"
-            >
-              <span className="gradient-text">{mockData.hero.title}</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-gray-600 mb-10 leading-relaxed"
-            >
-              {mockData.hero.subtitle}
-            </motion.p>
-
-            <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={() => setIsContactModalOpen(true)}
-                  size="lg"
-                  className="bg-black text-white hover:bg-gray-800 text-lg px-8 py-6 shadow-2xl hover:shadow-3xl transition-all duration-300 btn-modern hover-glow relative overflow-hidden group"
-                >
-                  <span className="relative z-10">{mockData.hero.cta}</span>
-                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                </Button>
-              </motion.div>
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  onClick={() => navigate('/servizi')}
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-black text-black hover:bg-black hover:text-white text-lg px-8 py-6 transition-all duration-300"
-                >
-                  Scopri Come Funziona
-                </Button>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            style={{ y: y2 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 max-w-5xl mx-auto"
-          >
-            {mockData.stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ scale: 0.5, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center glass rounded-2xl p-6 card-modern"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="text-4xl md:text-5xl font-bold text-black mb-2"
-                >
-                  {stat.number.includes('+') || stat.number.includes('%') ? (
-                    <AnimatedCounter end={stat.number} />
-                  ) : (
-                    stat.number
-                  )}
-                </motion.div>
-                <div className="text-sm md:text-base text-gray-600">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-20 px-6 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-50">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-gray-100 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gray-100 rounded-full blur-3xl" />
-        </div>
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Formazione di Qualità a Costo Zero
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Recupera i contributi versati ai fondi interprofessionali e investi nella crescita del tuo team
+      {/* ------------------------------------------------ apertura */}
+      <section className="pt-28">
+        <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[580px]">
+          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
+            className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
+            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.05]">Formazione finanziata per le aziende</h1>
+            <p className="mt-6 text-lg sm:text-xl text-gray-100 max-w-xl">
+              Dalla verifica del fondo alla formazione del personale, seguiamo tutto il piano.
             </p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button type="button" onClick={() => setContattoAperto(true)} className={`${BTN_VERDE} text-lg px-7 py-3.5`}>Verifica le opportunità</button>
+              <button type="button" onClick={vaiAPassi}
+                className="inline-flex items-center justify-center rounded-lg border-2 border-white/80 px-7 py-3 text-lg font-semibold text-white hover:bg-white hover:text-[#0f2742] transition-colors">
+                Come funziona
+              </button>
+            </div>
           </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Zero Investimento',
-                desc: 'La tua azienda versa già contributi ai fondi interprofessionali. Recuperiamo questi fondi per finanziare completamente la formazione.'
-              },
-              {
-                title: 'Gestione Totale',
-                desc: 'Non devi preoccuparti di nulla. Gestiamo noi tutto il processo: dalla progettazione alla rendicontazione finale.'
-              },
-              {
-                title: 'Risultati Concreti',
-                desc: 'Migliaia di ore di formazione erogate, centinaia di aziende servite in tutta Italia con il 100% di soddisfazione.'
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                whileHover={{ y: -10 }}
-              >
-                <Card className="p-8 border-2 hover:border-black transition-all duration-300 hover:shadow-2xl transform card-3d h-full">
-                  <motion.div
-                    whileHover={{ rotate: 360, scale: 1.2 }}
-                    transition={{ duration: 0.6 }}
-                    className="w-12 h-12 bg-black text-white rounded-lg flex items-center justify-center mb-6"
-                  >
-                    <CheckCircle2 className="w-6 h-6" />
-                  </motion.div>
-                  <h3 className="text-2xl font-bold mb-4 text-gray-900">{item.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{item.desc}</p>
-                </Card>
-              </motion.div>
-            ))}
+          <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
+            <picture>
+              <source media="(min-width: 1024px)" srcSet="/img/home-hero.webp" />
+              <img src="/img/home-hero-m.webp" alt="Un consulente e tre collaboratori pianificano la formazione aziendale davanti a un portatile"
+                width="472" height="464" className="absolute inset-0 w-full h-full object-cover" />
+            </picture>
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white relative overflow-hidden">
-        <motion.div
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl"
-        />
-        <motion.div
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="absolute bottom-10 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl"
-        />
-
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.h2
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-bold mb-6"
-          >
-            Pronto a Investire nella Tua Azienda Senza Costi?
-          </motion.h2>
-          <motion.p
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-300 mb-10"
-          >
-            Richiedi una consulenza gratuita e scopri quanto puoi ottenere dai fondi interprofessionali
-          </motion.p>
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button
-              onClick={() => setIsContactModalOpen(true)}
-              size="lg"
-              className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 shadow-2xl hover:shadow-3xl transition-all duration-300 btn-modern relative overflow-hidden group"
-            >
-              <span className="relative z-10">Richiedi Consulenza Gratuita</span>
-              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-            </Button>
-          </motion.div>
+      {/* ------------------------------------------------ tre schede */}
+      <section className="max-w-6xl mx-auto px-6 py-12">
+        <div className="grid gap-5 md:grid-cols-3">
+          {SCHEDE.map((s) => (
+            <Link key={s.titolo} to={s.link}
+              className="group flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:border-[#0f8a6a] hover:shadow-md transition">
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#e3f7ec] text-[#0f8a6a]"><s.icona className="w-7 h-7" /></span>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 leading-tight">{s.titolo}</h2>
+                <span className="mt-1 inline-flex items-center gap-1.5 font-bold text-[#0f8a6a] group-hover:text-[#0b5e48]">
+                  {s.azione} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="py-16 px-6 bg-white border-b border-gray-100" aria-labelledby="titolo-competenze">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10"
-          >
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gray-400 mb-3">Formazione continua</p>
-            <h2 id="titolo-competenze" className="text-2xl md:text-3xl font-bold text-gray-900">Competenze certificate</h2>
-            <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-              Intelligenza artificiale applicata all’impresa, alla formazione e al diritto: percorsi conclusi con università e aziende di riferimento.
-            </p>
-          </motion.div>
-          <ul className="flex flex-wrap justify-center gap-x-3 gap-y-6 md:gap-x-4 md:gap-y-8">
-            {BADGE.map((b, i) => (
-              <motion.li
-                key={b.file}
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="w-[22%] sm:w-[18%] lg:w-[calc((100%-8rem)/9)] flex flex-col items-center text-center group"
-              >
-                <img
-                  src={`/img/badge/${b.file}.webp`}
-                  alt={`${b.titolo} — ${b.ente}`}
-                  title={`${b.titolo} — ${b.ente}`}
-                  width="120"
-                  height="120"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-[72px] h-[72px] sm:w-24 sm:h-24 md:w-28 md:h-28 object-contain transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105"
-                />
-                <span className="mt-2 md:mt-3 text-[10px] md:text-[11px] leading-tight text-gray-500 font-medium">{b.ente}</span>
-              </motion.li>
+      {/* ------------------------------------------------ dal fondo al piano */}
+      <section id="dal-fondo-al-piano" className="bg-[#eef8f2] py-14 scroll-mt-24">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Dal fondo al piano formativo</h2>
+          <div className="mt-2 h-1 w-14 rounded bg-[#0f8a6a]" />
+          <ol className="mt-8 grid gap-6 md:grid-cols-3">
+            {PASSI.map((p, i) => (
+              <li key={p.titolo} className="relative flex items-center gap-4 md:pr-10">
+                <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[#d5f0e2] text-[#0f8a6a]"><p.icona className="w-9 h-9" /></span>
+                <div>
+                  <span className="block text-sm font-bold text-[#0f8a6a]">{i + 1}</span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{p.titolo}</h3>
+                </div>
+                {i < PASSI.length - 1 && <ArrowRight className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-6 h-6 text-[#0f8a6a]" aria-hidden="true" />}
+              </li>
             ))}
-          </ul>
+          </ol>
+          <p className="mt-8">
+            <Link to="/servizi" className="inline-flex items-center gap-1.5 font-bold text-[#0f8a6a] underline underline-offset-4 hover:text-[#0b5e48]">
+              Scopri tutti i servizi <ArrowRight className="w-4 h-4" />
+            </Link>
+          </p>
         </div>
       </section>
 
-      <ContactModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-        source="hero_cta"
-      />
+      {/* ------------------------------------------------ formula win-win */}
+      <section className="max-w-6xl mx-auto px-6 py-14">
+        <div className="grid overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm lg:grid-cols-2">
+          <div className="aspect-[3/2] lg:aspect-auto lg:min-h-[320px]">
+            <img src="/img/casi-studio/iso-9001.webp" srcSet="/img/casi-studio/iso-9001-720.webp 720w, /img/casi-studio/iso-9001.webp 1200w"
+              sizes="(min-width: 1024px) 600px, 100vw" alt="Una responsabile qualità e un capo reparto controllano la documentazione vicino alla linea produttiva"
+              width="1200" height="800" loading="lazy" className="w-full h-full object-cover" />
+          </div>
+          <div className="p-6 sm:p-10 flex flex-col justify-center">
+            <p className="text-sm font-bold uppercase tracking-wider text-[#0f8a6a]">La formula win-win</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-gray-900">Un preventivo più competitivo</h2>
+            <p className="mt-4 text-lg text-gray-700 leading-relaxed">
+              Il professionista mantiene il suo compenso. L’azienda riceve lo stesso servizio e può spendere meno se il fondo copre la formazione
+              del personale. MB Consulting gestisce il piano ed eroga i corsi.
+            </p>
+            <Link to="/professionisti" className="mt-5 inline-flex w-fit items-center gap-1.5 text-lg font-bold text-[#0f8a6a] hover:text-[#0b5e48]">
+              Vedi gli esempi <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------ contatto */}
+      <section className="bg-[#0f2742] text-white">
+        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <h2 className="text-3xl sm:text-4xl font-bold">Parliamo della formazione per la tua azienda</h2>
+          <button type="button" onClick={() => setContattoAperto(true)} className={`${BTN_VERDE} shrink-0 text-lg px-8 py-3.5`}>Contattaci</button>
+        </div>
+      </section>
+
+      <ContactModal isOpen={contattoAperto} onClose={() => setContattoAperto(false)} source="home" />
     </div>
-    </>
   );
 };
 

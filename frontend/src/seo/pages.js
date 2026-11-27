@@ -61,7 +61,8 @@ const pages = [
       },
     ],
     noscript: `
-      <h1>Fondi Interprofessionali: Formazione Aziendale Finanziata al 100% — MB Consulting</h1>
+      <h1>Formazione finanziata per le aziende</h1>
+      <p>Dalla verifica del fondo alla formazione del personale, seguiamo tutto il piano. <a href="/formazione-finanziata">Per le aziende</a> · <a href="/professionisti">Per i professionisti</a> · <a href="/corsi-sicurezza">E-learning 81/08</a>.</p>
       <p>MB Consulting è specializzata nella consulenza per l'accesso ai fondi interprofessionali, permettendo alle aziende italiane di finanziare completamente la formazione dei propri dipendenti senza costi aggiuntivi. Gestiamo tutto il processo: dall'adesione al fondo interprofessionale più adatto, alla progettazione del piano formativo, fino alla rendicontazione finale.</p>
       <h2>Cosa sono i Fondi Interprofessionali?</h2>
       <p>I fondi interprofessionali sono organismi paritetici che raccolgono lo 0,30% dei contributi INPS versati dalle aziende e li mettono a disposizione per finanziare piani formativi. L'adesione è gratuita e volontaria. Tra i principali fondi: Fondimpresa, Fondo For.Te., Fondirigenti, Fon.Coop, FAPI.</p>
