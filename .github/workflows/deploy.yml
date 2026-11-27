@@ -3,6 +3,7 @@ name: Deploy su GitHub Pages
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,12 +15,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-e-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  # 1) costruisce il sito e carica il pacchetto
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Scarica il codice
         uses: actions/checkout@v4
@@ -47,12 +45,29 @@ jobs:
         with:
           path: frontend/build
 
+  # 2) pubblica in un job separato: il pacchetto è già registrato quando parte
+  #    (con build e pubblicazione nello stesso job GitHub a volte non lo trova)
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Pubblica su GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
 
+      - name: Scarica il codice (per IndexNow)
+        uses: actions/checkout@v4
+
       - name: Avvisa Bing con IndexNow
         if: success()
         continue-on-error: true
-        run: sleep 60 && node scripts/indexnow.js
+        # la sitemap la prende dal sito appena pubblicato (in questo job non c'è la cartella build)
+        run: |
+          sleep 60
+          mkdir -p build
+          curl -fsSL https://www.mariobruzzese.it/sitemap.xml -o build/sitemap.xml
+          node scripts/indexnow.js
         working-directory: frontend
