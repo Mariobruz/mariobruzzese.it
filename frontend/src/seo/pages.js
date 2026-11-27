@@ -106,17 +106,20 @@ const pages = [
     changefreq: 'monthly',
     schema: [breadcrumb('Servizi', `${BASE}/servizi`)],
     noscript: `
-      <h1>Consulenza Fondi Interprofessionali per Aziende</h1>
-      <p>MB Consulting affianca le aziende in ogni fase dell'accesso ai fondi interprofessionali, dall'analisi iniziale alla rendicontazione finale.</p>
-      <h2>Servizi offerti</h2>
+      <h1>Formazione finanziata, dalla verifica al piano</h1>
+      <p>MB Consulting affianca la tua azienda nella scelta dei fondi interprofessionali, nella progettazione e nella gestione della formazione, dall'analisi iniziale alla rendicontazione finale.</p>
+      <h2>Come possiamo aiutarti</h2>
       <ul>
-        <li><strong>Consulenza Fondi Interprofessionali</strong> — Analisi delle opportunità disponibili e scelta del fondo più adatto alla tua realtà aziendale.</li>
-        <li><strong>Analisi Fabbisogni Formativi</strong> — Individuazione delle reali esigenze aziendali, anche quelle non esplicite, per una formazione mirata.</li>
-        <li><strong>Progettazione Piani Formativi</strong> — Costruzione completa del progetto formativo conforme ai requisiti dei fondi interprofessionali.</li>
-        <li><strong>Gestione Completa del Processo</strong> — Coordinamento tra azienda, ente di formazione e docenti.</li>
-        <li><strong>Erogazione e Coordinamento Didattico</strong> — Organizzazione delle attività formative e supervisione della qualità.</li>
-        <li><strong>Supporto Amministrativo</strong> — Preparazione della documentazione completa per controlli e ispezioni.</li>
+        <li><strong>Fondi interprofessionali</strong> — Verifichiamo il fondo a cui aderisce la tua azienda e valutiamo gli strumenti disponibili per finanziare la formazione.</li>
+        <li><strong>Analisi dei fabbisogni</strong> — Individuiamo con te le competenze da sviluppare, le persone da coinvolgere e le priorità aziendali.</li>
+        <li><strong>Progettazione del piano</strong> — Definiamo obiettivi, contenuti, durata e modalità dei corsi in base alle esigenze dell'azienda e ai requisiti dello strumento scelto.</li>
+        <li><strong>Organizzazione ed erogazione dei corsi</strong> — Concordiamo il calendario, coordiniamo docenti e partecipanti e seguiamo lo svolgimento delle attività formative.</li>
+        <li><strong>Gestione amministrativa</strong> — Predisponiamo la documentazione richiesta e seguiamo le pratiche del piano.</li>
+        <li><strong>Rendicontazione</strong> — Raccogliamo i registri e i documenti previsti e curiamo la rendicontazione finale secondo le procedure del fondo.</li>
       </ul>
+      <h2>Come lavoriamo insieme</h2>
+      <p>1. Verifica iniziale. 2. Piano formativo. 3. Erogazione e chiusura.</p>
+      <p>Vai al <a href="/formazione-finanziata">catalogo della formazione finanziata</a>, ai <a href="/corsi-sicurezza">corsi di sicurezza</a> o alla <a href="/professionisti">formula per i professionisti</a>.</p>
       <p>Vedi anche: <a href="/come-funziona">come funziona</a> e <a href="/perche-noi">perché sceglierci</a>.</p>
     `,
   },
