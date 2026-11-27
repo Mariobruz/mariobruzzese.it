@@ -23,7 +23,7 @@ const Header = () => {
     { name: 'Servizi', path: '/servizi' },
     { name: 'Per le aziende', path: '/formazione-finanziata' },
     { name: 'Per i professionisti', path: '/professionisti' },
-    { name: 'Corsi Sicurezza', path: '/corsi-sicurezza' },
+    { name: 'E-learning 81/08', path: '/corsi-sicurezza' },
     { name: 'FAQ', path: '/faq' }
   ];
 
