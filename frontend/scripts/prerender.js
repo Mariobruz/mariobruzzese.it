@@ -169,7 +169,7 @@ function paginaCorso(c) {
     noscript: `
       <h1>${esc(c.seoTitolo)}</h1>
       <p><strong>Durata:</strong> ${c.ore} ore in e-learning asincrono. <strong>Destinatari:</strong> ${esc(c.destinatari)}. <strong>Riferimento:</strong> ${esc(c.normativa)}.</p>
-      <p><strong>Prezzo:</strong> ${c.prezzo} € a partecipante, IVA compresa.</p>
+      <p><strong>Prezzo:</strong> ${c.prezzo} € a partecipante, IVA compresa. Corso a pagamento, non coperto dai fondi interprofessionali.</p>
       ${SCADENZE[c.id] ? `<p><strong>Validità dell'attestato:</strong> ${esc(SCADENZE[c.id].validita)}. <a href="${BASE}/durata-scadenza-corsi-sicurezza">Durate e scadenze di tutti i corsi</a></p>` : ''}
       ${c.avviso ? `<p>${esc(c.avviso)}</p>` : ''}
       <p>Soggetto formatore: O.P.N. Italia Lavoro – CNL – EBAFoS. Soggetto attuatore: MB Consulting di Mario Bruzzese, in convenzione con O.P.N. Italia Lavoro (Convenzione n. CFAL.1866). Superato il test finale si riceve l'attestato, verificabile tramite QR code sul sito opnitalialavoro.it.</p>

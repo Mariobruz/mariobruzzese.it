@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, ArrowRight, BadgeCheck, Briefcase, Check, CheckCircle2, ChevronDown, ClipboardCheck, ConciergeBell, Globe, HardHat, Layers, Link2, Clock,
-  Laptop, Megaphone, MessageCircle, Presentation, RefreshCw, ScrollText, Search, ShieldCheck, Tag, UserCog, Users, UtensilsCrossed, XCircle,
+  Info, Laptop, Megaphone, MessageCircle, Presentation, RefreshCw, ScrollText, Search, ShieldCheck, Tag, UserCog, Users, UtensilsCrossed, XCircle,
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
@@ -382,6 +382,10 @@ export default function CorsiSicurezza() {
             )}
             <p className="text-4xl font-bold text-gray-900">{dettaglio.prezzo}&nbsp;€</p>
             <p className="text-sm text-gray-500">a partecipante, IVA compresa</p>
+            <p className="mt-3 flex gap-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-sm text-amber-900">
+              <Info className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" />
+              Corso a pagamento, non coperto dai fondi interprofessionali.
+            </p>
             <ul className="mt-4 space-y-2 text-sm text-gray-700">
               <li className="flex gap-2"><Check className="w-4 h-4 mt-0.5 text-[#0f8a6a]" /> {dettaglio.ore} ore in e-learning, quando vuoi</li>
               <li className="flex gap-2"><Check className="w-4 h-4 mt-0.5 text-[#0f8a6a]" /> Credenziali entro 24 ore lavorative</li>
@@ -470,8 +474,22 @@ export default function CorsiSicurezza() {
         </div>
       </section>
 
+      {/* ------------------------------------------------ avviso: corsi a pagamento */}
+      <section className="max-w-6xl mx-auto px-6 pt-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 rounded-2xl border-2 border-amber-300 bg-amber-50 px-5 py-4">
+          <Info className="w-7 h-7 shrink-0 text-amber-700" aria-hidden="true" />
+          <p className="flex-1 text-gray-800 leading-relaxed">
+            <strong>Corsi a pagamento.</strong> I corsi E-learning 81/08 si acquistano online al prezzo indicato e
+            {' '}<strong>non sono coperti dai fondi interprofessionali</strong>.
+          </p>
+          <Link to="/formazione-finanziata" className="inline-flex shrink-0 items-center gap-1.5 font-bold text-[#0b5e48] underline underline-offset-4 hover:text-[#0f8a6a]">
+            Cerchi la formazione finanziata? <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
       {/* ------------------------------------------------ ricerca e categorie */}
-      <section id="trova" className="bg-[#eef8f2] scroll-mt-24">
+      <section id="trova" className="mt-8 bg-[#eef8f2] scroll-mt-24">
         <div className="max-w-6xl mx-auto px-6 py-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Trova il tuo corso</h2>
           <label className="mt-5 relative block">

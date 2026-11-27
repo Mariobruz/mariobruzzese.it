@@ -92,6 +92,7 @@ const pages = [
     schema: [breadcrumb('Corsi sicurezza', `${BASE}/corsi-sicurezza`)],
     noscript: `
       <h1>Corsi di sicurezza sul lavoro online — e-learning D.Lgs 81/08</h1>
+      <p><strong>Corsi a pagamento:</strong> i corsi E-learning 81/08 si acquistano online al prezzo indicato e non sono coperti dai fondi interprofessionali. Per la formazione finanziata vedi <a href="/formazione-finanziata">Per le aziende</a>.</p>
       <p>MB Consulting vende corsi di sicurezza sul lavoro in modalità e-learning asincrona, in convenzione con O.P.N. Italia Lavoro (soggetto formatore: O.P.N. Italia Lavoro – CNL – EBAFoS). Si seguono da computer, tablet o telefono negli orari che preferisci; superato il test finale si riceve l'attestato, verificabile tramite QR code sul sito opnitalialavoro.it.</p>
       <p>I percorsi sono conformi al D.Lgs. 9 aprile 2008 n. 81 e all'Accordo Stato-Regioni del 17 aprile 2025 (rep. atti n. 59/CSR), pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025. Dal 24 maggio 2026, concluso il periodo transitorio di dodici mesi, l'Accordo disciplina in via esclusiva durata e contenuti minimi della formazione in materia di salute e sicurezza sul lavoro.</p>
       <h2>Come funziona l'iscrizione</h2>
