@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, MessageCircle, Linkedin } from 'lucide-react';
 import { linkWhatsApp } from './WhatsApp';
-import { mockData } from '../mock';
+import EmailProtetta from './EmailProtetta';
 import { impostaConsenso } from '../googleAds';
 
 // Stesse voci, nello stesso ordine, del menu in alto (Header.jsx)
@@ -72,7 +72,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-[#86efb4] flex-shrink-0 mt-0.5" />
-                <a href={`mailto:${mockData.contact.email}`} className={`${LINK} break-all`}>{mockData.contact.email}</a>
+                <EmailProtetta utente="info" className={`${LINK} break-all`} />
               </li>
               <li className="flex items-start gap-3">
                 <MessageCircle className="w-5 h-5 text-[#86efb4] flex-shrink-0 mt-0.5" />

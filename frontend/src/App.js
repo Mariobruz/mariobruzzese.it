@@ -1,4 +1,5 @@
 import "@/App.css";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -6,18 +7,17 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Toaster } from "@/components/ui/toaster";
 import BannerConsenso from "@/components/BannerConsenso";
 import Home from "@/pages/Home";
-import Services from "@/pages/Services";
-import WhyChooseUs from "@/pages/WhyChooseUs";
-import CaseStudies from "@/pages/CaseStudies";
-import FAQ from "@/pages/FAQ";
-import ScadenzeCorsi from "./pages/ScadenzeCorsi";
-import RischioAteco from "./pages/RischioAteco";
-import CorsiSicurezza from "@/pages/CorsiSicurezza";
-import CondizioniVendita from "@/pages/CondizioniVendita";
-import Privacy from "@/pages/Privacy";
-import Consulenti from "@/pages/Consulenti";
-import CorsiCalabria from "@/pages/CorsiCalabria";
-import FormazioneFinanziata from "@/pages/FormazioneFinanziata";
+const Services = lazy(() => import("@/pages/Services"));
+const CaseStudies = lazy(() => import("@/pages/CaseStudies"));
+const FAQ = lazy(() => import("@/pages/FAQ"));
+const ScadenzeCorsi = lazy(() => import("@/pages/ScadenzeCorsi"));
+const RischioAteco = lazy(() => import("@/pages/RischioAteco"));
+const CorsiSicurezza = lazy(() => import("@/pages/CorsiSicurezza"));
+const CondizioniVendita = lazy(() => import("@/pages/CondizioniVendita"));
+const Privacy = lazy(() => import("@/pages/Privacy"));
+const Consulenti = lazy(() => import("@/pages/Consulenti"));
+const CorsiCalabria = lazy(() => import("@/pages/CorsiCalabria"));
+const FormazioneFinanziata = lazy(() => import("@/pages/FormazioneFinanziata"));
 
 function App() {
   return (
@@ -25,11 +25,13 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <Header />
+        {/* Le pagine si caricano solo quando servono: il primo caricamento è più leggero */}
+        <Suspense fallback={<div className="min-h-screen" />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/come-funziona" element={<Navigate to="/servizi" replace />} />
           <Route path="/servizi" element={<Services />} />
-          <Route path="/perche-noi" element={<WhyChooseUs />} />
+          <Route path="/perche-noi" element={<Navigate to="/servizi" replace />} />
           <Route path="/professionisti" element={<CaseStudies />} />
           <Route path="/casi-studio" element={<Navigate to="/professionisti" replace />} />
           <Route path="/faq" element={<FAQ />} />
@@ -44,6 +46,7 @@ function App() {
           <Route path="/corsi-sicurezza-calabria" element={<CorsiCalabria />} />
           <Route path="/formazione-finanziata" element={<FormazioneFinanziata />} />
         </Routes>
+        </Suspense>
         <Footer />
         <Toaster />
         <BannerConsenso />

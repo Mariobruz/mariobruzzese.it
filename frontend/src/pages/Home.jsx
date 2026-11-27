@@ -33,7 +33,7 @@ const Home = () => {
     <div className="bg-white">
       <SEOHead
         title="Fondi Interprofessionali | Consulenza Formazione Finanziata"
-        description="Accedi ai fondi interprofessionali e finanzia la formazione aziendale al 100%. MB Consulting gestisce tutto: adesione, piano formativo e rendicontazione. Contattaci."
+        description="Formazione aziendale finanziata dai fondi interprofessionali: MB Consulting segue verifica del fondo, piano formativo, corsi e rendicontazione."
         canonical="https://www.mariobruzzese.it/"
         schema={_seoSchemaHome}
       />
@@ -58,7 +58,7 @@ const Home = () => {
           <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
             <picture>
               <source media="(min-width: 1024px)" srcSet="/img/home-hero.webp" />
-              <img src="/img/home-hero-m.webp" alt="Un consulente e tre collaboratori pianificano la formazione aziendale davanti a un portatile"
+              <img src="/img/home-hero-m.webp" fetchpriority="high" decoding="async" alt="Un consulente e tre collaboratori pianificano la formazione aziendale davanti a un portatile"
                 width="472" height="464" className="absolute inset-0 w-full h-full object-cover" />
             </picture>
           </div>

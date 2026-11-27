@@ -18,6 +18,7 @@ const ContactModal = ({ isOpen, onClose, source = 'other' }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [trappola, setTrappola] = useState('');
 
   const validateForm = () => {
     const newErrors = {};
@@ -49,6 +50,8 @@ const ContactModal = ({ isOpen, onClose, source = 'other' }) => {
     if (!validateForm()) {
       return;
     }
+    // campo invisibile: se è compilato l'ha riempito un programma automatico
+    if (trappola) { onClose(); return; }
 
     setIsSubmitting(true);
 
@@ -151,6 +154,8 @@ const ContactModal = ({ isOpen, onClose, source = 'other' }) => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" value={trappola}
+              onChange={(e) => setTrappola(e.target.value)} className="absolute -left-[9999px] h-0 w-0 opacity-0" />
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                 Nome e Cognome <span className="text-red-500">*</span>

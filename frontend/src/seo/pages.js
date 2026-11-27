@@ -46,7 +46,7 @@ const pages = [
     slug: '',
     title: 'Fondi Interprofessionali | Consulenza Formazione Finanziata — MB Consulting',
     description:
-      'Accedi ai fondi interprofessionali e finanzia la formazione aziendale al 100%. MB Consulting gestisce tutto: adesione, piano formativo e rendicontazione. Contattaci.',
+      'Formazione aziendale finanziata dai fondi interprofessionali: MB Consulting segue verifica del fondo, piano formativo, corsi e rendicontazione.',
     priority: '1.0',
     changefreq: 'weekly',
     schema: [
@@ -78,7 +78,7 @@ const pages = [
       <h2>Come funzionano i Fondi Interprofessionali?</h2>
       <p>Ogni azienda versa mensilmente all'INPS lo 0,30% dei contributi per i propri dipendenti. Aderendo a un fondo interprofessionale, queste risorse vengono accantonate e rese disponibili per finanziare la formazione aziendale tramite Conto Formazione (risorse accumulate dalla singola azienda) oppure tramite Avvisi e bandi collettivi, ideali per le PMI.</p>
       <p>Approfondisci: <a href="/servizi">i servizi e come lavoriamo</a>, <a href="/professionisti">la formula per i professionisti</a>, <a href="/faq">le domande frequenti</a>.</p>
-      <p>Contattaci per una consulenza gratuita: <a href="mailto:info@mariobruzzese.it">info@mariobruzzese.it</a></p>
+      <p>Contattaci per una consulenza gratuita: info [at] mariobruzzese.it</p>
     `,
   },
   {
@@ -125,26 +125,6 @@ const pages = [
     `,
   },
   {
-    slug: 'perche-noi',
-    title: `Perché Scegliere MB Consulting per i Fondi Interprofessionali | ${SITE}`,
-    description:
-      "Esperienza, risultati concreti e zero burocrazia: MB Consulting accompagna le aziende nell'accesso ai fondi interprofessionali dalla A alla Z. Scopri perché.",
-    priority: '0.8',
-    changefreq: 'monthly',
-    schema: [breadcrumb('Perché noi', `${BASE}/perche-noi`)],
-    noscript: `
-      <h1>Perché Scegliere MB Consulting</h1>
-      <ul>
-        <li><strong>Zero Impatto Economico</strong> — La formazione è finanziata dai fondi interprofessionali: nessun costo diretto per l'azienda.</li>
-        <li><strong>Gestione Chiavi in Mano</strong> — Dall'analisi alla rendicontazione ci occupiamo noi di tutto.</li>
-        <li><strong>Esperienza Nazionale</strong> — Migliaia di ore di formazione erogate e centinaia di aziende servite in tutta Italia.</li>
-        <li><strong>Rete Consolidata</strong> — Collaborazioni con enti di formazione accreditati e docenti qualificati.</li>
-        <li><strong>Conformità Garantita</strong> — Documentazione curata per superare senza problemi controlli e ispezioni.</li>
-        <li><strong>Approccio Personalizzato</strong> — Ogni progetto nasce dalle reali esigenze dell'azienda, non da modelli standard.</li>
-      </ul>
-    `,
-  },
-  {
     slug: 'professionisti',
     title: `Per i professionisti | La formula win-win della formazione finanziata | ${SITE}`,
     description:
@@ -168,7 +148,7 @@ const pages = [
         <li>Privacy e protezione dei dati: le procedure e la formazione del personale.</li>
         <li>HACCP e sicurezza alimentare: il piano di autocontrollo e la formazione degli addetti.</li>
       </ul>
-      <p>Hai già un preventivo da presentare? Scrivici a <a href="mailto:info@mariobruzzese.it">info@mariobruzzese.it</a>.</p>
+      <p>Hai già un preventivo da presentare? Scrivici a info [at] mariobruzzese.it.</p>
     `,
   },
   {
@@ -242,7 +222,7 @@ const pages = [
     slug: 'corsi-sicurezza-calabria',
     title: `Corsi Sicurezza sul Lavoro Online in Calabria | ${SITE}`,
     description:
-      'Corsi di sicurezza sul lavoro online per aziende di Catanzaro, Cosenza, Crotone, Reggio Calabria e Vibo Valentia. Accordo Stato-Regioni 2025, attestato con QR code.',
+      'Corsi di sicurezza sul lavoro online per aziende di Catanzaro, Cosenza, Crotone, Reggio Calabria e Vibo Valentia. Accordo Stato-Regioni 2025.',
     priority: '0.8',
     changefreq: 'weekly',
     schema: [
@@ -274,7 +254,7 @@ const pages = [
     slug: 'formazione-finanziata',
     title: `Formazione finanziata per le aziende \u2013 Catalogo corsi | ${SITE}`,
     description:
-      'Corsi di formazione finanziata per le aziende aderenti a Fonarcom: sicurezza, digitale, intelligenza artificiale, lingue, organizzazione. Scegli i corsi e richiedili online.',
+      '182 corsi di formazione finanziata per le aziende aderenti a FonARCom: sicurezza, digitale, IA, lingue, organizzazione. Scegli i corsi e richiedili online.',
     priority: '0.8',
     changefreq: 'monthly',
     schema: [
@@ -294,6 +274,7 @@ const pages = [
   },
   {
     slug: 'consulenti',
+    noindex: true, // promozione in pausa: togliere questa riga quando riparte
     title: `Programma consulenti \u2013 Corsi sicurezza sul lavoro | ${SITE}`,
     description:
       'Consulente del lavoro, commercialista o RSPP? Offri ai tuoi clienti i corsi di sicurezza online con il 20% di sconto e ricevi il 40% dell\u2019incassato. Registrazione gratuita.',
@@ -336,13 +317,13 @@ const pages = [
     ],
     noscript: `
       <h1>Informativa privacy</h1>
-      <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, partita IVA 03504290796, privacy@mariobruzzese.it.</p>
+      <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, partita IVA 03504290796, privacy [at] mariobruzzese.it.</p>
       <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati dei partecipanti (nome, cognome, codice fiscale, email). Per le richieste di formazione finanziata: dati dell'azienda, del referente (nome, ruolo, email, telefono) e corsi scelti con il numero di partecipanti.</p>
       <p>Finalit\u00e0: esecuzione del contratto, obblighi fiscali e documentazione dell'obbligo formativo, invio di comunicazioni commerciali previo consenso.</p>
       <p>Destinatari: O.P.N. Italia Lavoro (responsabile del trattamento per il rilascio e la validazione degli attestati) e CNL Informatica s.r.l.s. (sub-responsabile, piattaforma e-learning), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), per le richieste di formazione finanziata confermate, l'ente di formazione accreditato che gestisce il piano e FonARCom; consulente fiscale.</p>
       <p>Registro di sicurezza: il servizio di iscrizione registra solo le richieste anomale o sospette (indirizzo IP, data e ora, paese e rete, browser, pagina richiesta), per la sicurezza dei sistemi (legittimo interesse, art. 6.1.f GDPR); gli IP con molte richieste sospette possono essere bloccati per 24 ore.</p>
       <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto e WhatsApp e per le richieste di formazione finanziata che non proseguono; fino a revoca per le comunicazioni commerciali; 90 giorni per il registro di sicurezza.</p>
-      <p>Diritti: accesso, rettifica, cancellazione, limitazione, portabilit\u00e0, opposizione e revoca del consenso, scrivendo a privacy@mariobruzzese.it; reclamo al Garante per la protezione dei dati personali.</p>
+      <p>Diritti: accesso, rettifica, cancellazione, limitazione, portabilit\u00e0, opposizione e revoca del consenso, scrivendo a privacy [at] mariobruzzese.it; reclamo al Garante per la protezione dei dati personali.</p>
       <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione né tracciamento pubblicitario. Le statistiche di visita sono anonime e senza cookie (Cloudflare Web Analytics).</p>
     `,
   },
@@ -350,7 +331,7 @@ const pages = [
     slug: 'durata-scadenza-corsi-sicurezza',
     title: `Durata e Scadenza dei Corsi di Sicurezza sul Lavoro | Accordo Stato-Regioni 2025`,
     description:
-      'Quanto dura ogni corso di sicurezza sul lavoro e ogni quanto va rifatto l\u2019aggiornamento: lavoratori, preposti, dirigenti, datore di lavoro, RSPP, RLS, antincendio, primo soccorso, HACCP.',
+      'Durata di ogni corso di sicurezza sul lavoro e ogni quanto va aggiornato: lavoratori, preposti, dirigenti, datore di lavoro, RSPP, RLS, antincendio, HACCP.',
     priority: '0.8',
     changefreq: 'monthly',
     schema: [breadcrumb('Durata e scadenza dei corsi', `${BASE}/durata-scadenza-corsi-sicurezza`)],

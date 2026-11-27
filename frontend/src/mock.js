@@ -160,7 +160,7 @@ export const mockData = {
   ],
 
   contact: {
-    email: "mariobruzzese@hotmail.com",
+    email: "info@mariobruzzese.it",
     phone: "+393291747521",
     address: "Reggio Calabria, Italia"
   }

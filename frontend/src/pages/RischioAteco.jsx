@@ -119,7 +119,7 @@ export default function RischioAteco() {
     <div className="min-h-screen pt-28 md:pt-40 pb-20">
       <SEOHead
         title="Codice ATECO e Livello di Rischio: Basso, Medio o Alto — Ore di Formazione"
-        description="Cerca il tuo codice ATECO e scopri se la tua attività è a rischio basso, medio o alto e quante ore di formazione servono ai lavoratori secondo l’Accordo Stato-Regioni 2025."
+        description="Cerca il tuo codice ATECO: scopri se l’attività è a rischio basso, medio o alto e quante ore di formazione servono secondo l’Accordo Stato-Regioni 2025."
         canonical="https://www.mariobruzzese.it/codice-ateco-livello-di-rischio"
       />
       <div className="max-w-5xl mx-auto px-6">

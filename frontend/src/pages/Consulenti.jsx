@@ -164,6 +164,7 @@ export default function Consulenti() {
         description="Consulente del lavoro, commercialista o RSPP? Offri ai tuoi clienti i corsi di sicurezza online con il 20% di sconto e ricevi il 40% dell’incassato. Registrazione gratuita."
         canonical="https://www.mariobruzzese.it/consulenti"
         schema={schema}
+        noIndex /* promozione in pausa: togliere quando riparte */
       />
 
       <div className="min-h-screen pt-36 pb-20 relative overflow-hidden">

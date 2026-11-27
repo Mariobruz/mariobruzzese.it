@@ -275,7 +275,7 @@ for (const page of [...pages, ...schede, ...iscrizioni]) {
 }
 
 // Indirizzi spostati: pagina ponte che rimanda al nuovo indirizzo (GitHub Pages non fa redirect 301)
-const SPOSTATE = { 'casi-studio': 'professionisti', 'come-funziona': 'servizi' };
+const SPOSTATE = { 'casi-studio': 'professionisti', 'come-funziona': 'servizi', 'perche-noi': 'servizi' };
 for (const [vecchio, nuovo] of Object.entries(SPOSTATE)) {
   const url = `${BASE}/${nuovo}`;
   const ponte = `<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><title>Pagina spostata</title>` +
@@ -294,6 +294,7 @@ const today = new Date().toISOString().slice(0, 10);
 const sitemap =
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
   [...pages, ...schede]
+    .filter((p) => !p.noindex)
     .map(
       (p) =>
         `  <url><loc>${p.slug ? `${BASE}/${p.slug}` : `${BASE}/`}</loc><lastmod>${today}</lastmod><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>`

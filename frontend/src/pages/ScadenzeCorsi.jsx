@@ -15,7 +15,7 @@ export default function ScadenzeCorsi() {
     <div className="min-h-screen pt-28 md:pt-40 pb-20">
       <SEOHead
         title="Durata e Scadenza dei Corsi di Sicurezza sul Lavoro — Accordo Stato-Regioni 2025"
-        description="Quanto dura ogni corso di sicurezza e ogni quanto va rifatto l’aggiornamento: lavoratori, preposti, dirigenti, datore di lavoro, RSPP, RLS, antincendio, primo soccorso, HACCP."
+        description="Durata di ogni corso di sicurezza sul lavoro e ogni quanto va aggiornato: lavoratori, preposti, dirigenti, datore di lavoro, RSPP, RLS, antincendio, HACCP."
         canonical="https://www.mariobruzzese.it/durata-scadenza-corsi-sicurezza"
       />
       <div className="max-w-6xl mx-auto px-6">

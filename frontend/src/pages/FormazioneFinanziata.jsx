@@ -269,7 +269,7 @@ export default function FormazioneFinanziata() {
       <WhatsAppFisso testo={MSG_WA} sopraBarra={passo === 1 && selezione.length > 0} />
       <SEOHead
         title="Formazione finanziata per le aziende – Catalogo corsi"
-        description={`${CORSI_FINANZIATI.length} corsi di formazione finanziata per le aziende aderenti a FonARCom: sicurezza, digitale, intelligenza artificiale, lingue, organizzazione. Scegli i corsi e richiedili online.`}
+        description={`${CORSI_FINANZIATI.length} corsi di formazione finanziata per le aziende aderenti a FonARCom: sicurezza, digitale, IA, lingue, organizzazione. Scegli i corsi e richiedili online.`}
         canonical="https://www.mariobruzzese.it/formazione-finanziata"
         schema={schema}
       />
@@ -291,7 +291,7 @@ export default function FormazioneFinanziata() {
             </div>
           </motion.div>
           <div className="relative min-h-[260px] lg:min-h-0 overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
-            <img src="/img/formazione-finanziata-team.webp" alt="Un formatore con un gruppo di dipendenti durante un corso in azienda" width="761" height="378"
+            <img src="/img/formazione-finanziata-team.webp" fetchpriority="high" decoding="async" alt="Un formatore con un gruppo di dipendenti durante un corso in azienda" width="761" height="378"
               className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             <div className="absolute right-6 bottom-6 text-right text-white drop-shadow-lg">

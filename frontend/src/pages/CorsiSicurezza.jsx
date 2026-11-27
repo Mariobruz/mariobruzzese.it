@@ -468,7 +468,7 @@ export default function CorsiSicurezza() {
             </div>
           </motion.div>
           <div className="relative aspect-[16/9] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
-            <img src="/img/corsi-sicurezza-hero.webp" alt="Un formatore spiega la sicurezza sul lavoro a un gruppo di partecipanti" width="482" height="275"
+            <img src="/img/corsi-sicurezza-hero.webp" fetchpriority="high" decoding="async" alt="Un formatore spiega la sicurezza sul lavoro a un gruppo di partecipanti" width="482" height="275"
               className="absolute inset-0 w-full h-full object-cover" />
           </div>
         </div>

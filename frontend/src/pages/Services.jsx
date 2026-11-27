@@ -54,7 +54,7 @@ const Services = () => {
             </div>
           </motion.div>
           <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
-            <img src="/img/servizi-hero.webp" alt="Una consulente illustra un piano formativo aziendale a un imprenditore" width="469" height="364"
+            <img src="/img/servizi-hero.webp" fetchpriority="high" decoding="async" alt="Una consulente illustra un piano formativo aziendale a un imprenditore" width="469" height="364"
               className="absolute inset-0 w-full h-full object-cover" />
           </div>
         </div>

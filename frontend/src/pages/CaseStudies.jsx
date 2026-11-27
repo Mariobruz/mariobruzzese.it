@@ -293,7 +293,7 @@ const CaseStudies = () => {
             </div>
           </motion.div>
           <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
-            <img src="/img/casi-studio/hero-m.webp" alt="Un consulente mostra un preventivo a una imprenditrice su un tablet" width="492" height="377"
+            <img src="/img/casi-studio/hero-m.webp" fetchpriority="high" decoding="async" alt="Un consulente mostra un preventivo a una imprenditrice su un tablet" width="492" height="377"
               className="absolute inset-0 w-full h-full object-cover object-[30%_center]" />
           </div>
         </div>
