@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, BadgeCheck, Check, CheckCircle2, Link2, Clock, Laptop, RefreshCw, ScrollText, ShieldCheck, Users, XCircle } from 'lucide-react';
+import {
+  ArrowLeft, ArrowRight, BadgeCheck, Briefcase, Check, CheckCircle2, ChevronDown, ClipboardCheck, ConciergeBell, Globe, HardHat, Layers, Link2, Clock,
+  Laptop, Megaphone, MessageCircle, Presentation, RefreshCw, ScrollText, Search, ShieldCheck, Tag, UserCog, Users, UtensilsCrossed, XCircle,
+} from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import IscrizioneCorso from '../components/IscrizioneCorso';
 import { scadenzeCorsi } from '../data/modalitaErogazione';
 import { faqCorso } from '../data/faqCorsi';
-import { WhatsAppFisso, WhatsAppLink } from '../components/WhatsApp';
-import { Button } from '../components/ui/button';
+import { WhatsAppFisso, WhatsAppLink, linkWhatsApp } from '../components/WhatsApp';
 import { categorie, corsiPubblicabili } from '../data/corsiSicurezza';
 import { concludiAcquistoInCorso } from '../googleAds';
 
@@ -20,14 +22,40 @@ const VANTAGGI = [
 ];
 
 const PASSI = [
-  { n: '01', titolo: 'Scegli il corso', testo: 'Individua il corso che copre il tuo obbligo formativo e indica quante persone devi iscrivere.' },
-  { n: '02', titolo: 'Inserisci i dati e paghi', testo: 'Indichi i dati per la fattura (privato o azienda) e, per ogni partecipante, nome, cognome, codice fiscale ed email. Poi paghi online in modo sicuro.' },
-  { n: '03', titolo: 'Ricevi le credenziali', testo: 'Entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma: a ciascuno arriva dalla piattaforma O.P.N. Italia Lavoro (non dal nostro sito) un’email con link di accesso, nome utente e password. Può finire nello spam: controlla anche lì.' },
-  { n: '04', titolo: 'Inizi il corso', testo: 'Al primo accesso il partecipante completa i suoi dati e inizia il corso. Superato il test finale, riceve l’attestato verificabile tramite QR code.' },
+  { titolo: 'Scegli il corso', testo: 'Individua il corso che copre il tuo obbligo formativo e indica quante persone devi iscrivere.' },
+  { titolo: 'Inserisci i dati e paghi', testo: 'Indichi i dati per la fattura (privato o azienda) e, per ogni partecipante, nome, cognome, codice fiscale ed email. Poi paghi online in modo sicuro.' },
+  { titolo: 'Ricevi le credenziali', testo: 'Entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma: a ciascuno arriva dalla piattaforma O.P.N. Italia Lavoro (non dal nostro sito) un’email con link di accesso, nome utente e password. Può finire nello spam: controlla anche lì.' },
+  { titolo: 'Inizi il corso', testo: 'Al primo accesso il partecipante completa i suoi dati e inizia il corso. Superato il test finale, riceve l’attestato verificabile tramite QR code.' },
 ];
 
+const DOMANDE = [
+  { domanda: 'Come si svolgono i corsi?', risposta: 'In e-learning asincrono: si seguono da computer, tablet o telefono, negli orari che decidi tu, senza aula e senza trasferte. Puoi iscrivere in una volta sola tutti i dipendenti da formare.' },
+  { domanda: 'L’attestato ha validità?', risposta: 'Sì. I corsi sono realizzati in convenzione con O.P.N. Italia Lavoro, in conformità al D.Lgs. 81/2008 e all’Accordo Stato-Regioni del 17 aprile 2025. L’attestato indica come soggetto formatore O.P.N. Italia Lavoro – CNL – EBAFoS ed è verificabile tramite QR code sul sito opnitalialavoro.it.' },
+  { domanda: 'È previsto un aggiornamento?', risposta: 'Sì: la formazione va aggiornata periodicamente e in catalogo trovi i corsi di aggiornamento per ogni figura. Nella pagina «Durate e scadenze» c’è la periodicità di ciascun corso secondo l’Accordo Stato-Regioni 2025.' },
+];
+
+const BTN_VERDE = 'inline-flex items-center justify-center gap-2 rounded-lg bg-[#0f8a6a] text-white font-bold hover:bg-[#0c7458] transition-colors';
+const LIMITE = 6;
+const TITOLO_CATEGORIA = {
+  lavoratori: 'Corsi per lavoratori', datore: 'Corsi per il datore di lavoro', dirigenti: 'Corsi per dirigenti', rspp: 'Corsi per RSPP e ASPP',
+  rls: 'Corsi per RLS', cantieri: 'Corsi per i cantieri', formatori: 'Corsi per formatori', haccp: 'Corsi HACCP e alimentaristi',
+};
+const ICONE_CATEGORIA = { lavoratori: Users, datore: Briefcase, dirigenti: UserCog, rspp: ClipboardCheck, rls: Megaphone, cantieri: HardHat, formatori: Presentation, haccp: UtensilsCrossed };
+function iconaCorso(c) {
+  const t = c.titolo.toLowerCase();
+  if (t.includes('inglese')) return Globe;
+  if (t.includes('cantieri')) return HardHat;
+  if (c.aggiornamento) return RefreshCw;
+  if (t.includes('turismo')) return ConciergeBell;
+  if (t.includes('uffici')) return Laptop;
+  if (t.includes('generale + specifica')) return Layers;
+  if (t.includes('specifica')) return ShieldCheck;
+  return ICONE_CATEGORIA[c.categoria] || ShieldCheck;
+}
+const normalizza = (x) => x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
 /** Copia negli appunti l'indirizzo della scheda: comodo per campagne e messaggi. */
-function CopiaLink({ url }) {
+function CopiaLink({ url, chiaro = false }) {
   const [copiato, setCopiato] = useState(false);
   const copia = async () => {
     try {
@@ -39,7 +67,7 @@ function CopiaLink({ url }) {
     }
   };
   return (
-    <button onClick={copia} className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-black transition-colors">
+    <button onClick={copia} className={`inline-flex items-center gap-2 text-sm transition-colors ${chiaro ? 'text-gray-200 hover:text-white' : 'text-gray-600 hover:text-black'}`}>
       {copiato ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
       {copiato ? 'Link copiato' : 'Copia link del corso'}
     </button>
@@ -47,7 +75,9 @@ function CopiaLink({ url }) {
 }
 
 export default function CorsiSicurezza() {
-  const [categoriaAttiva, setCategoriaAttiva] = useState('tutte');
+  const [categoriaAttiva, setCategoriaAttiva] = useState('lavoratori');
+  const [cerca, setCerca] = useState('');
+  const [tuttiVisibili, setTuttiVisibili] = useState(false);
   const { corsoId } = useParams();
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -98,10 +128,14 @@ export default function CorsiSicurezza() {
     osservatore.observe(ctaEl);
     return () => osservatore.disconnect();
   }, [ctaEl]);
-  const visibili = useMemo(
-    () => (categoriaAttiva === 'tutte' ? corsi : corsi.filter((c) => c.categoria === categoriaAttiva)),
-    [corsi, categoriaAttiva]
-  );
+  const categorieVisibili = useMemo(() => categorie.filter((cat) => corsi.some((c) => c.categoria === cat.id)), [corsi]);
+  const categoriaCorrente = categorieVisibili.find((c) => c.id === categoriaAttiva);
+  const elenco = useMemo(() => {
+    const q = normalizza(cerca.trim());
+    if (q) return corsi.filter((c) => normalizza(`${c.titolo} ${c.destinatari} ${c.categoria}`).includes(q));
+    return corsi.filter((c) => c.categoria === categoriaAttiva);
+  }, [corsi, cerca, categoriaAttiva]);
+  const elencoMostrato = cerca || tuttiVisibili ? elenco : elenco.slice(0, LIMITE);
 
   // Formato "pagina riepilogo" di Google: posizione e indirizzo di ogni scheda corso
   const schema = useMemo(
@@ -167,9 +201,9 @@ export default function CorsiSicurezza() {
               Non è stato addebitato nulla. Puoi riprendere l’iscrizione quando vuoi: i dati vanno reinseriti.
             </p>
           )}
-          <Button onClick={chiudiRitorno} className="bg-black text-white hover:bg-gray-800">
+          <button type="button" onClick={chiudiRitorno} className={`${BTN_VERDE} px-6 py-3`}>
             Torna ai corsi
-          </Button>
+          </button>
         </div>
       </div>
     );
@@ -191,152 +225,204 @@ export default function CorsiSicurezza() {
   }
 
   if (dettaglio) {
+    const scad = scadenzeCorsi[dettaglio.id];
+    const IconaDett = iconaCorso(dettaglio);
+    const categoriaDett = categorie.find((c) => c.id === dettaglio.categoria);
     return (
-      <div className="min-h-screen pt-28 md:pt-40 pb-28 md:pb-20">
+      <div className="bg-white pb-28 md:pb-0">
         <SEOHead
           title={dettaglio.seoTitolo}
           description={dettaglio.seoDescrizione}
           canonical={`https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`}
         />
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="flex items-center justify-between gap-4 mb-8">
-            <Link to={BASE} className="inline-flex items-center gap-2 text-gray-600 hover:text-black transition-colors">
-              <ArrowLeft className="w-4 h-4" /> Torna al catalogo
-            </Link>
-            <CopiaLink url={`https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`} />
-          </div>
 
-          <div className="grid md:grid-cols-2 gap-10 mb-12">
-            <img src={process.env.PUBLIC_URL + dettaglio.immagine} alt={dettaglio.titolo} className="rounded-xl w-full border border-gray-100" loading="lazy" />
-            <div>
-              {dettaglio.aggiornamento && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full px-3 py-1 mb-4">
-                  <RefreshCw className="w-3 h-3" /> Aggiornamento
-                </span>
-              )}
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{dettaglio.titolo}</h1>
-              <dl className="space-y-2 text-sm text-gray-600 mb-6">
-                <div><dt className="inline font-semibold text-gray-900">Durata: </dt><dd className="inline">{dettaglio.ore} ore</dd></div>
-                <div><dt className="inline font-semibold text-gray-900">Destinatari: </dt><dd className="inline">{dettaglio.destinatari}</dd></div>
-                <div><dt className="inline font-semibold text-gray-900">Riferimento: </dt><dd className="inline">{dettaglio.normativa}</dd></div>
-                <div><dt className="inline font-semibold text-gray-900">Conformità: </dt><dd className="inline">{ACCORDO}</dd></div>
-                <div><dt className="inline font-semibold text-gray-900">Modalità: </dt><dd className="inline">e-learning asincrono</dd></div>
-              </dl>
-              {dettaglio.avviso && <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-6">{dettaglio.avviso}</p>}
-              {dettaglio.lancio && (
-                <p className="inline-block text-xs font-semibold uppercase tracking-wide text-white bg-black rounded px-2.5 py-1 mb-2">
-                  Prezzo di lancio · fino al 31 ottobre
+        {/* ------------------------------------------------ intestazione */}
+        <section className="pt-28 bg-[#0f2742] text-white">
+          <div className="max-w-6xl mx-auto px-6 pt-8 pb-10">
+            <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
+              <Link to={BASE} className="inline-flex items-center gap-2 text-gray-200 hover:text-white transition-colors">
+                <ArrowLeft className="w-4 h-4" /> Torna al catalogo
+              </Link>
+              <CopiaLink url={`https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`} chiaro />
+            </div>
+            <div className="mt-6 flex items-start gap-5">
+              <span className="hidden sm:flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-[#86efb4]"><IconaDett className="w-8 h-8" /></span>
+              <div>
+                <div className="flex flex-wrap gap-2">
+                  {categoriaDett && <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">{categoriaDett.nome}</span>}
+                  {dettaglio.aggiornamento && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#86efb4] px-3 py-1 text-xs font-bold text-[#0f2742]">
+                      <RefreshCw className="w-3 h-3" /> Aggiornamento
+                    </span>
+                  )}
+                </div>
+                <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">{dettaglio.titolo}</h1>
+                <p className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-gray-200">
+                  <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4" /> {dettaglio.ore} ore</span>
+                  <span className="inline-flex items-center gap-1.5"><Laptop className="w-4 h-4" /> e-learning asincrono</span>
+                  <span className="inline-flex items-center gap-1.5"><BadgeCheck className="w-4 h-4" /> attestato con QR code</span>
                 </p>
-              )}
-              <p className="text-3xl font-bold text-gray-900 mb-1">{dettaglio.prezzo}&nbsp;€</p>
-              <p className="text-sm text-gray-500 mb-6">a partecipante, IVA compresa</p>
-              <div ref={ctaPrincipale}>
-                <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 w-full">
-                  Iscriviti ora
-                </Button>
-              </div>
-              <div className="mt-3">
-                <WhatsAppLink testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}» (${dettaglio.ore} ore): https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`}>
-                  Hai domande? Scrivici su WhatsApp
-                </WhatsAppLink>
               </div>
             </div>
           </div>
+        </section>
 
-          {scadenzeCorsi[dettaglio.id] && (
-            <div className="mb-12 bg-gray-50 rounded-xl p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">Durata e validità dell’attestato</h2>
-              <dl className="grid sm:grid-cols-2 gap-4 text-sm">
-                <div>
-                  <dt className="text-gray-500 mb-1">Durata</dt>
-                  <dd className="text-gray-900 font-semibold">{scadenzeCorsi[dettaglio.id].durata}</dd>
-                </div>
-                <div>
-                  <dt className="text-gray-500 mb-1">Validità e aggiornamento</dt>
-                  <dd className="text-gray-900 font-semibold">{scadenzeCorsi[dettaglio.id].validita}</dd>
-                </div>
+        <div className="max-w-6xl mx-auto px-6 py-10 grid gap-10 lg:grid-cols-[1fr_340px] items-start">
+          {/* ------------------------------------------------ contenuto */}
+          <div className="min-w-0">
+            <div className="grid gap-6 md:grid-cols-2">
+              <img src={process.env.PUBLIC_URL + dettaglio.immagine} alt={dettaglio.titolo} className="rounded-2xl w-full border border-gray-200" loading="lazy" />
+              <dl className="rounded-2xl border border-gray-200 p-5 space-y-3 text-[15px] text-gray-700">
+                <div><dt className="font-bold text-gray-900">Durata</dt><dd>{dettaglio.ore} ore</dd></div>
+                <div><dt className="font-bold text-gray-900">Destinatari</dt><dd>{dettaglio.destinatari}</dd></div>
+                <div><dt className="font-bold text-gray-900">Riferimento</dt><dd>{dettaglio.normativa}</dd></div>
+                <div><dt className="font-bold text-gray-900">Conformità</dt><dd>{ACCORDO}</dd></div>
+                <div><dt className="font-bold text-gray-900">Modalità</dt><dd>e-learning asincrono</dd></div>
               </dl>
-              <p className="text-sm text-gray-500 mt-4">
-                <Link to="/durata-scadenza-corsi-sicurezza" className="underline hover:text-black">
-                  Durate e scadenze di tutti i corsi
-                </Link>
-              </p>
             </div>
-          )}
+            {dettaglio.avviso && <p className="mt-6 text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">{dettaglio.avviso}</p>}
 
-          {dettaglio.programma.length > 0 && (
-            <>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Programma del corso</h2>
-              <p className="text-sm text-gray-500 mb-6">Contenuti minimi previsti dalla normativa.</p>
-              <div className="space-y-3 text-gray-700 leading-relaxed">
-                {dettaglio.programma.map((riga, i) => (
-                  <p key={i}>{riga}</p>
+            {scad && (
+              <div className="mt-8 rounded-2xl bg-[#eef8f2] p-6">
+                <h2 className="text-2xl font-bold text-gray-900">Durata e validità dell’attestato</h2>
+                <dl className="mt-4 grid sm:grid-cols-2 gap-4 text-[15px]">
+                  <div>
+                    <dt className="text-gray-600 mb-1">Durata</dt>
+                    <dd className="text-gray-900 font-semibold">{scad.durata}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-gray-600 mb-1">Validità e aggiornamento</dt>
+                    <dd className="text-gray-900 font-semibold">{scad.validita}</dd>
+                  </div>
+                </dl>
+                <p className="mt-4 text-sm">
+                  <Link to="/durata-scadenza-corsi-sicurezza" className="font-semibold text-[#0b5e48] underline hover:text-[#0f8a6a]">
+                    Durate e scadenze di tutti i corsi
+                  </Link>
+                </p>
+              </div>
+            )}
+
+            {dettaglio.programma.length > 0 && (
+              <section className="mt-10">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Programma del corso</h2>
+                <div className="mt-2 h-1 w-14 rounded bg-[#0f8a6a]" />
+                <p className="mt-3 text-sm text-gray-500">Contenuti minimi previsti dalla normativa.</p>
+                <div className="mt-5 space-y-3 text-gray-700 leading-relaxed">
+                  {dettaglio.programma.map((riga, i) => (
+                    <p key={i}>{riga}</p>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            <div className="mt-10 rounded-2xl border-2 border-[#0f8a6a] bg-[#f6fbf8] p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <p className="font-bold text-gray-900">{dettaglio.titolo} · {dettaglio.ore} ore</p>
+                <p className="text-sm text-gray-600">100% online, attestato con QR code. {dettaglio.prezzo}&nbsp;€ a partecipante.</p>
+              </div>
+              <button type="button" onClick={() => setIscrizione(dettaglio)} className={`${BTN_VERDE} px-6 py-3 whitespace-nowrap`}>
+                Iscriviti ora
+              </button>
+            </div>
+
+            <section className="mt-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Domande frequenti</h2>
+              <div className="mt-2 h-1 w-14 rounded bg-[#0f8a6a]" />
+              <div className="mt-6 divide-y divide-gray-200 rounded-xl border border-gray-200">
+                {faqCorso(dettaglio, scad).map((x) => (
+                  <details key={x.d} className="group px-5">
+                    <summary className="cursor-pointer list-none flex items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+                      <h3 className="text-base sm:text-lg font-bold text-gray-900">{x.d}</h3>
+                      <ChevronDown className="w-5 h-5 shrink-0 text-gray-700 transition-transform group-open:rotate-180" aria-hidden="true" />
+                    </summary>
+                    <p className="pb-5 text-gray-700 leading-relaxed">{x.r}</p>
+                  </details>
                 ))}
               </div>
-            </>
-          )}
-
-          <div className="mt-10 border-2 border-black rounded-xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className="font-bold text-gray-900">{dettaglio.titolo} · {dettaglio.ore} ore</p>
-              <p className="text-sm text-gray-600">100% online, attestato con QR code. {dettaglio.prezzo}&nbsp;€ a partecipante.</p>
-            </div>
-            <Button onClick={() => setIscrizione(dettaglio)} size="lg" className="bg-black text-white hover:bg-gray-800 whitespace-nowrap">
-              Iscriviti ora
-            </Button>
-          </div>
-
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Domande frequenti</h2>
-            <div className="divide-y divide-gray-200 border-y border-gray-200">
-              {faqCorso(dettaglio, scadenzeCorsi[dettaglio.id]).map((x) => (
-                <details key={x.d} className="group py-4">
-                  <summary className="cursor-pointer list-none flex items-start justify-between gap-4 font-semibold text-gray-900">
-                    <h3 className="text-base font-semibold">{x.d}</h3>
-                    <span className="text-gray-400 group-open:rotate-45 transition-transform text-xl leading-none" aria-hidden="true">+</span>
-                  </summary>
-                  <p className="mt-3 text-gray-700 leading-relaxed">{x.r}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {dettaglio.correlati.length > 0 && (
-            <section className="mt-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Altri corsi della stessa area</h2>
-              <ul className="grid sm:grid-cols-2 gap-3">
-                {dettaglio.correlati.map((x) => (
-                  <li key={x.id}>
-                    <Link
-                      to={`${BASE}/${x.id}`}
-                      className="flex items-center justify-between gap-4 border-2 border-gray-100 hover:border-black rounded-xl px-4 py-3 transition-colors"
-                    >
-                      <span className="font-medium text-gray-900">{x.titolo}</span>
-                      <span className="text-sm text-gray-500 whitespace-nowrap">{x.ore} ore · {x.prezzo}&nbsp;€</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </section>
-          )}
 
-          <div className="mt-12 bg-gray-50 rounded-xl p-6 text-sm text-gray-600">
-            Soggetto formatore: <strong>O.P.N. Italia Lavoro – CNL – EBAFoS</strong>. Soggetto attuatore:
-            <strong>MB Consulting di Mario Bruzzese</strong>, in convenzione con O.P.N. Italia Lavoro (Convenzione
-            n. CFAL.1866). Corso in e-learning conforme al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
-            all’<strong>{ACCORDO}</strong>. Superato il test finale si riceve l’attestato, verificabile tramite
-            QR code sul sito opnitalialavoro.it.
+            {dettaglio.correlati.length > 0 && (
+              <section className="mt-12">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Altri corsi della stessa area</h2>
+                <div className="mt-2 h-1 w-14 rounded bg-[#0f8a6a]" />
+                <ul className="mt-6 grid sm:grid-cols-2 gap-3">
+                  {dettaglio.correlati.map((x) => {
+                    const IconaX = iconaCorso({ ...x, categoria: dettaglio.categoria, aggiornamento: /aggiornamento/i.test(x.titolo) });
+                    return (
+                      <li key={x.id}>
+                        <Link to={`${BASE}/${x.id}`}
+                          className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm hover:border-[#0f8a6a] transition-colors">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e3f7ec] text-[#0f8a6a]"><IconaX className="w-5 h-5" /></span>
+                          <span className="flex-1 font-semibold text-gray-900 leading-snug">{x.titolo}</span>
+                          <span className="text-sm text-gray-500 whitespace-nowrap">{x.ore} ore · {x.prezzo}&nbsp;€</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
+
+            <div className="mt-12 rounded-2xl bg-gray-50 p-6 text-sm text-gray-600 leading-relaxed">
+              Soggetto formatore: <strong>O.P.N. Italia Lavoro – CNL – EBAFoS</strong>. Soggetto attuatore:
+              {' '}<strong>MB Consulting di Mario Bruzzese</strong>, in convenzione con O.P.N. Italia Lavoro (Convenzione
+              {' '}n. CFAL.1866). Corso in e-learning conforme al <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e
+              {' '}all’<strong>{ACCORDO}</strong>. Superato il test finale si riceve l’attestato, verificabile tramite
+              {' '}QR code sul sito opnitalialavoro.it.
+            </div>
           </div>
+
+          {/* ------------------------------------------------ riquadro acquisto */}
+          <aside className="lg:sticky lg:top-32 order-first lg:order-none rounded-2xl border border-gray-200 bg-white p-6 shadow-lg">
+            {dettaglio.lancio && (
+              <p className="inline-block text-xs font-bold uppercase tracking-wide text-white bg-[#0f8a6a] rounded px-2.5 py-1 mb-2">
+                Prezzo di lancio · fino al 31 ottobre
+              </p>
+            )}
+            <p className="text-4xl font-bold text-gray-900">{dettaglio.prezzo}&nbsp;€</p>
+            <p className="text-sm text-gray-500">a partecipante, IVA compresa</p>
+            <ul className="mt-4 space-y-2 text-sm text-gray-700">
+              <li className="flex gap-2"><Check className="w-4 h-4 mt-0.5 text-[#0f8a6a]" /> {dettaglio.ore} ore in e-learning, quando vuoi</li>
+              <li className="flex gap-2"><Check className="w-4 h-4 mt-0.5 text-[#0f8a6a]" /> Credenziali entro 24 ore lavorative</li>
+              <li className="flex gap-2"><Check className="w-4 h-4 mt-0.5 text-[#0f8a6a]" /> Attestato verificabile con QR code</li>
+            </ul>
+            <div ref={ctaPrincipale} className="mt-5">
+              <button type="button" onClick={() => setIscrizione(dettaglio)} className={`${BTN_VERDE} w-full text-lg py-3.5`}>
+                Iscriviti ora
+              </button>
+            </div>
+            <div className="mt-3">
+              <WhatsAppLink testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}» (${dettaglio.ore} ore): https://www.mariobruzzese.it/corsi-sicurezza/${dettaglio.id}`}>
+                Hai domande? Scrivici su WhatsApp
+              </WhatsAppLink>
+            </div>
+          </aside>
         </div>
+
+        {/* ------------------------------------------------ aiuto */}
+        <section className="bg-[#0f2742] text-white">
+          <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h2 className="text-3xl font-bold">Non sei sicuro che sia il corso giusto?</h2>
+              <p className="mt-2 text-lg text-gray-200">Scrivici: ti aiutiamo a scegliere il percorso adatto a te o ai tuoi dipendenti.</p>
+            </div>
+            <a href={linkWhatsApp(`Ciao, vorrei capire se il corso «${dettaglio.titolo}» è quello giusto per me.`)} target="_blank" rel="noopener noreferrer"
+              className={`${BTN_VERDE} shrink-0 text-lg px-8 py-3.5`}>
+              <MessageCircle className="w-5 h-5" /> Chiedi assistenza
+            </a>
+          </div>
+        </section>
+
         {!ctaVisibile && (
           <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
             <div className="flex-1 min-w-0">
               <p className="text-lg font-bold text-gray-900 leading-tight">{dettaglio.prezzo}&nbsp;€</p>
               <p className="text-xs text-gray-500 truncate">{dettaglio.ore} ore · 100% online</p>
             </div>
-            <Button onClick={() => setIscrizione(dettaglio)} className="bg-black text-white hover:bg-gray-800 px-6">
+            <button type="button" onClick={() => setIscrizione(dettaglio)} className={`${BTN_VERDE} px-6 py-2.5`}>
               Iscriviti ora
-            </Button>
+            </button>
           </div>
         )}
         <WhatsAppFisso sopraBarra={!ctaVisibile} testo={`Ciao, vorrei informazioni sul corso «${dettaglio.titolo}».`} />
@@ -345,7 +431,7 @@ export default function CorsiSicurezza() {
   }
 
   return (
-    <>
+    <div className="bg-white">
       <WhatsAppFisso testo="Ciao, vorrei informazioni sui corsi di sicurezza sul lavoro." />
       <SEOHead
         title="Corsi Sicurezza sul Lavoro Online – Accordo Stato-Regioni 2025"
@@ -354,177 +440,225 @@ export default function CorsiSicurezza() {
         schema={schema}
       />
 
-      <div className="min-h-screen pt-40 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-mesh opacity-40" />
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.7 }} className="max-w-3xl mb-16">
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 rounded-full text-sm font-medium">
-                <ShieldCheck className="w-4 h-4" /> Formazione obbligatoria D.Lgs 81/08
+      {/* ------------------------------------------------ apertura */}
+      <section className="pt-28">
+        <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[400px]">
+          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
+            className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-12 lg:py-14 flex flex-col justify-center text-white">
+            <div className="mb-4 flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold">
+                <ShieldCheck className="w-4 h-4 text-[#86efb4]" /> Formazione obbligatoria D.Lgs 81/08
               </span>
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-black/5 rounded-full text-sm font-medium">
-                <ScrollText className="w-4 h-4" /> Accordo Stato-Regioni 17 aprile 2025
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold">
+                <ScrollText className="w-4 h-4 text-[#86efb4]" /> Accordo Stato-Regioni 17 aprile 2025
               </span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Corsi di sicurezza sul lavoro online
-            </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              Metti in regola la tua azienda senza fermare il lavoro: {corsi.length} corsi in e-learning asincrono,
-              in convenzione con O.P.N. Italia Lavoro, con attestato verificabile tramite QR code a fine percorso.
+            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.05]">Corsi di sicurezza sul lavoro</h1>
+            <p className="mt-4 text-lg sm:text-xl text-gray-100">
+              Formazione e aggiornamento in e-learning. Metti in regola la tua azienda senza fermare il lavoro: {corsi.length} corsi in e-learning
+              asincrono, in convenzione con O.P.N. Italia Lavoro, con attestato verificabile tramite QR code a fine percorso.
             </p>
-
-            <div className="mt-8 border-l-2 border-gray-900 pl-5 text-[15px] text-gray-600 leading-relaxed">
-              <p>
-                I percorsi sono realizzati in convenzione con O.P.N. Italia Lavoro, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong>
-                {' '}e all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025.
-              </p>
-              <p className="mt-2">
-                Dal <strong>24 maggio 2026</strong>, concluso il periodo transitorio, l’Accordo disciplina in via
-                esclusiva durata e contenuti minimi della formazione: i corsi qui proposti seguono il nuovo impianto.
-              </p>
+            <div className="mt-8">
+              <button type="button" onClick={() => document.getElementById('trova')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                className={`${BTN_VERDE} text-lg px-7 py-3.5`}>Esplora i corsi</button>
             </div>
-            <p className="mt-6 text-[15px] text-gray-600">
-              Hai un’azienda in Calabria?{' '}
-              <Link to="/corsi-sicurezza-calabria" className="font-semibold text-gray-900 underline underline-offset-4">
-                Corsi di sicurezza online per le aziende calabresi
-              </Link>
-            </p>
           </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-20">
-            {VANTAGGI.map((v, i) => (
-              <motion.div
-                key={v.titolo}
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-xl p-6"
-              >
-                <v.icona className="w-6 h-6 mb-4" />
-                <h2 className="font-bold text-gray-900 mb-2">{v.titolo}</h2>
-                <p className="text-sm text-gray-600 leading-relaxed">{v.testo}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap gap-2 mb-10">
-            <button
-              onClick={() => setCategoriaAttiva('tutte')}
-              className={`px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
-                categoriaAttiva === 'tutte' ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-gray-400'
-              }`}
-            >
-              Tutti i corsi
-            </button>
-            {categorie.filter((cat) => corsi.some((c) => c.categoria === cat.id)).map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setCategoriaAttiva(cat.id)}
-                className={`px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
-                  categoriaAttiva === cat.id ? 'bg-black text-white border-black' : 'border-gray-200 text-gray-600 hover:border-gray-400'
-                }`}
-              >
-                {cat.nome}
-              </button>
-            ))}
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
-            {visibili.map((corso, i) => (
-              <motion.article
-                key={corso.id}
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: Math.min(i, 5) * 0.05 }}
-                className="group bg-white border-2 border-gray-100 rounded-xl overflow-hidden hover:border-black transition-all duration-300 flex flex-col"
-              >
-                <div className="aspect-[3/2] overflow-hidden">
-                  <img src={process.env.PUBLIC_URL + corso.immagine} alt={corso.titolo} className="w-full h-full object-cover object-center" loading="lazy" />
-                </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
-                    <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {corso.ore} ore</span>
-                    {corso.aggiornamento && <span className="inline-flex items-center gap-1"><RefreshCw className="w-3 h-3" /> aggiornamento</span>}
-                  </div>
-                  <h3 className="font-bold text-gray-900 mb-2 leading-snug">
-                    <Link to={`${BASE}/${corso.id}`} className="hover:underline">{corso.titolo}</Link>
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3 flex-1">{corso.destinatari}</p>
-                  <p className={`text-xs text-gray-500 ${corso.avviso ? 'mb-2' : 'mb-5'}`}>{corso.normativa} · ASR 17/04/2025</p>
-                  {corso.avviso && <p className="text-xs text-amber-800 mb-5">⚠ {corso.avviso}</p>}
-                  <div className="flex items-center justify-between gap-3">
-                    <span>
-                      {corso.lancio && (
-                        <span className="inline-block text-[11px] font-semibold uppercase tracking-wide text-white bg-black rounded px-2 py-0.5 mb-1.5">
-                          Prezzo di lancio · fino al 31 ottobre
-                        </span>
-                      )}
-                      <span className="block text-2xl font-bold text-gray-900 leading-none">{corso.prezzo}&nbsp;€</span>
-                      <span className="block text-xs text-gray-500 mt-1">IVA compresa</span>
-                    </span>
-                    <Button asChild className="bg-black text-white hover:bg-gray-800">
-                      <Link to={`${BASE}/${corso.id}`} aria-label={`Dettagli: ${corso.titolo}`}>Dettagli</Link>
-                    </Button>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-
-          <section className="mb-24">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">Come funziona</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {PASSI.map((p) => (
-                <div key={p.n}>
-                  <span className="text-5xl font-bold text-gray-200 block mb-3">{p.n}</span>
-                  <h3 className="font-bold text-gray-900 mb-2">{p.titolo}</h3>
-                  <p className="text-gray-600 leading-relaxed">{p.testo}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="mb-24 border-2 border-gray-100 rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Non sai quale corso ti serve?</h2>
-              <p className="text-gray-600 max-w-2xl">
-                Dal codice ATECO scopri se la tua attività è a rischio basso, medio o alto e quante ore servono ai
-                lavoratori. Nell’altra pagina, durata e scadenza di ogni corso secondo l’Accordo Stato-Regioni 2025.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                to="/durata-scadenza-corsi-sicurezza"
-                className="inline-flex items-center justify-center rounded-md border-2 border-black text-gray-900 font-semibold px-6 py-3 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
-              >
-                Durate e scadenze
-              </Link>
-              <Link
-                to="/codice-ateco-livello-di-rischio"
-                className="inline-flex items-center justify-center rounded-md border-2 border-black text-gray-900 font-semibold px-6 py-3 hover:bg-black hover:text-white transition-colors whitespace-nowrap"
-              >
-                Il mio codice ATECO
-              </Link>
-            </div>
-          </section>
-
-          <div className="bg-gray-50 rounded-2xl p-8 text-sm text-gray-600 leading-relaxed">
-            I corsi sono erogati in modalità e-learning asincrona in collaborazione tra <strong>O.P.N. Italia Lavoro</strong>
-            (Organismo Paritetico Nazionale), <strong>CNL – Confederazione Nazionale del Lavoro</strong> ed
-            <strong>EBAFoS</strong> (Organismo Paritetico Intersettoriale – Ente Bilaterale Nazionale), in conformità al
-            <strong>D.Lgs. 9 aprile 2008 n. 81</strong> e all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta
-            Ufficiale n. 119 del 24 maggio 2025 ed efficace senza più regime transitorio dal 24 maggio 2026.
-            <strong>MB Consulting di Mario Bruzzese</strong> è soggetto attuatore in convenzione con O.P.N. Italia
-            Lavoro (Convenzione n. CFAL.1866) e cura iscrizione, tutoraggio e assistenza; non è un Organismo
-            Paritetico. L’attestato è rilasciato al superamento del test finale, indica come soggetto formatore
-            O.P.N. Italia Lavoro – CNL – EBAFoS ed è verificabile tramite QR code sul sito opnitalialavoro.it.
+          <div className="relative aspect-[16/9] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(12%_0,100%_0,100%_100%,0_100%)]">
+            <img src="/img/corsi-sicurezza-hero.webp" alt="Un formatore spiega la sicurezza sul lavoro a un gruppo di partecipanti" width="482" height="275"
+              className="absolute inset-0 w-full h-full object-cover" />
           </div>
         </div>
-      </div>
-    </>
+      </section>
+
+      {/* ------------------------------------------------ ricerca e categorie */}
+      <section id="trova" className="bg-[#eef8f2] scroll-mt-24">
+        <div className="max-w-6xl mx-auto px-6 py-10">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Trova il tuo corso</h2>
+          <label className="mt-5 relative block">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <input type="search" value={cerca} onChange={(e) => setCerca(e.target.value)} aria-label="Cerca un corso"
+              placeholder="Cerca un corso (es. formazione generale, RSPP, HACCP…)"
+              className="w-full rounded-xl border-2 border-gray-200 bg-white pl-12 pr-4 py-3.5 text-gray-900 focus:border-[#0f8a6a] focus:outline-none" />
+          </label>
+          <div className="mt-4 flex flex-wrap gap-2" role="tablist" aria-label="Categorie di corsi">
+            {categorieVisibili.map((cat) => {
+              const attiva = !cerca && categoriaAttiva === cat.id;
+              return (
+                <button key={cat.id} type="button" role="tab" aria-selected={attiva}
+                  onClick={() => { setCategoriaAttiva(cat.id); setCerca(''); setTuttiVisibili(false); }}
+                  className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-colors ${attiva ? 'border-[#0f8a6a] bg-[#0f8a6a] text-white' : 'border-gray-200 bg-white text-gray-800 hover:border-[#0f8a6a]'}`}>
+                  {cat.nome}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------ elenco */}
+      <section className="max-w-6xl mx-auto px-6 pt-10 pb-14">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+          {cerca ? `Risultati per «${cerca}»` : TITOLO_CATEGORIA[categoriaAttiva] || categoriaCorrente?.nome}
+        </h2>
+        <p className="mt-2 text-gray-600">
+          {cerca ? `${elenco.length} ${elenco.length === 1 ? 'corso trovato' : 'corsi trovati'}.` : `${categoriaCorrente?.descrizione || ''}. Percorsi in e-learning conformi al D.Lgs. 81/08 e all’Accordo Stato-Regioni 2025.`}
+        </p>
+        {elenco.length === 0 && (
+          <p className="mt-8 rounded-xl bg-gray-50 p-6 text-gray-700">
+            Nessun corso corrisponde alla ricerca. Prova con un’altra parola o <a className="underline font-semibold" href={linkWhatsApp(`Ciao, cerco un corso: ${cerca}`)} target="_blank" rel="noopener noreferrer">scrivici su WhatsApp</a>.
+          </p>
+        )}
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {elencoMostrato.map((corso) => {
+            const Icona = iconaCorso(corso);
+            return (
+              <article key={corso.id} className="flex flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-[#0f8a6a]/40 transition">
+                <div className="flex gap-4">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#e3f7ec] text-[#0f8a6a]"><Icona className="w-7 h-7" /></span>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-bold text-gray-900 leading-snug">
+                      <Link to={`${BASE}/${corso.id}`} className="hover:underline">{corso.titolo}</Link>
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-600 leading-relaxed">{corso.destinatari}</p>
+                    {corso.aggiornamento && <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-700"><RefreshCw className="w-3 h-3" /> Aggiornamento</span>}
+                    {corso.avviso && <p className="mt-2 text-xs text-amber-800">⚠ {corso.avviso}</p>}
+                  </div>
+                </div>
+                <div className="mt-auto pt-5">
+                  <div className="flex items-center gap-3 border-t border-gray-100 pt-4">
+                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm text-gray-700"><Clock className="w-4 h-4" /> {corso.ore} ore</span>
+                    <span className="inline-flex items-start gap-1.5">
+                      <Tag className="w-4 h-4 mt-1 text-gray-700" />
+                      <span>
+                        {corso.lancio && <span className="block text-[10px] font-bold uppercase tracking-wide text-[#0f8a6a]">Prezzo di lancio · fino al 31 ottobre</span>}
+                        <span className="block text-lg font-bold text-gray-900 leading-none">{corso.prezzo}&nbsp;€</span>
+                        <span className="block whitespace-nowrap text-[11px] leading-tight text-gray-500">per partecipante<br />IVA inclusa</span>
+                      </span>
+                    </span>
+                    <Link to={`${BASE}/${corso.id}`} aria-label={`Vedi il corso: ${corso.titolo}`}
+                      className="ml-auto shrink-0 rounded-lg bg-[#0f8a6a] px-3.5 py-2 text-sm font-bold text-white hover:bg-[#0c7458] transition-colors">
+                      Vedi il corso
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        {!cerca && elenco.length > LIMITE && (
+          <div className="mt-8 text-center">
+            <button type="button" onClick={() => setTuttiVisibili(!tuttiVisibili)}
+              className="inline-flex items-center gap-2 font-bold text-[#0f8a6a] underline underline-offset-4 hover:text-[#0b5e48]">
+              {tuttiVisibili ? 'Mostra meno corsi' : `Mostra tutti i ${(TITOLO_CATEGORIA[categoriaAttiva] || 'corsi').replace(/^Corsi /, 'corsi ')} (${elenco.length})`}
+              <ArrowRight className={`w-4 h-4 transition-transform ${tuttiVisibili ? '-rotate-90' : ''}`} />
+            </button>
+          </div>
+        )}
+      </section>
+
+      {/* ------------------------------------------------ vantaggi e normativa */}
+      <section className="max-w-6xl mx-auto px-6 pb-14">
+        <div className="grid gap-5 md:grid-cols-3">
+          {VANTAGGI.map((v) => (
+            <div key={v.titolo} className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e3f7ec] text-[#0f8a6a]"><v.icona className="w-6 h-6" /></span>
+              <h3 className="mt-4 text-xl font-bold text-gray-900">{v.titolo}</h3>
+              <p className="mt-2 text-gray-700 leading-relaxed">{v.testo}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 border-l-4 border-[#0f8a6a] bg-[#f6fbf8] rounded-r-xl px-6 py-5 text-[15px] text-gray-700 leading-relaxed">
+          <p>
+            I percorsi sono realizzati in convenzione con O.P.N. Italia Lavoro, in conformità al <strong>D.Lgs. 9 aprile 2008 n. 81</strong>
+            {' '}e all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta Ufficiale n. 119 del 24 maggio 2025.
+          </p>
+          <p className="mt-2">
+            Dal <strong>24 maggio 2026</strong>, concluso il periodo transitorio, l’Accordo disciplina in via
+            esclusiva durata e contenuti minimi della formazione: i corsi qui proposti seguono il nuovo impianto.
+          </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------ come funziona */}
+      <section className="bg-[#eef8f2] py-14">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Come funziona l’iscrizione</h2>
+          <div className="mt-2 h-1 w-14 rounded bg-[#0f8a6a]" />
+          <ol className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {PASSI.map((p, i) => (
+              <li key={p.titolo} className="flex gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0f8a6a] text-white font-bold text-lg">{i + 1}</span>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 leading-snug">{p.titolo}</h3>
+                  <p className="mt-1 text-gray-700 leading-relaxed">{p.testo}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------ modalità e attestati */}
+      <section className="max-w-6xl mx-auto px-6 py-14">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Modalità e attestati</h2>
+        <div className="mt-2 h-1 w-14 rounded bg-[#0f8a6a]" />
+        <div className="mt-8 divide-y divide-gray-200 rounded-xl border border-gray-200">
+          {DOMANDE.map((d) => (
+            <details key={d.domanda} className="group px-5">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg font-bold text-gray-900 [&::-webkit-details-marker]:hidden">
+                {d.domanda}
+                <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="pb-5 text-gray-700 leading-relaxed">{d.risposta}</div>
+            </details>
+          ))}
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
+          <div className="rounded-2xl border border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900">Non sai quale corso ti serve?</h3>
+            <p className="mt-2 text-gray-700">
+              Dal codice ATECO scopri se la tua attività è a rischio basso, medio o alto e quante ore servono ai
+              lavoratori. Nell’altra pagina, durata e scadenza di ogni corso secondo l’Accordo Stato-Regioni 2025.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link to="/codice-ateco-livello-di-rischio" className="rounded-lg border-2 border-[#0f8a6a] px-4 py-2 font-bold text-[#0b5e48] hover:bg-[#e3f7ec]">Il mio codice ATECO</Link>
+              <Link to="/durata-scadenza-corsi-sicurezza" className="rounded-lg border-2 border-[#0f8a6a] px-4 py-2 font-bold text-[#0b5e48] hover:bg-[#e3f7ec]">Durate e scadenze</Link>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900">Hai un’azienda in Calabria?</h3>
+            <p className="mt-2 text-gray-700">I corsi più richiesti dalle aziende calabresi, dal turismo all’HACCP, in una pagina dedicata.</p>
+            <Link to="/corsi-sicurezza-calabria" className="mt-4 inline-flex items-center gap-2 font-bold text-[#0f8a6a] hover:text-[#0b5e48]">Corsi di sicurezza online per le aziende calabresi <ArrowRight className="w-4 h-4" /></Link>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-2xl bg-gray-50 p-6 sm:p-8 text-sm text-gray-600 leading-relaxed">
+          I corsi sono erogati in modalità e-learning asincrona in collaborazione tra <strong>O.P.N. Italia Lavoro</strong>
+          {' '}(Organismo Paritetico Nazionale), <strong>CNL – Confederazione Nazionale del Lavoro</strong> ed
+          {' '}<strong>EBAFoS</strong> (Organismo Paritetico Intersettoriale – Ente Bilaterale Nazionale), in conformità al
+          {' '}<strong>D.Lgs. 9 aprile 2008 n. 81</strong> e all’<strong>{ACCORDO}</strong>, pubblicato in Gazzetta
+          {' '}Ufficiale n. 119 del 24 maggio 2025 ed efficace senza più regime transitorio dal 24 maggio 2026.
+          {' '}<strong>MB Consulting di Mario Bruzzese</strong> è soggetto attuatore in convenzione con O.P.N. Italia
+          {' '}Lavoro (Convenzione n. CFAL.1866) e cura iscrizione, tutoraggio e assistenza; non è un Organismo
+          {' '}Paritetico. L’attestato è rilasciato al superamento del test finale, indica come soggetto formatore
+          {' '}O.P.N. Italia Lavoro – CNL – EBAFoS ed è verificabile tramite QR code sul sito opnitalialavoro.it.
+        </div>
+      </section>
+
+      {/* ------------------------------------------------ aiuto */}
+      <section className="bg-[#0f2742] text-white">
+        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 className="text-3xl sm:text-4xl font-bold">Ti serve aiuto a scegliere il corso?</h2>
+            <p className="mt-2 text-lg text-gray-200">Ti aiutiamo a trovare il percorso giusto per te o per i tuoi dipendenti.</p>
+          </div>
+          <a href={linkWhatsApp('Ciao, mi aiutate a scegliere il corso di sicurezza giusto?')} target="_blank" rel="noopener noreferrer"
+            className={`${BTN_VERDE} shrink-0 text-lg px-8 py-3.5`}>
+            <MessageCircle className="w-5 h-5" /> Chiedi assistenza
+          </a>
+        </div>
+      </section>
+    </div>
   );
 }
