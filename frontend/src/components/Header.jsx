@@ -25,6 +25,9 @@ const Header = () => {
     { name: 'FAQ', path: '/faq' }
   ];
 
+  // Voce attiva anche nelle sottopagine (es. le schede dei corsi sotto /corsi-sicurezza/...)
+  const attiva = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
+
   const scrollToContact = () => {
     const footer = document.getElementById('contatti');
     if (footer) {
@@ -39,18 +42,18 @@ const Header = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, type: 'spring', damping: 20 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-2xl' : 'bg-white shadow-md'
+        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white shadow-sm'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3 group">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex h-[88px] items-center justify-between">
+          <Link to="/" aria-label="MB Consulting, vai alla home" className="flex items-center rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f8a6a]">
             <motion.img
-              whileHover={{ scale: 1.05, rotate: 5 }}
+              whileHover={{ scale: 1.04 }}
               transition={{ duration: 0.3 }}
               src={process.env.PUBLIC_URL + "/logo.png"}
               alt="MB Consulting"
-              className="h-20 w-auto"
+              className="h-[72px] w-auto"
             />
           </Link>
 
@@ -64,17 +67,18 @@ const Header = () => {
               >
                 <Link
                   to={link.path}
-                  className={`text-sm font-medium transition-colors duration-200 relative group ${
-                    location.pathname === link.path
-                      ? 'text-black'
-                      : 'text-gray-600 hover:text-black'
+                  aria-current={attiva(link.path) ? 'page' : undefined}
+                  className={`relative inline-block py-1 text-[15px] transition-colors duration-200 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f8a6a] focus-visible:ring-offset-4 ${
+                    attiva(link.path)
+                      ? 'font-bold text-[#0f2742]'
+                      : 'font-medium text-[#0f2742]/80 hover:text-[#0f2742]'
                   }`}
                 >
                   {link.name}
                   <motion.span
-                    className="absolute -bottom-1 left-0 h-0.5 bg-black"
+                    className="absolute -bottom-1 left-0 h-[3px] rounded-full bg-[#0f8a6a]"
                     initial={{ width: 0 }}
-                    animate={{ width: location.pathname === link.path ? '100%' : 0 }}
+                    animate={{ width: attiva(link.path) ? '100%' : 0 }}
                     whileHover={{ width: '100%' }}
                     transition={{ duration: 0.3 }}
                   />
@@ -92,7 +96,7 @@ const Header = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={scrollToContact}
-                className="bg-black text-white hover:bg-gray-800 transition-all duration-300 shadow-md hover:shadow-2xl btn-modern"
+                className="h-11 rounded-lg bg-[#0f8a6a] px-6 text-[15px] font-bold text-white shadow-md shadow-[#0f8a6a]/25 hover:bg-[#0c7458] hover:shadow-lg transition-all duration-300"
               >
                 Contattaci
               </Button>
@@ -102,7 +106,9 @@ const Header = () => {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-gray-700 hover:text-black transition-colors"
+            aria-label={isMobileMenuOpen ? 'Chiudi il menu' : 'Apri il menu'}
+            aria-expanded={isMobileMenuOpen}
+            className="lg:hidden -mr-2 flex h-11 w-11 items-center justify-center rounded-lg text-[#0f2742] hover:bg-[#eef8f2] transition-colors"
           >
             <AnimatePresence mode="wait">
               {isMobileMenuOpen ? (
@@ -139,7 +145,7 @@ const Header = () => {
               transition={{ duration: 0.3 }}
               className="lg:hidden overflow-hidden"
             >
-              <div className="mt-4 pb-4 border-t border-gray-200 pt-4">
+              <div className="pb-4 border-t border-gray-200 pt-4">
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link, index) => (
                     <motion.div
@@ -151,10 +157,11 @@ const Header = () => {
                       <Link
                         to={link.path}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`text-sm font-medium transition-colors block ${
-                          location.pathname === link.path
-                            ? 'text-black'
-                            : 'text-gray-600'
+                        aria-current={attiva(link.path) ? 'page' : undefined}
+                        className={`block border-l-[3px] py-1 pl-3 text-base transition-colors ${
+                          attiva(link.path)
+                            ? 'border-[#0f8a6a] font-bold text-[#0f2742]'
+                            : 'border-transparent font-medium text-[#0f2742]/80'
                         }`}
                       >
                         {link.name}
@@ -163,7 +170,7 @@ const Header = () => {
                   ))}
                   <Button
                     onClick={scrollToContact}
-                    className="bg-black text-white hover:bg-gray-800 w-full"
+                    className="h-11 w-full rounded-lg bg-[#0f8a6a] text-base font-bold text-white shadow-md shadow-[#0f8a6a]/25 hover:bg-[#0c7458]"
                   >
                     Contattaci
                   </Button>

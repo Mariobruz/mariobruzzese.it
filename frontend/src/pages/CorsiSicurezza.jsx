@@ -237,7 +237,7 @@ export default function CorsiSicurezza() {
         />
 
         {/* ------------------------------------------------ intestazione */}
-        <section className="pt-28 bg-[#0f2742] text-white">
+        <section className="pt-[88px] bg-[#0f2742] text-white">
           <div className="max-w-6xl mx-auto px-6 pt-8 pb-10">
             <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
               <Link to={BASE} className="inline-flex items-center gap-2 text-gray-200 hover:text-white transition-colors">
@@ -445,7 +445,7 @@ export default function CorsiSicurezza() {
       />
 
       {/* ------------------------------------------------ apertura */}
-      <section className="pt-28">
+      <section className="pt-[88px]">
         <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[580px]">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
             className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">

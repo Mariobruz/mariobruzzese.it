@@ -39,7 +39,7 @@ const Home = () => {
       />
 
       {/* ------------------------------------------------ apertura */}
-      <section className="pt-28">
+      <section className="pt-[88px]">
         <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[580px]">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
             className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
