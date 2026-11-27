@@ -278,7 +278,7 @@ const CaseStudies = () => {
 
       {/* ------------------------------------------------ apertura */}
       <section className="pt-28">
-        <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[460px]">
+        <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[580px]">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
             className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
             <p className="mb-4 inline-flex w-fit items-center rounded-full bg-[#0f8a6a] px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-white">La formula win-win</p>
@@ -292,7 +292,7 @@ const CaseStudies = () => {
               <button type="button" onClick={() => scorri('iso-9001')} className="text-lg font-semibold underline underline-offset-8 decoration-2 hover:text-[#86efb4]">Guarda gli esempi</button>
             </div>
           </motion.div>
-          <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(12%_0,100%_0,100%_100%,0_100%)]">
+          <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
             <img src="/img/casi-studio/hero-m.webp" alt="Un consulente mostra un preventivo a una imprenditrice su un tablet" width="492" height="377"
               className="absolute inset-0 w-full h-full object-cover object-[30%_center]" />
           </div>

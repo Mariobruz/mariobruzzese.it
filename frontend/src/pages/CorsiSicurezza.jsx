@@ -442,9 +442,9 @@ export default function CorsiSicurezza() {
 
       {/* ------------------------------------------------ apertura */}
       <section className="pt-28">
-        <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[400px]">
+        <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[580px]">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
-            className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-12 lg:py-14 flex flex-col justify-center text-white">
+            className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
             <div className="mb-4 flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold">
                 <ShieldCheck className="w-4 h-4 text-[#86efb4]" /> Formazione obbligatoria D.Lgs 81/08
@@ -463,7 +463,7 @@ export default function CorsiSicurezza() {
                 className={`${BTN_VERDE} text-lg px-7 py-3.5`}>Esplora i corsi</button>
             </div>
           </motion.div>
-          <div className="relative aspect-[16/9] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(12%_0,100%_0,100%_100%,0_100%)]">
+          <div className="relative aspect-[16/9] lg:aspect-auto overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
             <img src="/img/corsi-sicurezza-hero.webp" alt="Un formatore spiega la sicurezza sul lavoro a un gruppo di partecipanti" width="482" height="275"
               className="absolute inset-0 w-full h-full object-cover" />
           </div>

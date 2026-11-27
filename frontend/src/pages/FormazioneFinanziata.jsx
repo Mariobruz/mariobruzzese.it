@@ -277,7 +277,7 @@ export default function FormazioneFinanziata() {
 
       {/* ------------------------------------------------ apertura */}
       <section className="pt-28">
-        <div className="grid lg:grid-cols-2 bg-[#0f2e2c] lg:min-h-[480px]">
+        <div className="grid lg:grid-cols-2 bg-[#0f2e2c] lg:min-h-[580px]">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
             className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
             <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.02]">
@@ -291,7 +291,7 @@ export default function FormazioneFinanziata() {
               <button type="button" onClick={() => scorri('come-funziona')} className="text-lg font-semibold underline underline-offset-8 decoration-2 hover:text-[#86efb4]">Come funziona</button>
             </div>
           </motion.div>
-          <div className="relative min-h-[260px] lg:min-h-0 overflow-hidden lg:[clip-path:polygon(8%_0,100%_0,100%_100%,0_100%)]">
+          <div className="relative min-h-[260px] lg:min-h-0 overflow-hidden lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]">
             <img src="/img/formazione-finanziata-team.webp" alt="Un formatore con un gruppo di dipendenti durante un corso in azienda" width="761" height="378"
               className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
