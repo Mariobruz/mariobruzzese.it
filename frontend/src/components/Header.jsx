@@ -22,7 +22,7 @@ const Header = () => {
     { name: 'Come Funziona', path: '/come-funziona' },
     { name: 'Servizi', path: '/servizi' },
     { name: 'Perché Noi', path: '/perche-noi' },
-    { name: 'Casi Studio', path: '/casi-studio' },
+    { name: 'Per i professionisti', path: '/professionisti' },
     { name: 'Corsi Sicurezza', path: '/corsi-sicurezza' },
     { name: 'FAQ', path: '/faq' }
   ];

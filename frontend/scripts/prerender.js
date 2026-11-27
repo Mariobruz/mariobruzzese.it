@@ -274,6 +274,21 @@ for (const page of [...pages, ...schede, ...iscrizioni]) {
   ok(`/${page.slug} → build/${page.slug}.html + build/${page.slug}/index.html`);
 }
 
+// Indirizzi spostati: pagina ponte che rimanda al nuovo indirizzo (GitHub Pages non fa redirect 301)
+const SPOSTATE = { 'casi-studio': 'professionisti' };
+for (const [vecchio, nuovo] of Object.entries(SPOSTATE)) {
+  const url = `${BASE}/${nuovo}`;
+  const ponte = `<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><title>Pagina spostata</title>` +
+    `<link rel="canonical" href="${url}"><meta name="robots" content="noindex,follow">` +
+    `<meta http-equiv="refresh" content="0; url=${url}">` +
+    `<script>location.replace('/${nuovo}' + location.search + location.hash)</script></head>` +
+    `<body><p>La pagina si è spostata: <a href="${url}">${url}</a></p></body></html>`;
+  fs.writeFileSync(path.join(BUILD, `${vecchio}.html`), ponte, 'utf8');
+  fs.mkdirSync(path.join(BUILD, vecchio), { recursive: true });
+  fs.writeFileSync(path.join(BUILD, vecchio, 'index.html'), ponte, 'utf8');
+  ok(`/${vecchio} → rimanda a /${nuovo}`);
+}
+
 // sitemap.xml sempre allineata alle rotte
 const today = new Date().toISOString().slice(0, 10);
 const sitemap =

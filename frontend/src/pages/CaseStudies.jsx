@@ -178,7 +178,7 @@ function ModuloContatto({ settore, setSettore, campoRef }) {
           name: dati.nome.trim(), email: dati.email.trim(), phone: dati.telefono.trim(), company: dati.azienda.trim(),
           settore: settore || 'Non indicato',
           message: `Settore del progetto: ${settore || 'non indicato'}\n\n${dati.descrizione.trim()}`,
-          source: 'casi_studio', _subject: `Casi studio — progetto ${settore || 'da valutare'}`,
+          source: 'professionisti', _subject: `Formula win-win — progetto ${settore || 'da valutare'}`,
         }),
       });
       if (!r.ok) throw new Error();
@@ -262,17 +262,17 @@ const CaseStudies = () => {
   };
 
   const schema = JSON.stringify({
-    '@context': 'https://schema.org', '@type': 'WebPage', name: 'Casi studio — formazione finanziata per professionisti e aziende',
-    url: 'https://www.mariobruzzese.it/casi-studio',
+    '@context': 'https://schema.org', '@type': 'WebPage', name: 'Per i professionisti — la formula win-win della formazione finanziata',
+    url: 'https://www.mariobruzzese.it/professionisti',
   });
 
   return (
     <div className="bg-white">
       <WhatsAppFisso testo={MSG_WA} />
       <SEOHead
-        title="Casi studio | Formazione finanziata per professionisti e aziende"
+        title="Per i professionisti | La formula win-win della formazione finanziata"
         description="Scopri come integrare la formazione finanziata nei tuoi progetti e rendere più competitivi i preventivi per ISO, sicurezza, Modello 231, siti web e altri servizi."
-        canonical="https://www.mariobruzzese.it/casi-studio"
+        canonical="https://www.mariobruzzese.it/professionisti"
         schema={schema}
       />
 
@@ -281,6 +281,7 @@ const CaseStudies = () => {
         <div className="grid lg:grid-cols-2 bg-[#0f2742] lg:min-h-[460px]">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}
             className="px-6 sm:px-12 lg:pl-[max(3rem,calc((100vw-80rem)/2+1.5rem))] py-14 lg:py-16 flex flex-col justify-center text-white">
+            <p className="mb-4 inline-flex w-fit items-center rounded-full bg-[#0f8a6a] px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-white">La formula win-win</p>
             <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.05]">Più clienti, senza regalare la formazione</h1>
             <p className="mt-6 text-lg sm:text-xl text-gray-100 max-w-xl">
               Rendi più competitivo il tuo preventivo mantenendo il tuo compenso. Se il fondo copre la formazione del personale, l’azienda ottiene
@@ -301,7 +302,8 @@ const CaseStudies = () => {
       <div className="max-w-6xl mx-auto px-6">
         {/* ------------------------------------------------ tre schede */}
         <section className="pt-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Un vantaggio per tutti e tre</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-[#0f8a6a]">La formula win-win</p>
+          <h2 className="mt-1 text-3xl sm:text-4xl font-bold text-gray-900">Un vantaggio per tutti e tre</h2>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {ATTORI.map((a, i) => {
               const Icona = a.icona;

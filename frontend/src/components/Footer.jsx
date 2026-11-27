@@ -38,8 +38,8 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/casi-studio" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Casi Studio
+                <a href="/professionisti" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Per i professionisti
                 </a>
               </li>
               <li>

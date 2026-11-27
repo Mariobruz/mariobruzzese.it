@@ -1,5 +1,5 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -31,7 +31,8 @@ function App() {
           <Route path="/come-funziona" element={<HowItWorks />} />
           <Route path="/servizi" element={<Services />} />
           <Route path="/perche-noi" element={<WhyChooseUs />} />
-          <Route path="/casi-studio" element={<CaseStudies />} />
+          <Route path="/professionisti" element={<CaseStudies />} />
+          <Route path="/casi-studio" element={<Navigate to="/professionisti" replace />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/corsi-sicurezza" element={<CorsiSicurezza />} />
           <Route path="/durata-scadenza-corsi-sicurezza" element={<ScadenzeCorsi />} />

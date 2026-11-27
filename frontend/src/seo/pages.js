@@ -76,7 +76,7 @@ const pages = [
       </ul>
       <h2>Come funzionano i Fondi Interprofessionali?</h2>
       <p>Ogni azienda versa mensilmente all'INPS lo 0,30% dei contributi per i propri dipendenti. Aderendo a un fondo interprofessionale, queste risorse vengono accantonate e rese disponibili per finanziare la formazione aziendale tramite Conto Formazione (risorse accumulate dalla singola azienda) oppure tramite Avvisi e bandi collettivi, ideali per le PMI.</p>
-      <p>Approfondisci: <a href="/come-funziona">come funzionano i fondi</a>, <a href="/servizi">i servizi</a>, <a href="/casi-studio">i casi studio</a>, <a href="/faq">le domande frequenti</a>.</p>
+      <p>Approfondisci: <a href="/come-funziona">come funzionano i fondi</a>, <a href="/servizi">i servizi</a>, <a href="/professionisti">la formula per i professionisti</a>, <a href="/faq">le domande frequenti</a>.</p>
       <p>Contattaci per una consulenza gratuita: <a href="mailto:info@mariobruzzese.it">info@mariobruzzese.it</a></p>
     `,
   },
@@ -182,14 +182,15 @@ const pages = [
     `,
   },
   {
-    slug: 'casi-studio',
-    title: `Casi studio | Formazione finanziata per professionisti e aziende | ${SITE}`,
+    slug: 'professionisti',
+    title: `Per i professionisti | La formula win-win della formazione finanziata | ${SITE}`,
     description:
       'Scopri come integrare la formazione finanziata nei tuoi progetti e rendere più competitivi i preventivi per ISO, sicurezza, Modello 231, siti web e altri servizi.',
     priority: '0.8',
     changefreq: 'monthly',
-    schema: [breadcrumb('Casi studio', `${BASE}/casi-studio`)],
+    schema: [breadcrumb('Per i professionisti', `${BASE}/professionisti`)],
     noscript: `
+      <p>La formula win-win</p>
       <h1>Più clienti, senza regalare la formazione</h1>
       <p>Per professionisti, studi e agenzie che vendono servizi alle aziende: se il fondo copre la formazione del personale, l'azienda ottiene lo stesso servizio e spende meno per il progetto complessivo, mentre il professionista mantiene il proprio compenso. MB Consulting verifica se la formazione è finanziabile, gestisce il piano ed eroga la formazione.</p>
       <h2>ISO 9001: un esempio di preventivo</h2>
