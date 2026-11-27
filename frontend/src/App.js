@@ -6,7 +6,6 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Toaster } from "@/components/ui/toaster";
 import BannerConsenso from "@/components/BannerConsenso";
 import Home from "@/pages/Home";
-import HowItWorks from "@/pages/HowItWorks";
 import Services from "@/pages/Services";
 import WhyChooseUs from "@/pages/WhyChooseUs";
 import CaseStudies from "@/pages/CaseStudies";
@@ -28,7 +27,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/come-funziona" element={<HowItWorks />} />
+          <Route path="/come-funziona" element={<Navigate to="/servizi" replace />} />
           <Route path="/servizi" element={<Services />} />
           <Route path="/perche-noi" element={<WhyChooseUs />} />
           <Route path="/professionisti" element={<CaseStudies />} />

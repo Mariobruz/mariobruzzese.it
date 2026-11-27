@@ -172,7 +172,7 @@ const Home = () => {
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
-                  onClick={() => navigate('/come-funziona')}
+                  onClick={() => navigate('/servizi')}
                   size="lg"
                   variant="outline"
                   className="border-2 border-black text-black hover:bg-black hover:text-white text-lg px-8 py-6 transition-all duration-300"

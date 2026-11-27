@@ -76,7 +76,7 @@ const pages = [
       </ul>
       <h2>Come funzionano i Fondi Interprofessionali?</h2>
       <p>Ogni azienda versa mensilmente all'INPS lo 0,30% dei contributi per i propri dipendenti. Aderendo a un fondo interprofessionale, queste risorse vengono accantonate e rese disponibili per finanziare la formazione aziendale tramite Conto Formazione (risorse accumulate dalla singola azienda) oppure tramite Avvisi e bandi collettivi, ideali per le PMI.</p>
-      <p>Approfondisci: <a href="/come-funziona">come funzionano i fondi</a>, <a href="/servizi">i servizi</a>, <a href="/professionisti">la formula per i professionisti</a>, <a href="/faq">le domande frequenti</a>.</p>
+      <p>Approfondisci: <a href="/servizi">i servizi e come lavoriamo</a>, <a href="/professionisti">la formula per i professionisti</a>, <a href="/faq">le domande frequenti</a>.</p>
       <p>Contattaci per una consulenza gratuita: <a href="mailto:info@mariobruzzese.it">info@mariobruzzese.it</a></p>
     `,
   },
@@ -120,48 +120,6 @@ const pages = [
       <h2>Come lavoriamo insieme</h2>
       <p>1. Verifica iniziale. 2. Piano formativo. 3. Erogazione e chiusura.</p>
       <p>Vai al <a href="/formazione-finanziata">catalogo della formazione finanziata</a>, ai <a href="/corsi-sicurezza">corsi di sicurezza</a> o alla <a href="/professionisti">formula per i professionisti</a>.</p>
-      <p>Vedi anche: <a href="/come-funziona">come funziona</a> e <a href="/perche-noi">perché sceglierci</a>.</p>
-    `,
-  },
-  {
-    slug: 'come-funziona',
-    title: `Come Funzionano i Fondi Interprofessionali | ${SITE}`,
-    description:
-      'Come funzionano i fondi interprofessionali? In pochi passi finanzi la formazione dei dipendenti al 100%. Scopri il metodo MB Consulting.',
-    priority: '0.8',
-    changefreq: 'monthly',
-    schema: [
-      {
-        '@context': 'https://schema.org',
-        '@type': 'HowTo',
-        name: 'Come accedere ai fondi interprofessionali',
-        description:
-          'Guida passo-passo per accedere ai fondi interprofessionali e ottenere formazione aziendale finanziata al 100%.',
-        step: [
-          { '@type': 'HowToStep', position: 1, name: 'Analisi iniziale', text: 'Analizziamo la tua azienda e identifichiamo il fondo più adatto.' },
-          { '@type': 'HowToStep', position: 2, name: 'Analisi dei fabbisogni', text: 'Individuiamo le reali esigenze formative, anche quelle non esplicite.' },
-          { '@type': 'HowToStep', position: 3, name: 'Progettazione del piano', text: 'Costruiamo il piano formativo conforme ai requisiti del fondo.' },
-          { '@type': 'HowToStep', position: 4, name: 'Coordinamento completo', text: 'Coordiniamo azienda, ente di formazione e docenti.' },
-          { '@type': 'HowToStep', position: 5, name: 'Erogazione della formazione', text: 'Organizziamo e supervisioniamo le attività formative.' },
-          { '@type': 'HowToStep', position: 6, name: 'Gestione amministrativa', text: 'Prepariamo la documentazione per controlli e rendicontazione.' },
-        ],
-      },
-      breadcrumb('Come funziona', `${BASE}/come-funziona`),
-    ],
-    noscript: `
-      <h1>Come Funzionano i Fondi Interprofessionali</h1>
-      <p>Ogni azienda versa all'INPS lo 0,30% dei contributi per i propri dipendenti. Aderendo a un fondo interprofessionale, quelle risorse tornano disponibili per finanziare la formazione aziendale.</p>
-      <h2>Il processo in 6 fasi</h2>
-      <ol>
-        <li><strong>Analisi Iniziale</strong> — Individuiamo il fondo interprofessionale più adatto alla tua azienda.</li>
-        <li><strong>Analisi Fabbisogni</strong> — Rileviamo le reali esigenze formative, anche quelle non esplicite.</li>
-        <li><strong>Progettazione Piano</strong> — Costruiamo il piano formativo conforme ai requisiti del fondo.</li>
-        <li><strong>Coordinamento Completo</strong> — Gestiamo azienda, ente di formazione e docenti.</li>
-        <li><strong>Erogazione Formazione</strong> — Supervisioniamo qualità ed efficacia didattica.</li>
-        <li><strong>Gestione Amministrativa</strong> — Curiamo documentazione e rendicontazione finale.</li>
-      </ol>
-      <h2>Conto Formazione o Avviso?</h2>
-      <p>Il <strong>Conto Formazione</strong> raccoglie le risorse della singola azienda, utilizzabili in autonomia per piani personalizzati. Gli <strong>Avvisi</strong> sono bandi collettivi periodici, ideali per le PMI con quote accantonate ridotte.</p>
     `,
   },
   {
