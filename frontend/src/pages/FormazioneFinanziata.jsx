@@ -481,7 +481,7 @@ export default function FormazioneFinanziata() {
                 </div>
                 <label className="flex gap-3 items-start mt-8 text-sm text-gray-700 leading-relaxed">
                   <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} className="mt-1 w-4 h-4 accent-[#0f2e2c]" />
-                  <span>Ho letto l’<Link to="/privacy" target="_blank" className="underline font-bold text-gray-900">informativa privacy</Link> e acconsento al trattamento dei dati per la gestione della richiesta. <span className="text-rose-500">*</span></span>
+                  <span>Ho letto l’<Link to="/privacy" target="_blank" className="underline font-bold text-gray-900">informativa privacy</Link>, che spiega come vengono trattati i dati inviati con questa richiesta. <span className="text-rose-500">*</span></span>
                 </label>
                 {invio.stato === 'errore' && <p role="alert" className="mt-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">{invio.messaggio}</p>}
                 <button type="submit" disabled={invio.stato === 'invio'}

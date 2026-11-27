@@ -16,7 +16,7 @@ const Privacy = () => (
   <DocumentoLegale
     titolo="Informativa privacy"
     sommario="Informativa resa ai sensi degli articoli 13 e 14 del Regolamento (UE) 2016/679 sul trattamento dei dati personali raccolti tramite il sito mariobruzzese.it."
-    aggiornamento="1 ottobre 2026"
+    aggiornamento="27 novembre 2026"
     seo={{
       title: 'Informativa privacy',
       description:
@@ -77,6 +77,21 @@ const Privacy = () => (
         ]}
       />
       <p>
+        <strong>Dati delle richieste di formazione finanziata.</strong> Se un’azienda chiede di aderire ai corsi
+        finanziati dalla pagina «Formazione finanziata», trattiamo:
+      </p>
+      <Elenco
+        voci={[
+          'dati dell’azienda: ragione sociale, partita IVA, eventuale codice fiscale, matricola INPS, codice ATECO, numero di dipendenti, sede, PEC e adesione dichiarata a FonARCom;',
+          'dati del referente: nome e cognome, ruolo, email e telefono;',
+          'dati della richiesta: corsi scelti, numero di partecipanti per corso, modalità e periodo preferiti, eventuali note e, se presente nel link, il nome della campagna da cui è arrivata la richiesta.',
+        ]}
+      />
+      <p>
+        In questa fase non chiediamo i nominativi dei lavoratori: verranno raccolti solo se la richiesta prosegue con
+        l’inserimento nel piano formativo, con un’informativa dedicata.
+      </p>
+      <p>
         Non vengono richiesti né devono essere comunicati dati appartenenti alle categorie particolari di cui
         all’art. 9 del Regolamento (dati sulla salute, convinzioni, appartenenza sindacale e simili).
       </p>
@@ -87,6 +102,7 @@ const Privacy = () => (
         voci={[
           'Gestire la richiesta inviata tramite il modulo di contatto o tramite WhatsApp e rispondere — base giuridica: misure precontrattuali su richiesta dell’interessato, art. 6.1.b.',
           'Registrare l’iscrizione, incassare il corrispettivo e trasmettere i dati all’ente erogatore per l’apertura dell’account e l’abbinamento del corso — base giuridica: esecuzione del contratto, art. 6.1.b (per i partecipanti che non siano anche il cliente: legittimo interesse del datore di lavoro e del titolare all’adempimento dell’obbligo formativo, art. 6.1.f).',
+          'Gestire le richieste di formazione finanziata: verificare l’adesione dell’azienda a FonARCom, ricontattare il referente e, se l’azienda lo conferma, inserire i corsi richiesti in un piano formativo finanziato — base giuridica: misure precontrattuali su richiesta dell’interessato, art. 6.1.b (per i dati del referente che agisce per conto dell’azienda: legittimo interesse del titolare a gestire la richiesta, art. 6.1.f).',
           'Emettere il documento fiscale e conservare le scritture contabili — base giuridica: obbligo di legge, art. 6.1.c.',
           'Documentare l’assolvimento degli obblighi formativi previsti dal D.Lgs. 81/2008 — base giuridica: obbligo di legge, art. 6.1.c.',
           'Inviare comunicazioni su scadenze formative e nuovi corsi — base giuridica: consenso, art. 6.1.a, revocabile in qualsiasi momento.',
@@ -114,6 +130,7 @@ const Privacy = () => (
           'GitHub, Inc., che ospita le pagine del sito.',
           'Cloudflare, Inc., per le statistiche anonime di visita (Cloudflare Web Analytics), senza cookie.',
           'Google Ireland Ltd., solo con il tuo consenso, per la misurazione delle conversioni dei nostri annunci Google Ads (titolare autonomo, informativa su policies.google.com/privacy).',
+          'Per le richieste di formazione finanziata che l’azienda conferma: l’ente di formazione accreditato che presenta e gestisce il piano formativo e il fondo interprofessionale FonARCom, per la verifica dell’adesione, l’approvazione, la gestione e la rendicontazione del piano, ciascuno per le proprie competenze.',
           'Il consulente fiscale del titolare e, se richiesto, le autorità competenti.',
         ]}
       />
@@ -136,6 +153,7 @@ const Privacy = () => (
         voci={[
           'Dati contrattuali, contabili e fiscali: 10 anni dalla conclusione dell’esercizio, come previsto dall’art. 2220 del codice civile e dalla normativa tributaria.',
           'Dati relativi all’assolvimento dell’obbligo formativo: per il periodo in cui l’attestato conserva validità e comunque per la durata degli obblighi di conservazione del datore di lavoro.',
+          'Richieste di formazione finanziata che non proseguono: 24 mesi dall’invio. Se la richiesta viene inserita in un piano formativo, i dati sono conservati per la durata del piano e degli obblighi di controllo e rendicontazione previsti dal fondo, e comunque non oltre 10 anni.',
           'Messaggi ricevuti dal modulo di contatto o su WhatsApp: 24 mesi dall’ultimo scambio, salvo che diano origine a un rapporto contrattuale.',
           'Dati trattati per finalità di comunicazione commerciale: fino alla revoca del consenso e comunque non oltre 24 mesi dall’ultimo contatto.',
           'Registro di sicurezza delle richieste sospette: 90 giorni, salvo che servano più a lungo per accertare o difendere un diritto in sede giudiziaria (ad esempio se allegati a una denuncia).',

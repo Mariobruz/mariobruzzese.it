@@ -366,11 +366,11 @@ const pages = [
     noscript: `
       <h1>Informativa privacy</h1>
       <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), privacy@mariobruzzese.it.</p>
-      <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati dei partecipanti (nome, cognome, codice fiscale, email).</p>
+      <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati dei partecipanti (nome, cognome, codice fiscale, email). Per le richieste di formazione finanziata: dati dell'azienda, del referente (nome, ruolo, email, telefono) e corsi scelti con il numero di partecipanti.</p>
       <p>Finalit\u00e0: esecuzione del contratto, obblighi fiscali e documentazione dell'obbligo formativo, invio di comunicazioni commerciali previo consenso.</p>
-      <p>Destinatari: O.P.N. Italia Lavoro (responsabile del trattamento per il rilascio e la validazione degli attestati) e CNL Informatica s.r.l.s. (sub-responsabile, piattaforma e-learning), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), consulente fiscale.</p>
+      <p>Destinatari: O.P.N. Italia Lavoro (responsabile del trattamento per il rilascio e la validazione degli attestati) e CNL Informatica s.r.l.s. (sub-responsabile, piattaforma e-learning), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), per le richieste di formazione finanziata confermate, l'ente di formazione accreditato che gestisce il piano e FonARCom; consulente fiscale.</p>
       <p>Registro di sicurezza: il servizio di iscrizione registra solo le richieste anomale o sospette (indirizzo IP, data e ora, paese e rete, browser, pagina richiesta), per la sicurezza dei sistemi (legittimo interesse, art. 6.1.f GDPR); gli IP con molte richieste sospette possono essere bloccati per 24 ore.</p>
-      <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto e WhatsApp; fino a revoca per le comunicazioni commerciali; 90 giorni per il registro di sicurezza.</p>
+      <p>Conservazione: 10 anni per i dati contabili e fiscali; 24 mesi per i messaggi di contatto e WhatsApp e per le richieste di formazione finanziata che non proseguono; fino a revoca per le comunicazioni commerciali; 90 giorni per il registro di sicurezza.</p>
       <p>Diritti: accesso, rettifica, cancellazione, limitazione, portabilit\u00e0, opposizione e revoca del consenso, scrivendo a privacy@mariobruzzese.it; reclamo al Garante per la protezione dei dati personali.</p>
       <p>Il sito usa solo cookie tecnici: nessun cookie di profilazione né tracciamento pubblicitario. Le statistiche di visita sono anonime e senza cookie (Cloudflare Web Analytics).</p>
     `,
