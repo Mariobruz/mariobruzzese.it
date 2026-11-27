@@ -109,7 +109,7 @@ const Services = () => {
       <section className="max-w-6xl mx-auto px-6 py-14 grid gap-5 md:grid-cols-2">
         {[
           { icona: BookOpen, titolo: 'Formazione finanziata', testo: 'Scopri le aree formative e le soluzioni attivabili tramite i fondi interprofessionali.', link: '/formazione-finanziata', azione: 'Esplora il catalogo' },
-          { icona: HardHat, titolo: 'Corsi di sicurezza', testo: 'Organizziamo i corsi sulla sicurezza sul lavoro obbligatori per la tua azienda.', link: '/corsi-sicurezza', azione: 'Vedi i corsi' },
+          { icona: HardHat, titolo: 'E-learning 81/08', testo: 'Organizziamo i corsi sulla sicurezza sul lavoro obbligatori per la tua azienda.', link: '/corsi-sicurezza', azione: 'Vedi i corsi' },
         ].map((c) => (
           <Link key={c.titolo} to={c.link} className="group flex gap-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:border-[#0f8a6a] hover:shadow-md transition">
             <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#e3f7ec] text-[#0f8a6a]"><c.icona className="w-8 h-8" /></span>

@@ -120,7 +120,7 @@ const pages = [
       </ul>
       <h2>Come lavoriamo insieme</h2>
       <p>1. Verifica iniziale. 2. Piano formativo. 3. Erogazione e chiusura.</p>
-      <p>Vai al <a href="/formazione-finanziata">catalogo della formazione finanziata</a>, ai <a href="/corsi-sicurezza">corsi di sicurezza</a> o alla <a href="/professionisti">formula per i professionisti</a>.</p>
+      <p>Vai al <a href="/formazione-finanziata">catalogo della formazione finanziata</a>, all’<a href="/corsi-sicurezza">E-learning 81/08</a> o alla <a href="/professionisti">formula per i professionisti</a>.</p>
     `,
   },
   {
@@ -188,7 +188,6 @@ const pages = [
           ['Qual è la differenza tra Conto Formazione e Avviso?', "Il Conto Formazione è individuale per ogni azienda. L'Avviso è collettivo tramite bandi periodici, ideale per le PMI con quote ridotte."],
           ['Quale fondo interprofessionale conviene scegliere?', 'Dipende dal settore, CCNL, dimensione aziendale e tipo di formazione. MB Consulting ti guida nella scelta del fondo più adatto.'],
           ['MB Consulting gestisce tutto il processo?', 'Sì. Dalla scelta del fondo alla progettazione del piano formativo fino alla rendicontazione finale: gestiamo tutto noi.'],
-          ['In quanto tempo si ottiene la formazione finanziata?', 'In media 2-6 mesi dalla scelta del fondo all’avvio della formazione, a seconda del fondo e della modalità di accesso.'],
         ].map(([q, a]) => ({
           '@type': 'Question',
           name: q,
@@ -207,8 +206,6 @@ const pages = [
       <p>Il Conto Formazione è individuale per ogni azienda. L'Avviso è collettivo, tramite bandi periodici, ed è ideale per le PMI con quote ridotte.</p>
       <h2>Quale fondo conviene scegliere?</h2>
       <p>Dipende da settore, CCNL, dimensione aziendale e tipo di formazione desiderata. MB Consulting ti guida nella scelta.</p>
-      <h2>In quanto tempo si ottiene la formazione finanziata?</h2>
-      <p>In media 2-6 mesi dalla scelta del fondo all'avvio della formazione.</p>
     `,
   },
   {

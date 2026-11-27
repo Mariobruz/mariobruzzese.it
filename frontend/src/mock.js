@@ -156,10 +156,6 @@ export const mockData = {
     {
       question: "MB Consulting gestisce tutto il processo?",
       answer: "Sì. Dalla scelta del fondo alla progettazione del piano formativo fino alla rendicontazione finale: gestiamo tutto noi."
-    },
-    {
-      question: "In quanto tempo si ottiene la formazione finanziata?",
-      answer: "In media 2-6 mesi dalla scelta del fondo all'avvio della formazione, a seconda del fondo e della modalità di accesso."
     }
   ],
 
