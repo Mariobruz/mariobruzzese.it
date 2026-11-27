@@ -20,7 +20,7 @@ const CondizioniVendita = () => (
         <p className="font-semibold text-gray-900 mb-1">MB Consulting di Mario Bruzzese</p>
         <p>Impresa individuale — Via Aspromonte 16, 89127 Reggio Calabria (RC)</p>
         <p>Partita IVA 03504290796 — REA RC-199357</p>
-        <p>Email: corsi@mariobruzzese.it — Telefono: +39 329 1747521</p>
+        <p>Email: corsi@mariobruzzese.it</p>
       </div>
       <p>
         Di seguito «MB Consulting». Il soggetto che acquista è di seguito «Cliente»; la persona fisica iscritta al

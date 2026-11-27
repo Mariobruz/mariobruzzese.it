@@ -51,7 +51,7 @@ const DOMANDE = [
   ['Chi rilascia l’attestato?', 'L’attestato indica come soggetto formatore O.P.N. Italia Lavoro – CNL – EBAFoS ed è verificabile tramite QR code sul sito opnitalialavoro.it.'],
   ['Quanto tempo serve per iniziare?', 'Dopo il pagamento, entro 24 ore lavorative iscriviamo i partecipanti sulla piattaforma: ciascuno riceve un’email con link, nome utente e password.'],
   ['Come si paga?', 'Online con carta di credito o di debito, in modo sicuro tramite Stripe. Ricevi la fattura intestata alla tua azienda.'],
-  ['Avete una sede in Calabria?', 'Sì: MB Consulting ha sede legale a Reggio Calabria, in Via Aspromonte 16. I corsi però sono interamente online, quindi non serve venire in sede.'],
+  ['Avete una sede in Calabria?', 'Sì: MB Consulting ha sede legale a Reggio Calabria. I corsi però sono interamente online, quindi non serve venire in sede.'],
 ];
 
 const euro = (n) => `${Number(n).toLocaleString('it-IT')} €`;
@@ -93,7 +93,7 @@ export default function CorsiCalabria() {
         '@type': 'Organization',
         name: 'MB Consulting di Mario Bruzzese',
         url: 'https://www.mariobruzzese.it',
-        address: { '@type': 'PostalAddress', streetAddress: 'Via Aspromonte 16', postalCode: '89127', addressLocality: 'Reggio Calabria', addressRegion: 'RC', addressCountry: 'IT' },
+        address: { '@type': 'PostalAddress', addressLocality: 'Reggio Calabria', addressRegion: 'RC', addressCountry: 'IT' },
       },
     },
     {

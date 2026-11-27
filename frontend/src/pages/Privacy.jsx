@@ -28,7 +28,6 @@ const Privacy = () => (
     <Sezione numero="1" titolo="Titolare del trattamento">
       <div className="bg-gray-50 rounded-xl p-5 text-[15px]">
         <p className="font-semibold text-gray-900 mb-1">MB Consulting di Mario Bruzzese</p>
-        <p>Via Aspromonte 16, 89127 Reggio Calabria (RC)</p>
         <p>Partita IVA 03504290796</p>
         <p>Email: privacy@mariobruzzese.it</p>
       </div>

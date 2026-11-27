@@ -267,7 +267,7 @@ const pages = [
         <li>Provincia di Reggio Calabria: Reggio Calabria, Gioia Tauro, Palmi, Villa San Giovanni, Siderno, Locri, Taurianova</li>
         <li>Provincia di Vibo Valentia: Vibo Valentia, Tropea, Pizzo, Serra San Bruno, Mileto, Nicotera</li>
       </ul>
-      <p>MB Consulting ha sede legale a Reggio Calabria, Via Aspromonte 16. <a href="${BASE}/corsi-sicurezza">Vedi tutti i corsi di sicurezza sul lavoro online</a>.</p>
+      <p>MB Consulting ha sede legale a Reggio Calabria. <a href="${BASE}/corsi-sicurezza">Vedi tutti i corsi di sicurezza sul lavoro online</a>.</p>
     `,
   },
   {
@@ -336,7 +336,7 @@ const pages = [
     ],
     noscript: `
       <h1>Informativa privacy</h1>
-      <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, Via Aspromonte 16, 89127 Reggio Calabria (RC), privacy@mariobruzzese.it.</p>
+      <p>Titolare del trattamento: MB Consulting di Mario Bruzzese, partita IVA 03504290796, privacy@mariobruzzese.it.</p>
       <p>Dati trattati: dati di intestazione e fatturazione del cliente e dati dei partecipanti (nome, cognome, codice fiscale, email). Per le richieste di formazione finanziata: dati dell'azienda, del referente (nome, ruolo, email, telefono) e corsi scelti con il numero di partecipanti.</p>
       <p>Finalit\u00e0: esecuzione del contratto, obblighi fiscali e documentazione dell'obbligo formativo, invio di comunicazioni commerciali previo consenso.</p>
       <p>Destinatari: O.P.N. Italia Lavoro (responsabile del trattamento per il rilascio e la validazione degli attestati) e CNL Informatica s.r.l.s. (sub-responsabile, piattaforma e-learning), Stripe, Brevo, Cloudflare, Formspree, GitHub, WhatsApp (solo se scegli di scriverci su WhatsApp, come titolare autonomo), per le richieste di formazione finanziata confermate, l'ente di formazione accreditato che gestisce il piano e FonARCom; consulente fiscale.</p>

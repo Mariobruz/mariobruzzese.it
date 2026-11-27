@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Linkedin } from 'lucide-react';
+import { Mail, MessageCircle, Linkedin } from 'lucide-react';
+import { linkWhatsApp } from './WhatsApp';
 import { mockData } from '../mock';
 import { impostaConsenso } from '../googleAds';
 
@@ -74,12 +75,8 @@ const Footer = () => {
                 <a href={`mailto:${mockData.contact.email}`} className={`${LINK} break-all`}>{mockData.contact.email}</a>
               </li>
               <li className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-[#86efb4] flex-shrink-0 mt-0.5" />
-                <a href={`tel:${mockData.contact.phone}`} className={LINK}>{mockData.contact.phone}</a>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-[#86efb4] flex-shrink-0 mt-0.5" />
-                <span className="text-[15px] text-gray-300">{mockData.contact.address}</span>
+                <MessageCircle className="w-5 h-5 text-[#86efb4] flex-shrink-0 mt-0.5" />
+                <a href={linkWhatsApp('Ciao, vorrei informazioni su MB Consulting.')} target="_blank" rel="noopener noreferrer" className={LINK}>Scrivici su WhatsApp</a>
               </li>
               <li className="flex items-start gap-3">
                 <Linkedin className="w-5 h-5 text-[#86efb4] flex-shrink-0 mt-0.5" />
